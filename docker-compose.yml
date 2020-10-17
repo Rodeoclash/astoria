@@ -1,0 +1,60 @@
+version: '3.7'
+
+services:
+  postgres:
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    logging: &logging
+      driver: 'json-file'
+      options:
+        max-size: '200k'
+        max-file: '10'
+    image: postgres:12.3
+
+  ngrok:
+    command: $NGROK_COMMAND
+    depends_on:
+      - server
+    logging: *logging
+    image: wernight/ngrok:latest
+
+  server:
+    build:
+      context: ./server
+      target: development
+    command: mix phx.server
+    depends_on:
+      - postgres
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SQS_QUEUE_INPUT
+      - AWS_SQS_QUEUE_OUTPUT
+      - GITHUB_APP_ID
+      - GITHUB_APP_PRIVATE_KEY=/usr/src/app/priv/keys/github_app_key_development.pem
+      - GITHUB_CLIENT_ID
+      - GITHUB_CLIENT_SECRET
+    image: rodeoclash/astoria:latest
+    logging: *logging
+    ports:
+      - '4000:4000'
+    user: "1000"
+    volumes:
+      - ./passwd:/etc/passwd
+      - ./server:/usr/src/app
+      - home:/home/server
+
+  pgadmin:
+    depends_on:
+      - postgres
+    environment:
+        PGADMIN_DEFAULT_EMAIL: user@email.com
+        PGADMIN_DEFAULT_PASSWORD: 12345678
+    image: dpage/pgadmin4
+    logging: *logging
+    ports:
+        - '5000:80'
+
+volumes:
+  home:
