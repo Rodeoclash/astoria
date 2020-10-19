@@ -1,8 +1,8 @@
-defmodule Astoria.Repo.Migrations.CreateGithubAuthorizations do
+defmodule Astoria.Repo.Migrations.CreateOauthAuthorizations do
   use Ecto.Migration
 
   def change do
-    create table(:github_authorizations) do
+    create table(:oauth_authorizations) do
       add :access_token, :string, null: false
       add :expires_in, :integer, null: false
       add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")

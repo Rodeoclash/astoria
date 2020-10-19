@@ -1,5 +1,5 @@
 defmodule Astoria.Users.User do
-  alias Astoria.{GithubAuthorizations}
+  alias Astoria.{UserGithubOauthAuthorizations}
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -8,7 +8,7 @@ defmodule Astoria.Users.User do
     field :name, :string
     field :pub_id, :binary_id, read_after_writes: true
 
-    has_one :github_authorization, GithubAuthorizations.GithubAuthorization
+    has_one :github_authorization, UserGithubOauthAuthorizations.UserGithubOauthAuthorization
 
     timestamps()
   end

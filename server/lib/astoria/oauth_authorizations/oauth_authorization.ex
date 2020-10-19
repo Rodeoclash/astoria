@@ -1,12 +1,11 @@
-defmodule Astoria.GithubAuthorizations.GithubAuthorization do
-  alias Astoria.{Users}
+defmodule Astoria.OauthAuthorizations.OauthAuthorization do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "github_authorizations" do
-    belongs_to :user, Users.User
+  schema "oauth_authorizations" do
     field :access_token, :string
     field :expires_in, :integer
+    field :pub_id, :binary_id, read_after_writes: true
     field :refresh_token, :string
     field :refresh_token_expires_in, :integer
     field :token_type, :string
@@ -21,16 +20,14 @@ defmodule Astoria.GithubAuthorizations.GithubAuthorization do
       :expires_in,
       :refresh_token,
       :refresh_token_expires_in,
-      :token_type,
-      :user_id
+      :token_type
     ])
     |> validate_required([
       :access_token,
       :expires_in,
       :refresh_token,
       :refresh_token_expires_in,
-      :token_type,
-      :user_id
+      :token_type
     ])
   end
 end

@@ -5,6 +5,7 @@ defmodule AstoriaWeb.Github.AuthorizedControllerTest do
   setup :verify_on_exit!
 
   describe "/github/authorized" do
+    @tag :skip
     test "with successful installation", %{conn: conn} do
       HTTPoisonMock
       |> expect(:post, fn _path, _payload, _headers ->

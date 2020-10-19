@@ -1,25 +1,32 @@
 defmodule AstoriaWeb.Github.AuthorizedController do
-  alias Astoria.{Github, GithubAuthorizations, Repo, Users}
+  alias Astoria.{
+    Github,
+    GithubApplication,
+    Repo,
+    UserGithubOauthAuthorizations,
+    Users
+  }
+
   use AstoriaWeb, :controller
 
   action_fallback AstoriaWeb.FallbackController
 
   @doc ~S"""
-  Callback after a user has installed the app in GitHub. Creates a user/company based on details fetched from the api.
+  Callback after a user has installed the app in Github. Creates a user/company based on details fetched from the api.
   """
   @spec show(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def show(conn, params) do
-    with client_id <- Github.client_id(),
-         client_secret <- Github.client_secret(),
-         {:ok, github_authorization} <-
+    with client_id <- GithubApplication.client_id(),
+         client_secret <- GithubApplication.client_secret(),
+         {:ok, oauth_authorization} <-
            Github.Oauth.tokens_from_code(
              client_id,
              client_secret,
              params["code"]
            ),
          {:ok, %Github.GraphQL.Response{data: user_data}} <-
-           GithubAuthorizations.GraphQL.query(
-             github_authorization,
+           UserGithubOauthAuthorizations.GraphQL.query(
+             oauth_authorization,
              Github.GraphQL.Request.viewer_details()
            ),
          multi <- Ecto.Multi.new(),
@@ -32,7 +39,7 @@ defmodule AstoriaWeb.Github.AuthorizedController do
            end),
          multi <-
            Ecto.Multi.run(multi, :github_authorization, fn _repo, %{user: user} ->
-             Repo.insert(%{github_authorization | user_id: user.id})
+             Repo.insert(%{oauth_authorization | user_id: user.id})
            end),
          {:ok, %{user: user}} <- Repo.transaction(multi) do
       conn

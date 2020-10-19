@@ -1,34 +1,26 @@
-defmodule Astoria.Github.GraphQL do
+defmodule Astoria.Github.Api.V4 do
   alias Astoria.{Github}
 
   @http_client Application.get_env(:astoria, :http_client)
 
   @doc ~S"""
-  Github GraphQL endpoint
-  """
-  @spec endpoint() :: String.t()
-  def endpoint do
-    "https://api.#{Github.domain()}/graphql"
-  end
-
-  @doc ~S"""
-  Required headers for GraphQL access.
+  Github V4 (GraphQL) endpoint
 
   ## Examples
 
-      iex> Astoria.Github.GraphQL.authorization_header("123")
-      [{"Authorization", "bearer 123"}]
+    iex> Astoria.Github.Api.V4.endpoint()
+    "https://api.github.com/graphql"
 
   """
-  @spec authorization_header(String.t()) :: [Authorization: String.t()]
-  def authorization_header(token) do
-    [{"Authorization", "bearer #{token}"}]
+  @spec endpoint() :: String.t()
+  def endpoint do
+    Github.Api.endpoint() <> "/graphql"
   end
 
   @doc ~S"""
   Perform a request against the Github GraphQL API
   """
-  def query(token, content) do
+  def perform(client, content) do
     with {:ok, encoded_content} <-
            Jason.encode(%{
              query: content
@@ -37,7 +29,7 @@ defmodule Astoria.Github.GraphQL do
            @http_client.post(
              endpoint(),
              encoded_content,
-             authorization_header(token)
+             Github.Api.headers(client)
            ),
          {:ok, decoded_body} <- Jason.decode(body),
          data <- struct(Github.GraphQL.Response, %{data: decoded_body["data"]}),

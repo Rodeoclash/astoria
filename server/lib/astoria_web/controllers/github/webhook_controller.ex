@@ -5,7 +5,7 @@ defmodule AstoriaWeb.Github.WebhookController do
   action_fallback AstoriaWeb.FallbackController
 
   @doc ~S"""
-  Ping event from a new app being created in GitHub and pointed at this instance of the Astoria app
+  Ping event from a new app being created in Github and pointed at this instance of the Astoria app
   """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"hook" => %{"app_id" => _app_id}}) do
@@ -38,7 +38,7 @@ defmodule AstoriaWeb.Github.WebhookController do
   end
 
   @doc ~S"""
-  Unknown event from GitHub
+  Unknown event from Github
   """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, params) do

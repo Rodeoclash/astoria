@@ -9,9 +9,5 @@ defmodule Astoria.Repo.Migrations.CreateUser do
 
       timestamps()
     end
-
-    alter table(:github_authorizations) do
-      add :user_id, references("users"), null: false, unique: true
-    end
   end
 end
