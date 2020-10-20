@@ -2,7 +2,7 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "github_organisations" do
+  schema "github_installations" do
     field :data, :map
     field :github_id, :integer
     field :pub_id, :binary_id, read_after_writes: true

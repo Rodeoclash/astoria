@@ -5,10 +5,10 @@ defmodule Astoria.Github.Api.V3.App do
   Note: Requires the app JWT
   """
   def get(client) do
-    Github.Api.V3.get(client, "app")
+    Github.Api.V3.Request.new(client, :get, "app")
   end
 
   def installations(client) do
-    Github.Api.V3.get(client, "app/installations")
+    Github.Api.V3.Request.new(client, :get, "app/installations")
   end
 end

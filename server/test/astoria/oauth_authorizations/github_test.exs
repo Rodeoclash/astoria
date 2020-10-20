@@ -23,7 +23,7 @@ defmodule Astoria.OauthAuthorizations.GithubTest do
     assert oauth_authorization.access_token == "abc"
     assert oauth_authorization.expires_in == 28_800
     assert oauth_authorization.refresh_token == "abc"
-    assert oauth_authorization.refresh_token_expires_in == 15811200
+    assert oauth_authorization.refresh_token_expires_in == 15_811_200
     assert oauth_authorization.token_type == "bearer"
   end
 end

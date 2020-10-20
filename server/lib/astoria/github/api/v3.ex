@@ -45,7 +45,7 @@ defmodule Astoria.Github.Api.V3 do
   @spec handle_response({:ok, %HTTPoison.Response{}} | {:error, String.t()}) :: map()
   def handle_response(response) do
     with {:ok, response} <- response,
-         {:ok, encoded_body} <- Jason.decode(response.body),
-         do: %{response | body: encoded_body}
+         {:ok, decoded_body} <- Jason.decode(response.body),
+         do: {:ok, Github.Api.V3.Response.new(%{response | body: decoded_body})}
   end
 end

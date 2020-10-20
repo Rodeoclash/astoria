@@ -9,6 +9,6 @@ defmodule Astoria.Repo.Migrations.CreateGithubInstallations do
       timestamps()
     end
 
-    create unique_index(:github_pull_requests, :github_id)
+    create unique_index(:github_installations, :github_id)
   end
 end
