@@ -20,15 +20,15 @@ defmodule Astoria.Github.Api.Oauth do
   end
 
   @doc ~S"""
-  Exchanges a Github code for access and refresh tokens
+  Make a post to the Github Oauth endpoint
   """
-  def post(content) do
+  def create(content) do
     with {:ok, %HTTPoison.Response{body: body}} <-
            @http_client.post(
              endpoint(),
              content,
              headers()
            ),
-         do: URI.decode_query(body)
+         do: {:ok, URI.decode_query(body)}
   end
 end

@@ -1,13 +1,9 @@
 defmodule Astoria.GithubInstallations do
-  alias Astoria.{Repo}
-  alias __MODULE__
+  alias Astoria.{GithubApplication, Github, Interactions}
 
-  @model GithubInstallations.GithubInstallation
-  @struct %GithubInstallations.GithubInstallation{}
-
-  def create(attrs) do
-    @struct
-    |> @model.changeset(attrs)
-    |> Repo.insert()
+  def sync_installations do
+    GithubApplication.client()
+    |> Github.Api.V3.App.Installations.read()
+    |> Interactions.perform()
   end
 end

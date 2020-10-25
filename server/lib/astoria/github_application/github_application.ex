@@ -2,25 +2,7 @@ defmodule Astoria.GithubApplication do
   alias Astoria.{Github}
 
   def client do
-    Github.Api.Client.new(%{
-      access_token: jwt()
-    })
-  end
-
-  @doc ~S"""
-  Get info about the current app
-  """
-  def info do
-    client()
-    |> Github.Api.V3.App.get()
-  end
-
-  @doc ~S"""
-  Get info about the current app
-  """
-  def installations do
-    client()
-    |> Github.Api.V3.App.installations()
+    Github.Api.Client.new(jwt())
   end
 
   @doc ~S"""

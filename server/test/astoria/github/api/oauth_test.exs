@@ -17,13 +17,14 @@ defmodule Astoria.Github.Api.OauthTest do
        }}
     end)
 
-    assert Oauth.post("123abc") == %{
-             "access_token" => "abc",
-             "expires_in" => "28800",
-             "refresh_token" => "abc",
-             "refresh_token_expires_in" => "15811200",
-             "scope" => "",
-             "token_type" => "bearer"
-           }
+    assert {:ok,
+            %{
+              "access_token" => "abc",
+              "expires_in" => "28800",
+              "refresh_token" => "abc",
+              "refresh_token_expires_in" => "15811200",
+              "scope" => "",
+              "token_type" => "bearer"
+            }} == Oauth.create("123abc")
   end
 end

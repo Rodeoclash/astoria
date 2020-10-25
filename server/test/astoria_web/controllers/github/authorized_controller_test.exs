@@ -1,26 +1,18 @@
 defmodule AstoriaWeb.Github.AuthorizedControllerTest do
+  alias Astoria.{Fixtures}
   import Mox
   use AstoriaWeb.ConnCase
 
   setup :verify_on_exit!
 
   describe "/github/authorized" do
-    @tag :skip
     test "with successful installation", %{conn: conn} do
       HTTPoisonMock
       |> expect(:post, fn _path, _payload, _headers ->
-        {:ok,
-         %HTTPoison.Response{
-           body:
-             "access_token=abc&expires_in=28800&refresh_token=abc&refresh_token_expires_in=15811200&scope=&token_type=bearer"
-         }}
+        {:ok, Fixtures.Github.Api.Oauth.create()}
       end)
-      |> expect(:post, fn _path, _payload, _headers ->
-        {:ok,
-         %HTTPoison.Response{
-           body:
-             "{\"data\":{\"viewer\":{\"name\":\"Louis Toadvine\", \"email\":\"email@example.com\"}}}"
-         }}
+      |> expect(:get, fn _path, _headers ->
+        {:ok, Fixtures.Github.Api.V3.User.get()}
       end)
 
       conn =

@@ -1,10 +1,10 @@
-defmodule Astoria.Github.Api.V3.App.Installation do
+defmodule Astoria.Github.Api.V3.App.Installations.AccessTokens do
   alias Astoria.{Github}
 
   @doc ~S"""
-  Note: Requires the app JWT
+  Note: Requires the app JWT client
   """
-  def access_tokens(client, installation_id) do
+  def create(client, installation_id) do
     Github.Api.V3.Request.new(client, :post, "app/installations/#{installation_id}/access_tokens")
   end
 end

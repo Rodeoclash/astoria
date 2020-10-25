@@ -10,5 +10,6 @@ defmodule Astoria.Repo.Migrations.CreateGithubInstallations do
     end
 
     create unique_index(:github_installations, :github_id)
+    create unique_index(:github_installations, :pub_id)
   end
 end

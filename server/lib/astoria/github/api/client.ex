@@ -4,7 +4,10 @@ defmodule Astoria.Github.Api.Client do
   @enforce_keys [:access_token]
   defstruct [:access_token]
 
-  def new(details) do
-    %Client{access_token: details[:access_token]}
+  @doc ~S"""
+  Exchanges a Github code for access and refresh tokens
+  """
+  def new(access_token) do
+    %Client{access_token: access_token}
   end
 end

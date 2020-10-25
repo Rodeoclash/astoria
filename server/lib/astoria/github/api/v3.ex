@@ -19,12 +19,13 @@ defmodule Astoria.Github.Api.V3 do
   """
   @spec post(%Github.Api.Client{}, String.t(), String.t()) :: nil
   def post(client, path, content \\ "") do
-    @http_client.post(
-      Path.join(Github.Api.endpoint(), path),
-      content,
-      headers(client)
-    )
-    |> handle_response
+    with {:ok, response} <-
+           @http_client.post(
+             Path.join(Github.Api.endpoint(), path),
+             content,
+             headers(client)
+           ),
+         do: process_response(response)
   end
 
   @doc ~S"""
@@ -32,20 +33,22 @@ defmodule Astoria.Github.Api.V3 do
   """
   @spec get(%Github.Api.Client{}, String.t()) :: nil
   def get(client, path) do
-    @http_client.get(
-      Path.join(Github.Api.endpoint(), path),
-      headers(client)
-    )
-    |> handle_response
+    with {:ok, response} <-
+           @http_client.get(
+             Path.join(Github.Api.endpoint(), path),
+             headers(client)
+           ),
+         do: process_response(response)
   end
 
   @doc ~S"""
-  Handle a response from a request, parse to a map
+  Handle a response from a request. Encodes the JSON response to a map.
   """
-  @spec handle_response({:ok, %HTTPoison.Response{}} | {:error, String.t()}) :: map()
-  def handle_response(response) do
-    with {:ok, response} <- response,
-         {:ok, decoded_body} <- Jason.decode(response.body),
+  @spec process_response(%HTTPoison.Response{}) :: %Github.Api.V3.Response{}
+  def process_response(response) do
+    # IO.inspect "=== response"
+    # IO.inspect response
+    with {:ok, decoded_body} <- Jason.decode(response.body),
          do: {:ok, Github.Api.V3.Response.new(%{response | body: decoded_body})}
   end
 end

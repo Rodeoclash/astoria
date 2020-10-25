@@ -8,10 +8,7 @@ defmodule Astoria.Github.Api.V4Test do
   setup :verify_on_exit!
 
   test "perform/2" do
-    client =
-      Github.Api.Client.new(%{
-        access_token: "123"
-      })
+    client = Github.Api.Client.new("123")
 
     HTTPoisonMock
     |> expect(:post, fn _path, _payload, _headers ->
