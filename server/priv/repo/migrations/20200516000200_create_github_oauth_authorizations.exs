@@ -19,11 +19,9 @@ defmodule Astoria.Repo.Migrations.CreateOauthAuthorizations do
              primary_key: false,
              options: "INHERITS (oauth_authorizations)"
            ) do
-      add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")
       add :user_id, references("users")
     end
 
-    create unique_index(:github_oauth_authorizations, :pub_id)
     create unique_index(:github_oauth_authorizations, :user_id)
   end
 end

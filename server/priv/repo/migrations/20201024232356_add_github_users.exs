@@ -3,7 +3,7 @@ defmodule Astoria.Repo.Migrations.AddGithubUsers do
 
   def change do
     create table(:github_users) do
-      add :data, :map, default: %{}
+      add :data, :map, null: false
       add :github_id, :integer, null: false, unique: true
       add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")
       add :user_id, references("users")

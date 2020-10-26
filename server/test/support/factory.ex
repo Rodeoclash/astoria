@@ -18,4 +18,20 @@ defmodule Astoria.Factory do
       user: build(:user)
     }
   end
+
+  def github_installation_factory do
+    %Astoria.GithubInstallations.GithubInstallation{
+      data: %{},
+      github_id: 1
+    }
+  end
+
+  def github_installation_authorization_factory do
+    %Astoria.GithubInstallationAuthorizations.GithubInstallationAuthorization{
+      data: %{},
+      expires_at: NaiveDateTime.add(NaiveDateTime.utc_now(), 3600),
+      github_installation: build(:github_installation),
+      token: "abc"
+    }
+  end
 end

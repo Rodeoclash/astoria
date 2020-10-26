@@ -1,6 +1,7 @@
 defmodule Astoria.GithubApplication do
   alias Astoria.{Github}
 
+  @spec client() :: %Github.Api.Client{}
   def client do
     Github.Api.Client.new(jwt())
   end

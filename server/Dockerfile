@@ -44,7 +44,7 @@ RUN npm run deploy --prefix assets
 RUN mix phx.digest
 
 # create a release
-RUN MIX_ENV=prod mix release astoria
+# RUN MIX_ENV=prod mix release astoria
 
 CMD mix phx.server
 

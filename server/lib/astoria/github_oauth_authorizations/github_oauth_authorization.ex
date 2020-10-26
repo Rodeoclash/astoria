@@ -8,7 +8,6 @@ defmodule Astoria.GithubOauthAuthorizations.GithubOauthAuthorization do
     field :access_token, :string
     field :expires_at, :naive_datetime, read_after_writes: true
     field :expires_in, :integer
-    field :pub_id, :binary_id, read_after_writes: true
     field :refresh_token, :string
     field :refresh_token_expires_in, :integer
     field :token_type, :string

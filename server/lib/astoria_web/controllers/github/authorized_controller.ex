@@ -35,10 +35,18 @@ defmodule AstoriaWeb.Github.AuthorizedController do
              )
            end),
          multi <-
-           Ecto.Multi.run(multi, :github_aouth_authorization, fn _repo, %{user: user} ->
+           Ecto.Multi.run(multi, :github_oauth_authorization, fn _repo, %{user: user} ->
              %{github_oauth_authorization | user_id: user.id}
              |> Repo.insert(
-               on_conflict: {:replace, [:access_token, :expires_in, :refresh_token, :refresh_token_expires_in, :token_type]},
+               on_conflict:
+                 {:replace,
+                  [
+                    :access_token,
+                    :expires_in,
+                    :refresh_token,
+                    :refresh_token_expires_in,
+                    :token_type
+                  ]},
                conflict_target: :user_id
              )
            end),
