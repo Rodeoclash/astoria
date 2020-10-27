@@ -3,7 +3,7 @@ defmodule Astoria.GithubApplication do
 
   @spec client() :: %Github.Api.Client{}
   def client do
-    Github.Api.Client.new(jwt())
+    Github.Api.Client.new(jwt(), "Bearer")
   end
 
   @doc ~S"""

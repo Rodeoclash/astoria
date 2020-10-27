@@ -30,11 +30,14 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizationsTest do
              GithubInstallationAuthorizations.create(github_installation)
 
     assert github_installation.id == github_installation_authorization.github_installation_id
-    assert github_installation_authorization.token == "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
+
+    assert github_installation_authorization.token ==
+             "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
   end
 
   test "refresh/1" do
-    github_installation = insert(:github_installation_authorization).github_installation
+    github_installation =
+      insert(:github_installation_authorization).github_installation
       |> Repo.preload(:github_installation_authorization)
 
     HTTPoisonMock
@@ -46,6 +49,8 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizationsTest do
              GithubInstallationAuthorizations.refresh(github_installation)
 
     assert github_installation.id == github_installation_authorization.github_installation_id
-    assert github_installation_authorization.token == "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
+
+    assert github_installation_authorization.token ==
+             "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
   end
 end

@@ -22,7 +22,7 @@ defmodule Astoria.Github.Api.V3.RequestTest do
   setup do
     Mox.verify_on_exit!()
 
-    client = Github.Api.Client.new("123")
+    client = Github.Api.Client.new("123", "bearer")
 
     %{client: client}
   end

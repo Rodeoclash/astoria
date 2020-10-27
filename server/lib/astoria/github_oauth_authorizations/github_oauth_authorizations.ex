@@ -34,10 +34,10 @@ defmodule Astoria.GithubOauthAuthorizations do
     case expired?(github_oauth_authorization) do
       true ->
         with {:ok, github_oauth_authorization} <- refresh(github_oauth_authorization),
-             do: {:ok, Github.Api.Client.new(github_oauth_authorization.access_token)}
+             do: {:ok, Github.Api.Client.new(github_oauth_authorization.access_token, "Bearer")}
 
       false ->
-        {:ok, Github.Api.Client.new(github_oauth_authorization.access_token)}
+        {:ok, Github.Api.Client.new(github_oauth_authorization.access_token, "Bearer")}
     end
   end
 

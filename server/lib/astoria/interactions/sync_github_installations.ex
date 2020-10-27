@@ -1,8 +1,8 @@
 defmodule Astoria.Interactions.SyncGithubInstallations do
   alias Astoria.{Github, GithubInstallations, Repo}
 
-  def perform(installations_request) do
-    with {:ok, response} <- Github.Api.V3.Request.perform(installations_request),
+  def perform(request) do
+    with {:ok, response} <- Github.Api.V3.Request.perform(request),
          _results <-
            Enum.each(response.data.body, fn installation_data ->
              %GithubInstallations.GithubInstallation{}

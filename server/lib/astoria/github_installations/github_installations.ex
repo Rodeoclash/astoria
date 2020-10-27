@@ -2,7 +2,11 @@ defmodule Astoria.GithubInstallations do
   alias __MODULE__
   alias Astoria.{GithubApplication, Github, Interactions}
 
-  def sync_installations do
+  @doc """
+  Trigger a sync of all installations in the system
+  """
+  @spec sync() :: :ok
+  def sync do
     GithubApplication.client()
     |> Github.Api.V3.App.Installations.read()
     |> Interactions.SyncGithubInstallations.perform()
@@ -16,6 +20,6 @@ defmodule Astoria.GithubInstallations do
   def client(github_installation) do
     with {:ok, github_installation_authorization} <-
            GithubInstallations.GithubInstallationAuthorizations.get(github_installation),
-         do: {:ok, Github.Api.Client.new(github_installation_authorization.token)}
+         do: {:ok, Github.Api.Client.new(github_installation_authorization.token, "token")}
   end
 end

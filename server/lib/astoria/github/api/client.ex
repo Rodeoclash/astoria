@@ -1,13 +1,13 @@
 defmodule Astoria.Github.Api.Client do
   alias __MODULE__
 
-  @enforce_keys [:access_token]
-  defstruct [:access_token]
+  @enforce_keys [:token, :type]
+  defstruct [:token, :type]
 
   @doc ~S"""
   Exchanges a Github code for access and refresh tokens
   """
-  def new(access_token) do
-    %Client{access_token: access_token}
+  def new(token, type) do
+    %Client{token: token, type: type}
   end
 end

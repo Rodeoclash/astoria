@@ -15,7 +15,7 @@ defmodule Astoria.Github.Api do
   @spec headers(%Github.Api.Client{}) :: [{String.t(), String.t()}]
   def headers(client) do
     [
-      {"Authorization", "Bearer #{client.access_token}"},
+      {"Authorization", "#{client.type} #{client.token}"},
       {"Content-Type", "application/json"}
     ]
   end

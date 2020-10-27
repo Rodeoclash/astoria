@@ -19,6 +19,6 @@ defmodule Astoria.GithubInstallationsTest do
     end)
 
     assert {:ok, github_client} = GithubInstallations.client(github_installation)
-    assert github_client.access_token == "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
+    assert github_client.token == "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
   end
 end

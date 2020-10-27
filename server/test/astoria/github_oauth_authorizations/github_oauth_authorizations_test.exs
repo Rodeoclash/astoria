@@ -45,7 +45,7 @@ defmodule Astoria.GithubOauthAuthorizationsTest do
     test "before expiry" do
       github_oauth_authorization = insert(:github_oauth_authorization)
       assert {:ok, github_client} = GithubOauthAuthorizations.client(github_oauth_authorization)
-      assert github_client.access_token == github_oauth_authorization.access_token
+      assert github_client.token == github_oauth_authorization.access_token
     end
 
     test "after expiry" do
@@ -62,7 +62,7 @@ defmodule Astoria.GithubOauthAuthorizationsTest do
       :timer.sleep(2)
 
       assert {:ok, github_client} = GithubOauthAuthorizations.client(github_oauth_authorization)
-      assert github_client.access_token == "abc"
+      assert github_client.token == "abc"
     end
   end
 

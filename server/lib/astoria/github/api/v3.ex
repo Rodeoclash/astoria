@@ -46,8 +46,8 @@ defmodule Astoria.Github.Api.V3 do
   """
   @spec process_response(%HTTPoison.Response{}) :: %Github.Api.V3.Response{}
   def process_response(response) do
-    # IO.inspect("=== response")
-    # IO.inspect(response)
+    IO.inspect("=== response")
+    IO.inspect(response)
 
     with {:ok, decoded_body} <- Jason.decode(response.body),
          do: {:ok, Github.Api.V3.Response.new(%{response | body: decoded_body})}
