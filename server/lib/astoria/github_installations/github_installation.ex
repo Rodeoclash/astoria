@@ -1,5 +1,5 @@
 defmodule Astoria.GithubInstallations.GithubInstallation do
-  alias Astoria.{GithubInstallationAuthorizations}
+  alias Astoria.{GithubInstallationAuthorizations, GithubRepositories}
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -10,6 +10,9 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
 
     has_one :github_installation_authorization,
             GithubInstallationAuthorizations.GithubInstallationAuthorization
+
+    has_many :github_repositories,
+             GithubRepositories.GithubRepository
 
     timestamps()
   end

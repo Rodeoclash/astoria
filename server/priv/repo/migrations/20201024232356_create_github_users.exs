@@ -1,10 +1,10 @@
-defmodule Astoria.Repo.Migrations.AddGithubUsers do
+defmodule Astoria.Repo.Migrations.CreateGithubUsers do
   use Ecto.Migration
 
   def change do
     create table(:github_users) do
       add :data, :map, null: false
-      add :github_id, :integer, null: false, unique: true
+      add :github_id, :integer, null: false
       add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")
       add :user_id, references("users")
       timestamps()

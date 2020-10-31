@@ -12,12 +12,12 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizations do
 
     cond do
       missing?(github_installation) == true ->
-        create(github_installation)
+        upsert(github_installation)
 
       GithubInstallationAuthorizations.expired?(
         github_installation.github_installation_authorization
       ) == true ->
-        refresh(github_installation)
+        upsert(github_installation)
 
       true ->
         {:ok, github_installation.github_installation_authorization}
@@ -28,10 +28,10 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizations do
     github_installation.github_installation_authorization == nil
   end
 
-  @spec create(%GithubInstallations.GithubInstallation{}) ::
+  @spec upsert(%GithubInstallations.GithubInstallation{}) ::
           {:ok, %GithubInstallationAuthorizations.GithubInstallationAuthorization{}}
           | {:error, any()}
-  def create(github_installation) do
+  def upsert(github_installation) do
     with {:ok, result} <- create_token(github_installation),
          do:
            %GithubInstallationAuthorizations.GithubInstallationAuthorization{}
@@ -45,19 +45,6 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizations do
              on_conflict: {:replace_all_except, [:id]},
              conflict_target: :github_installation_id
            )
-  end
-
-  def refresh(github_installation) do
-    with {:ok, result} <- create_token(github_installation),
-         do:
-           github_installation.github_installation_authorization
-           |> GithubInstallationAuthorizations.GithubInstallationAuthorization.changeset(%{
-             data: result.data.body,
-             expires_at: result.data.body["expires_at"],
-             github_installation_id: github_installation.id,
-             token: result.data.body["token"]
-           })
-           |> Repo.update()
   end
 
   defp create_token(github_installation) do
