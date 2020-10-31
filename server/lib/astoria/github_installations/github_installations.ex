@@ -1,6 +1,7 @@
 defmodule Astoria.GithubInstallations do
-  alias __MODULE__
-  alias Astoria.{GithubApplication, Github, Interactions, Repo}
+  alias Astoria.{GithubInstallations, GithubApplication, Github, Interactions, Repo}
+
+  import Ecto.Query, only: [from: 2]
 
   @doc """
   Trigger a sync of all installations in the system
@@ -9,7 +10,18 @@ defmodule Astoria.GithubInstallations do
   def sync do
     GithubApplication.client()
     |> Github.Api.V3.App.Installations.read()
-    |> Interactions.SyncGithubRecords.perform(&GithubInstallations.upsert_from_api/1)
+    |> Interactions.SyncGithubInstallations.perform()
+  end
+
+  @doc """
+  How many installations have been created
+  """
+  @spec count() :: :ok
+  def count do
+    from(github_installation in GithubInstallations.GithubInstallation,
+      select: count(github_installation.id)
+    )
+    |> Repo.one()
   end
 
   @doc """
@@ -24,13 +36,14 @@ defmodule Astoria.GithubInstallations do
   end
 
   @doc """
-  Returns a function that can be used to insert data returned from the Github API
+  Insert data about the installation. Will update if matches github_id
   """
-  def upsert_from_api(installation) do
+  @spec upsert(map()) :: :ok
+  def upsert(data) do
     %GithubInstallations.GithubInstallation{}
     |> GithubInstallations.GithubInstallation.changeset(%{
-      data: installation,
-      github_id: installation["id"]
+      data: data,
+      github_id: data["id"]
     })
     |> Repo.insert(
       on_conflict: {:replace_all_except, [:id, :pub_id]},

@@ -9,6 +9,6 @@ defmodule Astoria.GithubInstallations.GithubRepositories do
     with {:ok, client} <- GithubInstallations.client(github_installation),
          do:
            Github.Api.V3.Installation.Repositories.read(client)
-           |> Interactions.SyncGithubInstallations.perform()
+           |> Interactions.SyncGithubInstallationRepositories.perform(github_installation.id)
   end
 end

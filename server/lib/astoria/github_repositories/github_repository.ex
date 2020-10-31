@@ -3,7 +3,7 @@ defmodule Astoria.GithubRepositories.GithubRepository do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "github_installations" do
+  schema "github_repositories" do
     field :data, :map
     field :github_id, :integer
     field :pub_id, :binary_id, read_after_writes: true
