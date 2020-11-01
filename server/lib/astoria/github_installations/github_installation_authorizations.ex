@@ -13,15 +13,13 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizations do
     cond do
       missing?(github_installation) == true ->
         with {:ok, response} <- create(github_installation),
-             do:
-               upsert(github_installation, response.data.body)
+             do: upsert(github_installation, response.data.body)
 
       GithubInstallationAuthorizations.expired?(
         github_installation.github_installation_authorization
       ) == true ->
         with {:ok, response} <- create(github_installation),
-             do:
-               upsert(github_installation, response.data.body)
+             do: upsert(github_installation, response.data.body)
 
       true ->
         {:ok, github_installation.github_installation_authorization}
