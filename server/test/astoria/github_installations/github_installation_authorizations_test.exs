@@ -10,6 +10,55 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizationsTest do
 
   setup :verify_on_exit!
 
+  describe "get/1" do
+    test "when missing" do
+      github_installation = insert(:github_installation)
+
+      HTTPoisonMock
+      |> expect(:post, fn _path, _payload, _headers ->
+        {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
+      end)
+
+      assert {:ok, github_installation_authorization} =
+               GithubInstallationAuthorizations.get(github_installation)
+
+      assert github_installation_authorization.github_installation_id == github_installation.id
+    end
+
+    test "when expired" do
+      github_installation_authorization =
+        insert(:github_installation_authorization, %{
+          expires_at: ~N[2014-10-02 00:29:10]
+        })
+
+      github_installation = github_installation_authorization.github_installation
+
+      HTTPoisonMock
+      |> expect(:post, fn _path, _payload, _headers ->
+        {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
+      end)
+
+      assert {:ok, github_installation_authorization} =
+               GithubInstallationAuthorizations.get(github_installation)
+
+      assert github_installation_authorization.github_installation_id == github_installation.id
+    end
+
+    test "when not expired" do
+      github_installation_authorization =
+        insert(:github_installation_authorization, %{
+          expires_at: ~N[3014-10-02 00:29:10]
+        })
+
+      github_installation = github_installation_authorization.github_installation
+
+      assert {:ok, github_installation_authorization} =
+               GithubInstallationAuthorizations.get(github_installation)
+
+      assert github_installation_authorization.github_installation_id == github_installation.id
+    end
+  end
+
   test "missing?/1" do
     github_installation =
       insert(:github_installation)
@@ -18,25 +67,29 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizationsTest do
     assert GithubInstallationAuthorizations.missing?(github_installation)
   end
 
-  test "upsert/1" do
+  test "create/1" do
     github_installation = insert(:github_installation)
 
     HTTPoisonMock
     |> expect(:post, fn _path, _payload, _headers ->
       {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
     end)
-    |> expect(:post, fn _path, _payload, _headers ->
-      {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
-    end)
 
-    GithubInstallationAuthorizations.upsert(github_installation)
+    assert {:ok, response} = GithubInstallationAuthorizations.create(github_installation)
+    assert response.data.body["token"] == "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
+  end
+
+  test "upsert/1" do
+    github_installation = insert(:github_installation)
+    token = "token"
 
     assert {:ok, github_installation_authorization} =
-             GithubInstallationAuthorizations.upsert(github_installation)
+             GithubInstallationAuthorizations.upsert(github_installation, %{
+               "expires_at" => NaiveDateTime.utc_now(),
+               "token" => token
+             })
 
-    assert github_installation.id == github_installation_authorization.github_installation_id
-
-    assert github_installation_authorization.token ==
-             "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
+    assert github_installation_authorization.github_installation_id == github_installation.id
+    assert github_installation_authorization.token == token
   end
 end

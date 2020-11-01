@@ -27,6 +27,26 @@ defmodule Astoria.Github.Api.V3.RequestTest do
     %{client: client}
   end
 
+  describe "new/2" do
+    test "with no payload", %{client: client} do
+      assert %Request{
+               client: client,
+               method: :get,
+               path: "/path",
+               payload: %{}
+             } = Request.new(client, :get, "/path")
+    end
+
+    test "with payload", %{client: client} do
+      assert %Request{
+               client: client,
+               method: :get,
+               path: "/path",
+               payload: %{"test" => "test"}
+             } = Request.new(client, :get, "/path", %{"test" => "test"})
+    end
+  end
+
   describe "perform/2" do
     test "with get request", %{client: client} do
       request =

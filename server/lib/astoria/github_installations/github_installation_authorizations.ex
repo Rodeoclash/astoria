@@ -12,12 +12,16 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizations do
 
     cond do
       missing?(github_installation) == true ->
-        upsert(github_installation)
+        with {:ok, response} <- create(github_installation),
+             do:
+               upsert(github_installation, response.data.body)
 
       GithubInstallationAuthorizations.expired?(
         github_installation.github_installation_authorization
       ) == true ->
-        upsert(github_installation)
+        with {:ok, response} <- create(github_installation),
+             do:
+               upsert(github_installation, response.data.body)
 
       true ->
         {:ok, github_installation.github_installation_authorization}
@@ -28,28 +32,26 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizations do
     github_installation.github_installation_authorization == nil
   end
 
-  @spec upsert(%GithubInstallations.GithubInstallation{}) ::
-          {:ok, %GithubInstallationAuthorizations.GithubInstallationAuthorization{}}
-          | {:error, any()}
-  def upsert(github_installation) do
-    with {:ok, result} <- create_token(github_installation),
-         do:
-           %GithubInstallationAuthorizations.GithubInstallationAuthorization{}
-           |> GithubInstallationAuthorizations.GithubInstallationAuthorization.changeset(%{
-             data: result.data.body,
-             expires_at: result.data.body["expires_at"],
-             github_installation_id: github_installation.id,
-             token: result.data.body["token"]
-           })
-           |> Repo.insert(
-             on_conflict: {:replace_all_except, [:id]},
-             conflict_target: :github_installation_id
-           )
-  end
-
-  defp create_token(github_installation) do
+  def create(github_installation) do
     GithubApplication.client()
     |> Github.Api.V3.App.Installations.AccessTokens.create(github_installation.github_id)
     |> Github.Api.V3.Request.perform()
+  end
+
+  @spec upsert(%GithubInstallations.GithubInstallation{}, map()) ::
+          {:ok, %GithubInstallationAuthorizations.GithubInstallationAuthorization{}}
+          | {:error, any()}
+  def upsert(github_installation, data) do
+    %GithubInstallationAuthorizations.GithubInstallationAuthorization{}
+    |> GithubInstallationAuthorizations.GithubInstallationAuthorization.changeset(%{
+      data: data,
+      expires_at: data["expires_at"],
+      github_installation_id: github_installation.id,
+      token: data["token"]
+    })
+    |> Repo.insert(
+      on_conflict: {:replace_all_except, [:id]},
+      conflict_target: :github_installation_id
+    )
   end
 end

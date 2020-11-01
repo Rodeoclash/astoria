@@ -17,26 +17,50 @@ defmodule Astoria.Github.Api.V3Test do
     %{client: client}
   end
 
-  test "post/2", %{client: client} do
-    HTTPoisonMock
-    |> expect(:post, fn path, payload, _headers ->
-      assert path == "https://api.github.com/endpoint"
-      assert payload == "123abc"
+  describe "post/2" do
+    test "with payload", %{client: client} do
+      HTTPoisonMock
+      |> expect(:post, fn path, payload, _headers ->
+        assert path == "https://api.github.com/endpoint"
+        assert payload == "123abc"
 
-      {:ok, @response}
-    end)
+        {:ok, @response}
+      end)
 
-    assert V3.post(client, "/endpoint", "123abc") ==
-             {:ok,
-              %V3.Response{
-                data: %HTTPoison.Response{
-                  body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
-                  headers: [],
-                  request: nil,
-                  request_url: nil,
-                  status_code: nil
-                }
-              }}
+      assert V3.post(client, "/endpoint", "123abc") ==
+               {:ok,
+                %V3.Response{
+                  data: %HTTPoison.Response{
+                    body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
+                    headers: [],
+                    request: nil,
+                    request_url: nil,
+                    status_code: nil
+                  }
+                }}
+    end
+
+    test "without payload", %{client: client} do
+      HTTPoisonMock
+      |> expect(:post, fn path, payload, _headers ->
+        assert path == "https://api.github.com/endpoint"
+        assert payload == ""
+
+        {:ok, @response}
+      end)
+
+      assert V3.post(client, "/endpoint") ==
+               {:ok,
+                %V3.Response{
+                  data: %HTTPoison.Response{
+                    body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
+                    headers: [],
+                    request: nil,
+                    request_url: nil,
+                    status_code: nil
+                  }
+                }}
+    end
   end
 
   test "get/2", %{client: client} do

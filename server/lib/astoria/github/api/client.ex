@@ -6,6 +6,12 @@ defmodule Astoria.Github.Api.Client do
 
   @doc ~S"""
   Exchanges a Github code for access and refresh tokens
+
+  ## Examples
+
+      iex> Client.new("token", "type")
+      %Client{token: "token", type: "type"}
+
   """
   def new(token, type) do
     %Client{token: token, type: type}

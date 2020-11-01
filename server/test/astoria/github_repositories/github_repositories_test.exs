@@ -19,7 +19,7 @@ defmodule Astoria.GithubRepositoriesTest do
 
     assert {:ok, github_repository} =
              GithubRepositories.upsert(github_installation, %{
-               "id" => 1,
+               "id" => 1
              })
 
     assert github_repository.data == %{"id" => 1}
@@ -27,4 +27,3 @@ defmodule Astoria.GithubRepositoriesTest do
     assert github_repository.github_installation_id == github_installation.id
   end
 end
-
