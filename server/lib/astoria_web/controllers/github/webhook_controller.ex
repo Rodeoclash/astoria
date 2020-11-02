@@ -1,4 +1,5 @@
 defmodule AstoriaWeb.Github.WebhookController do
+  alias Astoria.{GithubInstallations}
   require Logger
   use AstoriaWeb, :controller
 
@@ -19,8 +20,10 @@ defmodule AstoriaWeb.Github.WebhookController do
   App was installed
   """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def create(conn, %{"action" => "created", "installation" => _installation}) do
+  def create(conn, %{"action" => "created", "installation" => installation}) do
     log("App installation create heard")
+
+    GithubInstallations.upsert(installation)
 
     conn
     |> send_resp(:no_content, "")

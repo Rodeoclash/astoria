@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.Github.WebhookControllerTest do
-  alias Astoria.Fixtures.Github.Webhooks
+  alias Astoria.{Fixtures.Github.Webhooks, GithubInstallations}
   use AstoriaWeb.ConnCase
 
   setup %{conn: conn} do
@@ -25,6 +25,8 @@ defmodule AstoriaWeb.Github.WebhookControllerTest do
           Routes.api_github_webhook_path(conn, :create),
           Webhooks.Installation.created()
         )
+
+      assert GithubInstallations.count() == 1
 
       assert response(conn, 204)
     end

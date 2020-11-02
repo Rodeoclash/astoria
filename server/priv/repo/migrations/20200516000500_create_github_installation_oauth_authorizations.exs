@@ -6,7 +6,7 @@ defmodule Astoria.Repo.Migrations.CreateGithubInstallationOauthAuthorizations do
       add :data, :map, null: false
       add :expires_at, :naive_datetime, null: false
       add :token, :string, null: false
-      add :github_installation_id, references("github_installations")
+      add :github_installation_id, references("github_installations", on_delete: :delete_all)
       timestamps()
     end
 

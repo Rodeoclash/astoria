@@ -5,7 +5,7 @@ defmodule Astoria.Repo.Migrations.CreateGithubRepositories do
     create table(:github_repositories) do
       add :data, :map, null: false
       add :github_id, :integer, null: false
-      add :github_installation_id, references("github_installations")
+      add :github_installation_id, references("github_installations", on_delete: :delete_all)
       add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")
       timestamps()
     end

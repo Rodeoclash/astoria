@@ -5,7 +5,7 @@ defmodule Astoria.Repo.Migrations.CreateGithubPullRequests do
     create table(:github_pull_requests) do
       add :data, :map, null: false
       add :github_id, :integer, null: false
-      add :github_repository_id, references("github_repositories")
+      add :github_repository_id, references("github_repositories", on_delete: :delete_all)
       add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")
       timestamps()
     end
