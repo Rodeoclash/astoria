@@ -23,7 +23,8 @@ defmodule AstoriaWeb.Github.WebhookController do
   def create(conn, %{"action" => "created", "installation" => installation}) do
     log("App installation create heard")
 
-    GithubInstallations.upsert(installation)
+    with {:ok, github_installation} <- GithubInstallations.upsert(installation),
+         do: GithubInstallations.GithubRepositories.sync(github_installation)
 
     conn
     |> send_resp(:no_content, "")

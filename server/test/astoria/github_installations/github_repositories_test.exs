@@ -20,6 +20,9 @@ defmodule Astoria.GithubInstallations.GithubRepositoriesTest do
     |> expect(:get, fn _path, _headers ->
       {:ok, Fixtures.Github.Api.V3.Installation.Repositories.read()}
     end)
+    |> expect(:get, 28, fn _path, _headers ->
+      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read()}
+    end)
 
     GithubRepositories.sync(github_installation)
 

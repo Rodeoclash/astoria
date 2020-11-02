@@ -2,7 +2,7 @@ defmodule Astoria.Fixtures.Github.Api.V3.App.Installations.AccessTokens do
   def create do
     %HTTPoison.Response{
       body:
-        "{\"token\":\"v1.32990a00ff2a464dfccd66be81de7c413e3c60e1\",\"expires_at\":\"2020-10-25T04:14:02Z\",\"permissions\":{\"metadata\":\"read\",\"pull_requests\":\"read\"},\"repository_selection\":\"all\"}",
+        "{\"token\":\"v1.32990a00ff2a464dfccd66be81de7c413e3c60e1\",\"expires_at\":\"3020-10-25T04:14:02Z\",\"permissions\":{\"metadata\":\"read\",\"pull_requests\":\"read\"},\"repository_selection\":\"all\"}",
       headers: [
         {"Date", "Sun, 25 Oct 2020 03:14:02 GMT"},
         {"Content-Type", "application/json; charset=utf-8"},
