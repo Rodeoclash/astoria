@@ -34,4 +34,20 @@ defmodule Astoria.Factory do
       token: "abc"
     }
   end
+
+  def github_repository_factory do
+    %Astoria.GithubRepositories.GithubRepository{
+      data: %{},
+      github_id: 1,
+      github_installation: build(:github_installation)
+    }
+  end
+
+  def github_pull_request_factory do
+    %Astoria.GithubPullRequests.GithubPullRequest{
+      data: %{},
+      github_id: 1,
+      github_repository: build(:github_repository)
+    }
+  end
 end

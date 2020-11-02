@@ -3,8 +3,6 @@ defmodule Astoria.Interactions.SyncGithubInstallations do
 
   def perform(request) do
     with {:ok, response} <- Github.Api.V3.Request.perform(request),
-         do: Enum.each(response.data.body, &GithubInstallations.upsert/1)
-
-    :ok
+         do: Enum.map(response.data.body, &GithubInstallations.upsert/1)
   end
 end

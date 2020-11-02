@@ -6,10 +6,8 @@ defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
 
     with {:ok, response} <- Github.Api.V3.Request.perform(request),
          do:
-           Enum.each(response.data.body["repositories"], fn repository ->
+           Enum.map(response.data.body["repositories"], fn repository ->
              GithubRepositories.upsert(github_installation, repository)
            end)
-
-    :ok
   end
 end

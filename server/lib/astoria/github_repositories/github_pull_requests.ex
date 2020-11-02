@@ -10,7 +10,10 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
 
     with {:ok, client} <- GithubInstallations.client(github_repository.github_installation),
          do:
-           Github.Api.V3.Repos.Pulls.read(client, github_repository.data["full_name"])
+           Github.Api.V3.Repos.Pulls.read(client, %{
+             full_name: github_repository.data["full_name"],
+             state: "all"
+           })
            |> Interactions.SyncGithubRepositoryPullRequests.perform(github_repository.id)
   end
 end
