@@ -1,5 +1,6 @@
 defmodule AstoriaWeb.Github.WebhookControllerTest do
   alias Astoria.{Fixtures.Github.Webhooks, GithubInstallations, Fixtures}
+  import Astoria.Factory
   import Mox
   use AstoriaWeb.ConnCase
 
@@ -46,12 +47,20 @@ defmodule AstoriaWeb.Github.WebhookControllerTest do
     end
 
     test "app install deleted", %{conn: conn} do
+      response = Webhooks.Installation.deleted()
+
+      insert(:github_installation, %{
+        github_id: response["installation"]["id"]
+      })
+
       conn =
         post(
           conn,
           Routes.api_github_webhook_path(conn, :create),
-          Webhooks.Installation.deleted()
+          response
         )
+
+      assert GithubInstallations.count() == 0
 
       assert response(conn, 204)
     end

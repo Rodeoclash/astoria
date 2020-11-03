@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.Github.WebhookController do
-  alias Astoria.{GithubInstallations}
+  alias Astoria.{GithubInstallations, Repo}
   require Logger
   use AstoriaWeb, :controller
 
@@ -34,8 +34,12 @@ defmodule AstoriaWeb.Github.WebhookController do
   App was uninstalled
   """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def create(conn, %{"action" => "deleted", "installation" => _installation}) do
+  def create(conn, %{"action" => "deleted", "installation" => installation}) do
     log("App installation delete heard")
+
+    with github_installation <-
+           Repo.get_by(GithubInstallations.GithubInstallation, %{github_id: installation["id"]}),
+         do: Repo.delete(github_installation)
 
     conn
     |> send_resp(:no_content, "")

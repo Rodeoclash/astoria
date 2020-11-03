@@ -1,16 +1,12 @@
 defmodule Astoria.GithubRepositories do
   alias Astoria.{GithubInstallations, GithubRepositories, Repo}
 
-  import Ecto.Query, only: [from: 2]
-
   @doc """
   How many repositories have been created
   """
   @spec count() :: :ok
   def count do
-    from(github_repository in GithubRepositories.GithubRepository,
-      select: count(github_repository.id)
-    )
+    GithubRepositories.GithubRepository.count()
     |> Repo.one()
   end
 
@@ -29,5 +25,14 @@ defmodule Astoria.GithubRepositories do
       on_conflict: {:replace_all_except, [:id, :pub_id]},
       conflict_target: :github_id
     )
+  end
+
+  @doc """
+  The list of contributors to this repo
+  """
+  @spec logins(%GithubInstallations.GithubInstallation{}) :: :ok
+  def logins(github_repository) do
+    GithubRepositories.GithubRepository.count(github_repository)
+    |> Repo.all()
   end
 end
