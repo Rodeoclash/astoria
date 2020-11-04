@@ -1,11 +1,13 @@
 defmodule Astoria.Users do
-  alias Astoria.{Users.User, Repo}
+  alias Astoria.{Repo, GithubRepositories, Users}
+  alias __MODULE__
 
   @doc ~S"""
   Gets a single user by id
   """
-  @spec get(term()) :: %User{}
-  def get(id) do
-    Repo.get(User, id)
+  @spec github_repositories(%Users.User{}) :: [%GithubRepositories.GithubRepository{}]
+  def github_repositories(user) do
+    GithubRepositories.GithubRepository.for_users([user.id])
+    |> Repo.all()
   end
 end

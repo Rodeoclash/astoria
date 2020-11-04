@@ -33,6 +33,8 @@ defmodule Astoria.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:absinthe, "~> 1.5.0"},
+      {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"},
       {:ecto_sql, "~> 3.4"},
       {:ex_machina, "~> 2.4", only: :test},
       {:gettext, "~> 0.11"},

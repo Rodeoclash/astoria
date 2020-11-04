@@ -23,6 +23,14 @@ defmodule Astoria.Factory do
     }
   end
 
+  def github_user_factory do
+    %Astoria.GithubUsers.GithubUser{
+      data: %{},
+      github_id: github_id(),
+      user: build(:user)
+    }
+  end
+
   def github_installation_factory do
     %Astoria.GithubInstallations.GithubInstallation{
       data: %{},

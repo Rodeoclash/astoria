@@ -5,7 +5,7 @@ defmodule AstoriaWeb.Github.WebhookController do
 
   action_fallback AstoriaWeb.FallbackController
 
-  @doc ~S"""
+  @doc """
   Ping event from a new app being created in Github and pointed at this instance of the Astoria app
   """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
@@ -16,9 +16,6 @@ defmodule AstoriaWeb.Github.WebhookController do
     |> send_resp(:no_content, "")
   end
 
-  @doc ~S"""
-  App was installed
-  """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"action" => "created", "installation" => installation}) do
     log("App installation create heard")
@@ -30,9 +27,6 @@ defmodule AstoriaWeb.Github.WebhookController do
     |> send_resp(:no_content, "")
   end
 
-  @doc ~S"""
-  App was uninstalled
-  """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"action" => "deleted", "installation" => installation}) do
     log("App installation delete heard")
@@ -45,9 +39,6 @@ defmodule AstoriaWeb.Github.WebhookController do
     |> send_resp(:no_content, "")
   end
 
-  @doc ~S"""
-  Unknown event from Github
-  """
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, params) do
     log("Unknown webhook heard")

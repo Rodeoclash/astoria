@@ -17,8 +17,7 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
 
     with {:ok, client} <- GithubInstallations.client(github_repository.github_installation),
          do:
-           Github.Api.V3.Repos.Pulls.read(client, %{
-             full_name: github_repository.data["full_name"],
+           Github.Api.V3.Repos.Pulls.read_list(client, github_repository.data["full_name"], %{
              state: "all"
            })
            |> Interactions.SyncGithubRepositoryPullRequests.perform(github_repository.id)
@@ -33,10 +32,11 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
 
     with {:ok, client} <- GithubInstallations.client(github_repository.github_installation),
          do:
-           Github.Api.V3.Repos.Pulls.read(client, %{
-             full_name: github_repository.data["full_name"],
-             id: github_pull_request_id
-           })
+           Github.Api.V3.Repos.Pulls.read_single(
+             client,
+             github_repository.data["full_name"],
+             github_pull_request_id
+           )
            |> Interactions.SyncGithubPullRequest.perform(github_repository.id)
   end
 

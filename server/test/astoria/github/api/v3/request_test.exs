@@ -34,7 +34,7 @@ defmodule Astoria.Github.Api.V3.RequestTest do
                method: :get,
                path: "/path",
                payload: %{}
-             } = Request.new(client, :get, "/path")
+             } == Request.new(client, :get, "/path")
     end
 
     test "with payload", %{client: client} do
@@ -43,7 +43,7 @@ defmodule Astoria.Github.Api.V3.RequestTest do
                method: :get,
                path: "/path",
                payload: %{"test" => "test"}
-             } = Request.new(client, :get, "/path", %{"test" => "test"})
+             } == Request.new(client, :get, "/path", %{"test" => "test"})
     end
   end
 

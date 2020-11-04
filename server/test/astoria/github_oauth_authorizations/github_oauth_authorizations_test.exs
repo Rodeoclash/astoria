@@ -36,7 +36,7 @@ defmodule Astoria.GithubOauthAuthorizationsTest do
          }}
       end)
 
-      assert {:error, %HTTPoison.Error{} = response} =
+      assert {:error, %HTTPoison.Error{} = _response} =
                GithubOauthAuthorizations.from_temporary_code("xyz")
     end
   end
@@ -99,7 +99,7 @@ defmodule Astoria.GithubOauthAuthorizationsTest do
          }}
       end)
 
-      assert {:error, %HTTPoison.Error{} = response} =
+      assert {:error, %HTTPoison.Error{} = _response} =
                GithubOauthAuthorizations.refresh(github_oauth_authorization)
     end
   end

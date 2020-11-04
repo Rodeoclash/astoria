@@ -31,6 +31,25 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
   end
 
   @doc """
+  Group by the PR being merged in a specific period
+  """
+  def group_by_merged_in_period(query \\ GithubPullRequest, period) do
+    query
+    |> group_by(
+      [github_pull_request],
+      fragment("DATE_TRUNC(?, ?->>'merged_at')", ^period, github_pull_request.data)
+    )
+  end
+
+  @doc """
+  Group by specific users
+  """
+  def group_by_user(query \\ GithubPullRequest) do
+    query
+    |> group_by([github_pull_request], fragment("name"))
+  end
+
+  @doc """
   Get details about users
   """
   def user_summary(query \\ GithubPullRequest) do
@@ -41,6 +60,5 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
       first_seen: fragment("MIN(?->>'created_at')::timestamp", github_pull_request.data),
       last_seen: fragment("MAX(?->>'created_at')::timestamp", github_pull_request.data)
     })
-    |> group_by([github_pull_request], fragment("name"))
   end
 end

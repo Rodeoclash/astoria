@@ -2,7 +2,7 @@
 # Development
 #
 
-FROM elixir:1.10 as development
+FROM elixir:1.11 as development
 
 ENV APP_HOME /usr/src/app
 ENV LANG C.UTF-8
