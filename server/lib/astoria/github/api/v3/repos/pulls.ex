@@ -4,9 +4,11 @@ defmodule Astoria.Github.Api.V3.Repos.Pulls do
   def read(client, options) do
     params =
       options
-      |> Map.drop([:full_name])
+      |> Map.drop([:full_name, :id])
       |> URI.encode_query()
 
-    Github.Api.V3.Request.new(client, :get, "repos/#{options[:full_name]}/pulls?#{params}")
+    id = "/#{options[:id]}" || ""
+
+    Github.Api.V3.Request.new(client, :get, "repos/#{options[:full_name]}/pulls#{id}?#{params}")
   end
 end

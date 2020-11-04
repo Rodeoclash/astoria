@@ -1,6 +1,10 @@
 defmodule Astoria.Factory do
   use ExMachina.Ecto, repo: Astoria.Repo
 
+  def github_id() do
+    sequence(:github_id, & &1)
+  end
+
   def user_factory do
     %Astoria.Users.User{
       email: sequence(:email, &"email-#{&1}@example.com"),
@@ -22,7 +26,7 @@ defmodule Astoria.Factory do
   def github_installation_factory do
     %Astoria.GithubInstallations.GithubInstallation{
       data: %{},
-      github_id: 1
+      github_id: github_id()
     }
   end
 
@@ -38,7 +42,7 @@ defmodule Astoria.Factory do
   def github_repository_factory do
     %Astoria.GithubRepositories.GithubRepository{
       data: %{},
-      github_id: 1,
+      github_id: github_id(),
       github_installation: build(:github_installation)
     }
   end
@@ -46,7 +50,7 @@ defmodule Astoria.Factory do
   def github_pull_request_factory do
     %Astoria.GithubPullRequests.GithubPullRequest{
       data: %{},
-      github_id: 1,
+      github_id: github_id(),
       github_repository: build(:github_repository)
     }
   end

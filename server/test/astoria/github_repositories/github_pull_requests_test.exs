@@ -18,7 +18,10 @@ defmodule Astoria.GithubRepositories.GithubPullRequestsTest do
       {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
     end)
     |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read()}
+      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_list()}
+    end)
+    |> expect(:get, fn _path, _headers ->
+      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_single()}
     end)
 
     GithubPullRequests.sync(github_repository)

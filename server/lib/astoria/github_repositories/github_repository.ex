@@ -3,7 +3,6 @@ defmodule Astoria.GithubRepositories.GithubRepository do
   alias __MODULE__
   use Ecto.Schema
   import Ecto.Changeset
-
   import Ecto.Query
 
   schema "github_repositories" do
@@ -27,27 +26,26 @@ defmodule Astoria.GithubRepositories.GithubRepository do
   end
 
   @doc """
+  Scope the query by the supplied installation id
+  """
+  def filter_by_github_installation_id(query \\ GithubRepository, id) do
+    query
+    |> where([github_repository], github_repository.github_installation_id == ^id)
+  end
+
+  @doc """
   Scope the query by the supplied github_repositories
   """
-  def filter(query \\ GithubRepository, github_repositories) do
-    ids = Enum.map(github_repositories, &(&1.id))
-
-    IO.inspect(ids)
-
+  def filter_by_pub_id(query \\ GithubRepository, pub_ids) do
     query
-    |> where([github_repository], github_repository.id in ^ids)
+    |> where([github_repository], github_repository.pub_id in ^pub_ids)
   end
 
   @doc """
   Count the number of results
   """
   def count(query \\ GithubRepository) do
-    from(github_repository in GithubRepository,
-      select: count(github_repository.id)
-    )
-  end
-
-  def logins(github_repository) do
-    # SELECT github_pull_requests.data->'user'->'login' AS github_name FROM github_pull_requests WHERE github_repository_id = 45 GROUP BY github_name;
+    query
+    |> select([github_repository], count(github_repository.id))
   end
 end
