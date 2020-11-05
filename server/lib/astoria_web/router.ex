@@ -7,11 +7,17 @@ defmodule AstoriaWeb.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
-    plug AstoriaWeb.Plugs.SetCurrentUser
+    plug AstoriaWeb.Plugs.SetSessionCurrentUserPlug
   end
 
   pipeline :api do
     plug :accepts, ["json"]
+  end
+
+  pipeline :graphql do
+    plug :accepts, ["json"]
+    plug AstoriaWeb.Plugs.SetSessionCurrentUserPlug
+    plug AstoriaWeb.Plugs.SetGraphQLContextPlug
   end
 
   scope "/", AstoriaWeb do
@@ -36,7 +42,17 @@ defmodule AstoriaWeb.Router do
     end
   end
 
+  scope "/graphql" do
+    pipe_through :graphql
+    forward "/", Absinthe.Plug, schema: AstoriaWeb.Schema
+  end
+
   if Mix.env() in [:dev, :test] do
+    forward "/graphiql", Absinthe.Plug.GraphiQL,
+      schema: AstoriaWeb.Schema,
+      interface: :playground,
+      default_url: "/graphql"
+
     import Phoenix.LiveDashboard.Router
 
     scope "/" do

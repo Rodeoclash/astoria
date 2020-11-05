@@ -35,6 +35,7 @@ defmodule Astoria.MixProject do
     [
       {:absinthe, "~> 1.5.0"},
       {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"},
+      {:absinthe_plug, "~> 1.5.0"},
       {:ecto_sql, "~> 3.4"},
       {:ex_machina, "~> 2.4", only: :test},
       {:gettext, "~> 0.11"},

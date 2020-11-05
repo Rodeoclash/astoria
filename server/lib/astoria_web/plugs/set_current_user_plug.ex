@@ -1,15 +1,16 @@
-defmodule AstoriaWeb.Plugs.SetCurrentUser do
+defmodule AstoriaWeb.Plugs.SetSessionCurrentUserPlug do
   alias Astoria.{Users, Repo}
   import Plug.Conn
 
-  def init(_params) do
-  end
+  def init(opts), do: opts
 
   def call(conn, _params) do
-    user_id = Plug.Conn.get_session(conn, :user_id)
+    conn = fetch_session(conn)
+
+    current_user_id = get_session(conn, :current_user_id)
 
     cond do
-      current_user = user_id && Repo.get(Users.User, user_id) ->
+      current_user = current_user_id != nil && Repo.get(Users.User, current_user_id) ->
         conn
         |> assign(:current_user, current_user)
         |> assign(:current_user?, true)

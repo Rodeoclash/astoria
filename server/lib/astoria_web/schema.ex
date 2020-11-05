@@ -13,7 +13,7 @@ defmodule AstoriaWeb.Schema do
   import_types(Types.RepositoryType)
 
   query do
-    field :current_user, non_null(:current_user) do
+    field :current_user, :current_user do
       resolve(&Resolvers.CurrentUserResolver.get_from_context/3)
     end
   end

@@ -64,7 +64,7 @@ defmodule AstoriaWeb.Github.AuthorizedController do
            end),
          {:ok, %{user: user}} <- Repo.transaction(multi) do
       conn
-      |> put_session("user_id", user.id)
+      |> put_session("current_user_id", user.id)
       |> redirect(to: Routes.admin_current_user_path(conn, :show))
     else
       {:error, _error} ->
