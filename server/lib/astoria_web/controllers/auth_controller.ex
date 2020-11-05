@@ -1,9 +1,8 @@
 defmodule AstoriaWeb.AuthController do
   alias Astoria.{Users, Repo}
+  alias Ueberauth.Strategy.Helpers
   use AstoriaWeb, :controller
   plug Ueberauth
-
-  alias Ueberauth.Strategy.Helpers
 
   def request(conn, _params) do
     render(conn, "request.html", callback_url: Helpers.callback_url(conn))
@@ -37,7 +36,7 @@ defmodule AstoriaWeb.AuthController do
       |> Ecto.Multi.run(:service_user, fn _repo, %{user: user} ->
         case auth.provider do
           :github ->
-            Users.GithubUsers.upsert(user, auth.extra.raw_info.user)
+            Users.GithubUsers.upsert(user, auth.extra.raw_info[:user])
         end
       end)
 
@@ -45,12 +44,7 @@ defmodule AstoriaWeb.AuthController do
       {:ok, %{user: user}} ->
         conn
         |> put_session("current_user_id", user.id)
-        |> put_flash(:info, "You have been logged in")
-        |> redirect(to: "/")
-
-      {:error, _} ->
-        conn
-        |> put_flash(:error, "Problem setting up account")
+        |> put_flash(:info, "Hello #{user.name}, you have been logged in")
         |> redirect(to: "/")
     end
   end
