@@ -23,7 +23,9 @@ defmodule AstoriaWeb.Router do
   scope "/", AstoriaWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    get "/", HomeController, :show
+
+    get "/dashboard", DashboardController, :show
 
     scope "/admin", Admin, as: :admin do
       get "/current_user", CurrentUserController, :show
@@ -61,12 +63,5 @@ defmodule AstoriaWeb.Router do
       schema: AstoriaWeb.Schema,
       interface: :playground,
       default_url: "/graphql"
-
-    import Phoenix.LiveDashboard.Router
-
-    scope "/" do
-      pipe_through :browser
-      live_dashboard "/dashboard", metrics: AstoriaWeb.Telemetry
-    end
   end
 end

@@ -25,7 +25,7 @@ defmodule AstoriaWeb.AuthControllerTest do
       |> AstoriaWeb.AuthController.callback(%{})
 
       assert get_flash(conn, :info) == "Hello John Doe, you have been logged in"
-      assert redirected_to(conn) =~ "/"
+      assert redirected_to(conn) == "/dashboard"
     end
   end
 end

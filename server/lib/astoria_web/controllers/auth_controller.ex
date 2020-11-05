@@ -45,7 +45,7 @@ defmodule AstoriaWeb.AuthController do
         conn
         |> put_session("current_user_id", user.id)
         |> put_flash(:info, "Hello #{user.name}, you have been logged in")
-        |> redirect(to: "/")
+        |> redirect(to: Routes.dashboard_path(conn, :show))
     end
   end
 end
