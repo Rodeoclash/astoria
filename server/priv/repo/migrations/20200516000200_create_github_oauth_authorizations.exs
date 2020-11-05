@@ -3,17 +3,17 @@ defmodule Astoria.Repo.Migrations.CreateOauthAuthorizations do
 
   def change do
     create table(:oauth_authorizations) do
-      add :access_token, :string, null: false
-      add :expires_in, :integer, null: false
-      add :refresh_token, :string, null: false
-      add :refresh_token_expires_in, :integer, null: false
-      add :token_type, :string, null: false
+      add :expires, :boolean
+      add :expires_at, :integer
+      add :other, :map, null: false
+      add :refresh_token, :string
+      add :scopes, {:array, :string}, null: false
+      add :secret, :string
+      add :token, :string
+      add :token_type, :string
 
       timestamps()
     end
-
-    execute "ALTER TABLE oauth_authorizations ADD COLUMN expires_at timestamp(0) without time zone GENERATED ALWAYS AS (inserted_at + expires_in * interval '1' second) stored;",
-            "ALTER TABLE oauth_authorizations DROP COLUMN expires_at;"
 
     create table(:github_oauth_authorizations,
              primary_key: false,

@@ -34,8 +34,8 @@ defmodule Astoria.MixProject do
   defp deps do
     [
       {:absinthe, "~> 1.5.0"},
-      {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"},
       {:absinthe_plug, "~> 1.5.0"},
+      {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"},
       {:ecto_sql, "~> 3.4"},
       {:ex_machina, "~> 2.4", only: :test},
       {:gettext, "~> 0.11"},
@@ -51,7 +51,9 @@ defmodule Astoria.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"}
+      {:telemetry_poller, "~> 0.4"},
+      {:ueberauth, "~> 0.6"},
+      {:ueberauth_github, "~> 0.7"}
     ]
   end
 

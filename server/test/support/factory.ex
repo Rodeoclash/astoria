@@ -14,11 +14,13 @@ defmodule Astoria.Factory do
 
   def github_oauth_authorization_factory do
     %Astoria.GithubOauthAuthorizations.GithubOauthAuthorization{
-      access_token: "123",
-      expires_in: 3600,
+      expires: true,
+      expires_at: 1_704_545_903,
+      other: %{},
       refresh_token: "abc",
-      refresh_token_expires_in: 3600,
-      token_type: "bearer",
+      scopes: [""],
+      token: "123",
+      token_type: "Bearer",
       user: build(:user)
     }
   end

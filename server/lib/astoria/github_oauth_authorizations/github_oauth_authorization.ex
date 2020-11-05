@@ -5,11 +5,13 @@ defmodule Astoria.GithubOauthAuthorizations.GithubOauthAuthorization do
 
   schema "github_oauth_authorizations" do
     belongs_to :user, Users.User
-    field :access_token, :string
-    field :expires_at, :naive_datetime, read_after_writes: true
-    field :expires_in, :integer
+    field :expires, :boolean
+    field :expires_at, :integer
+    field :other, :map
     field :refresh_token, :string
-    field :refresh_token_expires_in, :integer
+    field :scopes, {:array, :string}
+    field :secret, :string
+    field :token, :string
     field :token_type, :string
     timestamps()
   end
@@ -18,19 +20,19 @@ defmodule Astoria.GithubOauthAuthorizations.GithubOauthAuthorization do
   def changeset(auth, attrs) do
     auth
     |> cast(attrs, [
-      :access_token,
-      :expires_in,
+      :expires,
+      :expires_at,
+      :other,
+      :scopes,
+      :secret,
       :refresh_token,
-      :refresh_token_expires_in,
+      :token,
       :token_type,
       :user_id
     ])
     |> validate_required([
-      :access_token,
-      :expires_in,
-      :refresh_token,
-      :refresh_token_expires_in,
-      :token_type,
+      :other,
+      :scopes,
       :user_id
     ])
   end

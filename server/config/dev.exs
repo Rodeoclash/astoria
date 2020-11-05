@@ -16,6 +16,7 @@ config :astoria, Astoria.Repo,
 # watchers to your application. For example, we use it
 # with webpack to recompile .js and .css sources.
 config :astoria, AstoriaWeb.Endpoint,
+  url: [host: "astoria.au.ngrok.io", port: 443, scheme: "https"],
   http: [port: 4000],
   debug_errors: true,
   code_reloader: true,
@@ -29,6 +30,10 @@ config :astoria, AstoriaWeb.Endpoint,
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
+
+config :ueberauth, Ueberauth.Strategy.Github.OAuth,
+  client_id: System.get_env("GITHUB_CLIENT_ID"),
+  client_secret: System.get_env("GITHUB_CLIENT_SECRET")
 
 # ## SSL Support
 #

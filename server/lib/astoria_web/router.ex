@@ -25,10 +25,6 @@ defmodule AstoriaWeb.Router do
 
     get "/", PageController, :index
 
-    scope "/github", Github, as: :github do
-      get "/authorized", AuthorizedController, :show
-    end
-
     scope "/admin", Admin, as: :admin do
       get "/current_user", CurrentUserController, :show
     end
@@ -45,6 +41,19 @@ defmodule AstoriaWeb.Router do
   scope "/graphql" do
     pipe_through :graphql
     forward "/", Absinthe.Plug, schema: AstoriaWeb.Schema
+  end
+
+  scope "/auth", AstoriaWeb do
+    pipe_through :browser
+
+    get "/:provider", AuthController, :request
+    get "/:provider/callback", AuthController, :callback
+  end
+
+  scope "/installed", AstoriaWeb do
+    pipe_through :browser
+
+    get "/:provider", InstalledController, :callback
   end
 
   if Mix.env() in [:dev, :test] do
