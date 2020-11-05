@@ -8,7 +8,7 @@ defmodule AstoriaWeb.Admin.CurrentUserControllerTest do
 
       conn =
         conn
-        |> Plug.Test.init_test_session(%{user_id: user.id})
+        |> Plug.Test.init_test_session(%{current_user_id: user.id})
         |> get(
           Routes.admin_current_user_path(conn, :show),
           %{}

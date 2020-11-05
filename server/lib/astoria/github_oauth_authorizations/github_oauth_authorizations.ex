@@ -6,26 +6,6 @@ defmodule Astoria.GithubOauthAuthorizations do
     GithubOauthAuthorizations.GithubOauthAuthorization
   }
 
-  # @doc ~S"""
-  # Create a github_oauth_authorization from a temporary code
-  # """
-  # @spec from_temporary_code(String.t()) :: %GithubOauthAuthorization{}
-  # def from_temporary_code(code) do
-  #  payload = Map.merge(client_secrets(), %{code: code})
-
-  #  with {:ok, encoded_payload} <- Jason.encode(payload),
-  #       {:ok, data} <- Github.Api.Oauth.create(encoded_payload),
-  #       do:
-  #         {:ok,
-  #          %GithubOauthAuthorization{
-  #            access_token: data["access_token"],
-  #            expires_in: String.to_integer(data["expires_in"]),
-  #            refresh_token: data["refresh_token"],
-  #            refresh_token_expires_in: String.to_integer(data["refresh_token_expires_in"]),
-  #            token_type: data["token_type"]
-  #          }}
-  # end
-
   @doc ~S"""
   Create a Github client from this oauth authorization. It will be refreshed if required.
   """
@@ -56,10 +36,12 @@ defmodule Astoria.GithubOauthAuthorizations do
          {:ok, data} <- Github.Api.Oauth.create(encoded_payload),
          changeset <-
            Ecto.Changeset.change(github_oauth_authorization, %{
-             access_token: data["access_token"],
-             expires_in: String.to_integer(data["expires_in"]),
+             expires_at:
+               DateTime.utc_now()
+               |> DateTime.add(String.to_integer(data["expires_in"]))
+               |> DateTime.to_unix(),
              refresh_token: data["refresh_token"],
-             refresh_token_expires_in: String.to_integer(data["refresh_token_expires_in"]),
+             token: data["access_token"],
              token_type: data["token_type"]
            }),
          do: Repo.update(changeset)
@@ -67,33 +49,21 @@ defmodule Astoria.GithubOauthAuthorizations do
 
   @doc ~S"""
   Has this token expired? Yes if we're past the expiry date. Expires at is a minute early to ensure we have time for inflight requests.
-
-  TODO: Convert this to a virtual generated column when we have support for it
   """
   @spec expired?(%GithubOauthAuthorization{}) :: boolean()
+  def expired?(%GithubOauthAuthorization{expires: nil}), do: false
+  def expired?(%GithubOauthAuthorization{expires: false}), do: false
   def expired?(%GithubOauthAuthorization{expires_at: nil}), do: false
 
   def expired?(%GithubOauthAuthorization{expires_at: expires_at}) do
-    NaiveDateTime.compare(
-      NaiveDateTime.utc_now(),
-      NaiveDateTime.add(expires_at, -60)
-    ) == :gt
+    with {:ok, expires_at} <- DateTime.from_unix(expires_at),
+         expires_at <- DateTime.to_naive(expires_at),
+         do:
+           NaiveDateTime.compare(
+             NaiveDateTime.add(NaiveDateTime.utc_now(), -60),
+             expires_at
+           ) == :gt
   end
-
-  # @doc ~S"""
-  # Update an existing authorization using data payload
-  # """
-  # @spec update(%GithubOauthAuthorization{}) :: boolean()
-  # def update(github_oauth_authorization, data) do
-  #   Ecto.Changeset.change(github_oauth_authorization, %{
-  #     access_token: data["access_token"],
-  #     expires_in: String.to_integer(data["expires_in"]),
-  #     refresh_token: data["refresh_token"],
-  #     refresh_token_expires_in: String.to_integer(data["refresh_token_expires_in"]),
-  #     token_type: data["token_type"]
-  #   })
-  #   |> Repo.update()
-  # end
 
   defp client_secrets do
     %{

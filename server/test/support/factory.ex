@@ -15,7 +15,7 @@ defmodule Astoria.Factory do
   def github_oauth_authorization_factory do
     %Astoria.GithubOauthAuthorizations.GithubOauthAuthorization{
       expires: true,
-      expires_at: 1_704_545_903,
+      expires_at: 2_000_000_000,
       other: %{},
       refresh_token: "abc",
       scopes: [""],

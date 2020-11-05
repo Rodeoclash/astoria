@@ -8,6 +8,7 @@
 use Mix.Config
 
 config :astoria,
+  public_name: "Astoria",
   ecto_repos: [Astoria.Repo],
   http_client: HTTPoison
 

@@ -45,10 +45,10 @@ defmodule AstoriaWeb.AuthController do
       {:ok, %{user: user}} ->
         conn
         |> put_session("current_user_id", user.id)
-        |> put_flash(:info, "The application was installed to your GitHub account")
+        |> put_flash(:info, "You have been logged in")
         |> redirect(to: "/")
 
-      {:error, _, _} ->
+      {:error, _} ->
         conn
         |> put_flash(:error, "Problem setting up account")
         |> redirect(to: "/")
