@@ -56,5 +56,16 @@ services:
     ports:
         - '5000:80'
 
+  relay-compiler:
+    command: ./node_modules/relay-compiler/bin/relay-compiler --src ./src --schema ./src/schema.json --watch
+    image: rodeoclash/astoria:latest
+    logging: *logging
+    user: "1000"
+    working_dir: /usr/src/app/assets/
+    volumes:
+      - ./passwd:/etc/passwd
+      - ./server:/usr/src/app
+      - home:/home/server
+
 volumes:
   home:

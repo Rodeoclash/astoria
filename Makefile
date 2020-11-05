@@ -24,3 +24,6 @@ server-bash-root:
 
 infra-deploy:
 	ansible-playbook --vault-password-file=deploy/vault_password.sh -i deploy/hosts deploy/playbook.yml
+
+graphql-update-schema:
+	docker-compose run --rm server mix absinthe.schema.json assets/src/schema.json

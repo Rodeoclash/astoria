@@ -21,6 +21,18 @@ RUN apt-get update && \
     --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
 
+# Install Watchman
+ENV WATCHMAN_VERSION=2020.08.03.00
+RUN curl -LO https://github.com/facebook/watchman/releases/download/v${WATCHMAN_VERSION}/watchman-v${WATCHMAN_VERSION}-linux.zip && \
+    unzip watchman-v${WATCHMAN_VERSION}-linux.zip && \
+    cd watchman-v${WATCHMAN_VERSION}-linux && \
+    cp bin/* /usr/local/bin && \
+    cp lib/* /usr/local/lib && \
+    chmod 755 /usr/local/bin/watchman && \
+    mkdir -p /usr/local/var/run/watchman && \
+    chmod 2777 /usr/local/var/run/watchman && \
+    rm -rf watchman
+
 # install supporting tools
 RUN mix local.hex --force
 RUN mix local.rebar --force
@@ -39,9 +51,9 @@ COPY ./priv priv
 COPY ./test test
 
 # build frontend
-RUN npm install --prefix assets
-RUN npm run deploy --prefix assets
-RUN mix phx.digest
+#RUN npm install --prefix assets
+#RUN npm run deploy --prefix assets
+#RUN mix phx.digest
 
 # create a release
 # RUN MIX_ENV=prod mix release astoria

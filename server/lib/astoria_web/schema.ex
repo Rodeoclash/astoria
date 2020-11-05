@@ -17,4 +17,7 @@ defmodule AstoriaWeb.Schema do
       resolve(&Resolvers.CurrentUserResolver.get_from_context/3)
     end
   end
+
+  mutation do
+  end
 end

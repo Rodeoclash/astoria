@@ -1,0 +1,11 @@
+type Flash {
+  id: ID!
+  body: String!
+  createdAt: String!
+  kind: String!
+  secondsVisible: Int!
+}
+
+extend type RootQueryType {
+  flashes: [Flash]
+}
