@@ -1,0 +1,7 @@
+node_modules
+server/priv/static
+*.graphql.js
+server/cover
+server/assets/src/schema.json
+server/_build
+server/deps

@@ -1,0 +1,34 @@
+{
+  "name": "astoria",
+  "version": "1.0.0",
+  "description": "![Docker Image CI](https://github.com/AndrewRPerkins/gotchas_proto/workflows/Docker%20Image%20CI/badge.svg)",
+  "main": "index.js",
+  "dependencies": {
+    "prettier": "^2.1.2"
+  },
+  "devDependencies": {
+    "husky": "^4.3.0",
+    "lint-staged": "^10.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rodeoclash/astoria.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rodeoclash/astoria/issues"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
+  "homepage": "https://github.com/Rodeoclash/astoria#readme"
+}
