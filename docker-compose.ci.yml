@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   postgres:
@@ -6,10 +6,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     logging: &logging
-      driver: 'json-file'
+      driver: "json-file"
       options:
-        max-size: '200k'
-        max-file: '10'
+        max-size: "200k"
+        max-file: "10"
     image: postgres:12.3
 
   server:

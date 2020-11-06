@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   postgres:
@@ -6,10 +6,10 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     logging: &logging
-      driver: 'json-file'
+      driver: "json-file"
       options:
-        max-size: '200k'
-        max-file: '10'
+        max-size: "200k"
+        max-file: "10"
     image: postgres:12.3
 
   ngrok:
@@ -38,7 +38,7 @@ services:
     image: rodeoclash/astoria:latest
     logging: *logging
     ports:
-      - '4000:4000'
+      - "4000:4000"
     user: "1000"
     volumes:
       - ./passwd:/etc/passwd
@@ -49,12 +49,12 @@ services:
     depends_on:
       - postgres
     environment:
-        PGADMIN_DEFAULT_EMAIL: user@email.com
-        PGADMIN_DEFAULT_PASSWORD: 12345678
+      PGADMIN_DEFAULT_EMAIL: user@email.com
+      PGADMIN_DEFAULT_PASSWORD: 12345678
     image: dpage/pgadmin4
     logging: *logging
     ports:
-        - '5000:80'
+      - "5000:80"
 
   relay-compiler:
     command: ./node_modules/relay-compiler/bin/relay-compiler --src ./src --schema ./src/schema.json --watch

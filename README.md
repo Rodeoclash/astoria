@@ -1,4 +1,5 @@
 # Gotchas Proto
+
 ![Docker Image CI](https://github.com/AndrewRPerkins/gotchas_proto/workflows/Docker%20Image%20CI/badge.svg)
 
 ## Server
@@ -6,6 +7,7 @@
 Provided Docker is installed you should be able to start the server component with `make server-start`. This will fetch all dependencies, install all libs then start the server.
 
 ### Setup for local development
+
 Local development will require the use of ngrok and a dummy repository on GitHub which is configured to the ngrok endpoint. You can trigger events by pushing to your dummy repo.
 
 1. Clone repo
@@ -17,10 +19,10 @@ Local development will require the use of ngrok and a dummy repository on GitHub
 
 ### Direnv variables and there usage
 
-|Name|Use|
-|---|---|
-|GITHUB_PERSONAL_ACCESS_TOKEN|Used to access the Github API until an auth system is built. When setting permissions, ensure it has access to download the repo source code|
-|NGROK_COMMAND|Used in the `docker-compose` file to bring up the ngrok container. Defined as an env variable to allow usage of the paid version|
+| Name                         | Use                                                                                                                                          |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| GITHUB_PERSONAL_ACCESS_TOKEN | Used to access the Github API until an auth system is built. When setting permissions, ensure it has access to download the repo source code |
+| NGROK_COMMAND                | Used in the `docker-compose` file to bring up the ngrok container. Defined as an env variable to allow usage of the paid version             |
 
 ### ngrok usage
 

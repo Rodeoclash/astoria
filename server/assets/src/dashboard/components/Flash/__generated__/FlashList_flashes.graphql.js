@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-'use strict';
+"use strict";
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
@@ -25,35 +25,34 @@ export type FlashList_flashes$key = $ReadOnlyArray<{
 }>;
 */
 
-
-const node/*: ReaderFragment*/ = {
-  "argumentDefinitions": [],
-  "kind": "Fragment",
-  "metadata": {
-    "plural": true
+const node /*: ReaderFragment*/ = {
+  argumentDefinitions: [],
+  kind: "Fragment",
+  metadata: {
+    plural: true,
   },
-  "name": "FlashList_flashes",
-  "selections": [
+  name: "FlashList_flashes",
+  selections: [
     {
-      "args": null,
-      "kind": "FragmentSpread",
-      "name": "FlashShow_flash"
+      args: null,
+      kind: "FragmentSpread",
+      name: "FlashShow_flash",
     },
     {
-      "kind": "ClientExtension",
-      "selections": [
+      kind: "ClientExtension",
+      selections: [
         {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "id",
-          "storageKey": null
-        }
-      ]
-    }
+          alias: null,
+          args: null,
+          kind: "ScalarField",
+          name: "id",
+          storageKey: null,
+        },
+      ],
+    },
   ],
-  "type": "Flash",
-  "abstractKey": null
+  type: "Flash",
+  abstractKey: null,
 };
 // prettier-ignore
 (node/*: any*/).hash = '9a16fefade00102f83ed39a202fc18fb';

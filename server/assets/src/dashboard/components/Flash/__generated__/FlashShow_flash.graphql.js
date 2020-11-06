@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-'use strict';
+"use strict";
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
@@ -26,49 +26,48 @@ export type FlashShow_flash$key = {
 };
 */
 
-
-const node/*: ReaderFragment*/ = {
-  "argumentDefinitions": [],
-  "kind": "Fragment",
-  "metadata": null,
-  "name": "FlashShow_flash",
-  "selections": [
+const node /*: ReaderFragment*/ = {
+  argumentDefinitions: [],
+  kind: "Fragment",
+  metadata: null,
+  name: "FlashShow_flash",
+  selections: [
     {
-      "kind": "ClientExtension",
-      "selections": [
+      kind: "ClientExtension",
+      selections: [
         {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "body",
-          "storageKey": null
+          alias: null,
+          args: null,
+          kind: "ScalarField",
+          name: "body",
+          storageKey: null,
         },
         {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "createdAt",
-          "storageKey": null
+          alias: null,
+          args: null,
+          kind: "ScalarField",
+          name: "createdAt",
+          storageKey: null,
         },
         {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "kind",
-          "storageKey": null
+          alias: null,
+          args: null,
+          kind: "ScalarField",
+          name: "kind",
+          storageKey: null,
         },
         {
-          "alias": null,
-          "args": null,
-          "kind": "ScalarField",
-          "name": "secondsVisible",
-          "storageKey": null
-        }
-      ]
-    }
+          alias: null,
+          args: null,
+          kind: "ScalarField",
+          name: "secondsVisible",
+          storageKey: null,
+        },
+      ],
+    },
   ],
-  "type": "Flash",
-  "abstractKey": null
+  type: "Flash",
+  abstractKey: null,
 };
 // prettier-ignore
 (node/*: any*/).hash = 'b58f5c4f7543dccc94366707bc203509';

@@ -14,27 +14,13 @@ const globalStyles = css`
   }
 `;
 
-const rootStyles = css`
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: 20rem auto 20rem;
-  grid-template-rows: 3rem auto 3rem;
-`;
-
-const navStyles = css`
-  grid-column-end: -1;
-  grid-column-start: 1;
-  grid-row-end: 1;
-  grid-row-start: 1;
-`;
+const rootStyles = css``;
 
 const AppPage = function ({ children, flashes }) {
   return (
     <ThemeProvider theme={theme}>
       <Global styles={globalStyles} />
-      <main css={rootStyles}>
-        {children}
-      </main>
+      <main css={rootStyles}>{children}</main>
 
       <FlashList flashes={flashes} />
     </ThemeProvider>
