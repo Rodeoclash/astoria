@@ -18,7 +18,7 @@ export const CurrentUserRepositoryList = function ({ currentUser }) {
 export default createFragmentContainer(CurrentUserRepositoryList, {
   currentUser: graphql`
     fragment CurrentUserRepositoryList_currentUser on CurrentUser {
-      repositories(first: 10) {
+      repositories(first: 100) {
         edges {
           node {
             ...RepositoryNavigationItem_repository

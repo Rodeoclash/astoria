@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-"use strict";
+'use strict';
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
@@ -24,29 +24,30 @@ export type RepositoryNavigationItem_repository$key = {
 };
 */
 
-const node /*: ReaderFragment*/ = {
-  argumentDefinitions: [],
-  kind: "Fragment",
-  metadata: null,
-  name: "RepositoryNavigationItem_repository",
-  selections: [
+
+const node/*: ReaderFragment*/ = {
+  "argumentDefinitions": [],
+  "kind": "Fragment",
+  "metadata": null,
+  "name": "RepositoryNavigationItem_repository",
+  "selections": [
     {
-      alias: null,
-      args: null,
-      kind: "ScalarField",
-      name: "id",
-      storageKey: null,
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "id",
+      "storageKey": null
     },
     {
-      alias: null,
-      args: null,
-      kind: "ScalarField",
-      name: "name",
-      storageKey: null,
-    },
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    }
   ],
-  type: "Repository",
-  abstractKey: null,
+  "type": "Repository",
+  "abstractKey": null
 };
 // prettier-ignore
 (node/*: any*/).hash = 'd810d4d54b03f2179003093c0c5741aa';

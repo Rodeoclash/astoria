@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-"use strict";
+'use strict';
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
@@ -31,68 +31,69 @@ export type CurrentUserRepositoryList_currentUser$key = {
 };
 */
 
-const node /*: ReaderFragment*/ = {
-  argumentDefinitions: [],
-  kind: "Fragment",
-  metadata: null,
-  name: "CurrentUserRepositoryList_currentUser",
-  selections: [
+
+const node/*: ReaderFragment*/ = {
+  "argumentDefinitions": [],
+  "kind": "Fragment",
+  "metadata": null,
+  "name": "CurrentUserRepositoryList_currentUser",
+  "selections": [
     {
-      alias: null,
-      args: [
+      "alias": null,
+      "args": [
         {
-          kind: "Literal",
-          name: "first",
-          value: 10,
-        },
+          "kind": "Literal",
+          "name": "first",
+          "value": 100
+        }
       ],
-      concreteType: "RepositoryConnection",
-      kind: "LinkedField",
-      name: "repositories",
-      plural: false,
-      selections: [
+      "concreteType": "RepositoryConnection",
+      "kind": "LinkedField",
+      "name": "repositories",
+      "plural": false,
+      "selections": [
         {
-          alias: null,
-          args: null,
-          concreteType: "RepositoryEdge",
-          kind: "LinkedField",
-          name: "edges",
-          plural: true,
-          selections: [
+          "alias": null,
+          "args": null,
+          "concreteType": "RepositoryEdge",
+          "kind": "LinkedField",
+          "name": "edges",
+          "plural": true,
+          "selections": [
             {
-              alias: null,
-              args: null,
-              concreteType: "Repository",
-              kind: "LinkedField",
-              name: "node",
-              plural: false,
-              selections: [
+              "alias": null,
+              "args": null,
+              "concreteType": "Repository",
+              "kind": "LinkedField",
+              "name": "node",
+              "plural": false,
+              "selections": [
                 {
-                  alias: null,
-                  args: null,
-                  kind: "ScalarField",
-                  name: "id",
-                  storageKey: null,
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "id",
+                  "storageKey": null
                 },
                 {
-                  args: null,
-                  kind: "FragmentSpread",
-                  name: "RepositoryNavigationItem_repository",
-                },
+                  "args": null,
+                  "kind": "FragmentSpread",
+                  "name": "RepositoryNavigationItem_repository"
+                }
               ],
-              storageKey: null,
-            },
+              "storageKey": null
+            }
           ],
-          storageKey: null,
-        },
+          "storageKey": null
+        }
       ],
-      storageKey: "repositories(first:10)",
-    },
+      "storageKey": "repositories(first:100)"
+    }
   ],
-  type: "CurrentUser",
-  abstractKey: null,
+  "type": "CurrentUser",
+  "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = '7aa7666dac402b1a869e5a4729c4a48a';
+(node/*: any*/).hash = '491576a1a3c63263dfa2f74d2802af8d';
 
 module.exports = node;

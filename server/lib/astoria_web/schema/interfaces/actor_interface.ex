@@ -11,8 +11,15 @@ defmodule AstoriaWeb.Schema.Interfaces.ActorInterface do
       nil
     end)
 
+    field :name, non_null(:string)
+
     connection field :repositories, node_type: :repository do
-      resolve(&Resolvers.RepositoriesResolver.list_from_user/3)
+      resolve(&Resolvers.GithubRepositoryResolver.list_from_user/3)
+    end
+
+    field :repository, non_null(:repository) do
+      arg :id, non_null(:id)
+      resolve(&Resolvers.GithubRepositoryResolver.get/3)
     end
   end
 end

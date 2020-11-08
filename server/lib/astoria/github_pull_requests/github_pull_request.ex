@@ -25,40 +25,49 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
   @doc """
   Scope the query by the supplied github repository ids
   """
-  def filter_by_github_repository_ids(query \\ GithubPullRequest, ids) do
+  def filter_by_github_repository_id(query \\ GithubPullRequest, id) do
     query
-    |> where([github_pull_request], github_pull_request.github_repository_id in ^ids)
+    |> where([github_pull_request], github_pull_request.github_repository_id == ^id)
   end
 
-  @doc """
-  Group by the PR being merged in a specific period
-  """
-  def group_by_merged_in_period(query \\ GithubPullRequest, period) do
-    query
-    |> group_by(
-      [github_pull_request],
-      fragment("DATE_TRUNC(?, ?->>'merged_at')", ^period, github_pull_request.data)
-    )
-  end
+  #@doc """
+  #Get details about users, used to populate the inputs to the filters.
+  #"""
+  #def select_user_summary(query \\ GithubPullRequest) do
+  #  query
+  #  |> select([github_pull_request], %{
+  #    name: fragment("?->'user'->>'login'", github_pull_request.data),
+  #    total: count(github_pull_request.id),
+  #    first_seen: fragment("MIN(?->>'created_at')::timestamp", github_pull_request.data),
+  #    last_seen: fragment("MAX(?->>'created_at')::timestamp", github_pull_request.data)
+  #  })
+  #end
 
   @doc """
-  Group by specific users
+  Get details about users, used to populate the inputs to the filters.
   """
-  def group_by_user(query \\ GithubPullRequest) do
-    query
-    |> group_by([github_pull_request], fragment("name"))
-  end
-
-  @doc """
-  Get details about users
-  """
-  def user_summary(query \\ GithubPullRequest) do
+  def select_merged_prs(query \\ GithubPullRequest, period) do
     query
     |> select([github_pull_request], %{
-      name: fragment("?->'user'->>'login' as name", github_pull_request.data),
-      total: count(github_pull_request.id),
-      first_seen: fragment("MIN(?->>'created_at')::timestamp", github_pull_request.data),
-      last_seen: fragment("MAX(?->>'created_at')::timestamp", github_pull_request.data)
+      ys: fragment("COUNT(?)", github_pull_request.id),
+      xs: fragment("DATE_TRUNC(?, (?->>'merged_at')::timestamp)", ^period, github_pull_request.data),
+      entities: fragment("?->'user'->>'login'", github_pull_request.data),
     })
+    |> where([github_pull_request], fragment("?->>'merged_at' IS NOT NULL", github_pull_request.data))
+    |> group_by(fragment("xs, entities"))
+    |> order_by(fragment("xs"))
+  end
+
+  @doc """
+  Takes a sub query result set and converts it to a format suitable for plotly
+  """
+  def source_to_traces(source) do
+    from source in subquery(source),
+      select: %{
+        name: source.entities,
+        x: fragment("ARRAY_AGG(?)", source.xs),
+        y: fragment("ARRAY_AGG(?)", source.ys),
+      },
+      group_by: source.entities
   end
 end

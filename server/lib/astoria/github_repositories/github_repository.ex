@@ -36,9 +36,9 @@ defmodule Astoria.GithubRepositories.GithubRepository do
   @doc """
   Scope the query by the supplied github_repositories
   """
-  def filter_by_pub_id(query \\ GithubRepository, pub_ids) do
+  def filter_by_pub_id(query \\ GithubRepository, pub_id) do
     query
-    |> where([github_repository], github_repository.pub_id in ^pub_ids)
+    |> where([github_repository], github_repository.pub_id == ^pub_id)
   end
 
   @doc """
@@ -49,7 +49,7 @@ defmodule Astoria.GithubRepositories.GithubRepository do
     |> select([github_repository], count(github_repository.id))
   end
 
-  def for_users(query \\ GithubRepository, user_ids) do
+  def for_user(query \\ GithubRepository, user_id) do
     query
     |> join(
       :left,
@@ -74,6 +74,6 @@ defmodule Astoria.GithubRepositories.GithubRepository do
       user in Users.User,
       on: user.id == github_user.user_id
     )
-    |> where([github_repository, github_installation, github_user, user], user.id in ^user_ids)
+    |> where([github_repository, github_installation, github_user, user], user.id == ^user_id)
   end
 end

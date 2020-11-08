@@ -10,6 +10,9 @@ defmodule AstoriaWeb.Schema do
   import_types(Interfaces.TimestampInterface)
 
   import_types(Types.CurrentUserType)
+  import_types(Types.PeriodType)
+  import_types(Types.PlotDataMergedPrTraceType)
+  import_types(Types.PlotDataMergedPrType)
   import_types(Types.RepositoryType)
 
   query do

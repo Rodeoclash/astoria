@@ -11,7 +11,12 @@ defmodule AstoriaWeb.Schema.Types.RepositoryType do
     import_fields(:timestamp)
 
     field :name, non_null(:string) do
-      resolve(&Resolvers.RepositoriesResolver.name/3)
+      resolve(&Resolvers.GithubRepositoryResolver.name/3)
+    end
+
+    field :merged_prs, non_null(:plot_data_merged_pr) do
+      arg :period, non_null(:period)
+      resolve(&Resolvers.GithubPullRequestResolver.merged_prs/3)
     end
   end
 

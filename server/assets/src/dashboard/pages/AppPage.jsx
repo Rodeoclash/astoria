@@ -20,8 +20,7 @@ const AppPage = function ({ children, flashes }) {
   return (
     <ThemeProvider theme={theme}>
       <Global styles={globalStyles} />
-      <main css={rootStyles}>{children}</main>
-
+      <div css={rootStyles}>{children}</div>
       <FlashList flashes={flashes} />
     </ThemeProvider>
   );

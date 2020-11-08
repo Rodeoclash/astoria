@@ -11,6 +11,5 @@ defmodule AstoriaWeb.Schema.Types.CurrentUserType do
     import_fields(:timestamp)
 
     field :email, non_null(:string)
-    field :name, non_null(:string)
   end
 end

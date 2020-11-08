@@ -4,7 +4,7 @@
 
 /* eslint-disable */
 
-"use strict";
+'use strict';
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
@@ -23,22 +23,23 @@ export type CurrentUserWelcome_currentUser$key = {
 };
 */
 
-const node /*: ReaderFragment*/ = {
-  argumentDefinitions: [],
-  kind: "Fragment",
-  metadata: null,
-  name: "CurrentUserWelcome_currentUser",
-  selections: [
+
+const node/*: ReaderFragment*/ = {
+  "argumentDefinitions": [],
+  "kind": "Fragment",
+  "metadata": null,
+  "name": "CurrentUserWelcome_currentUser",
+  "selections": [
     {
-      alias: null,
-      args: null,
-      kind: "ScalarField",
-      name: "name",
-      storageKey: null,
-    },
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    }
   ],
-  type: "CurrentUser",
-  abstractKey: null,
+  "type": "CurrentUser",
+  "abstractKey": null
 };
 // prettier-ignore
 (node/*: any*/).hash = '8dc9a03a472cabdb30ccb7dcabeeae2d';

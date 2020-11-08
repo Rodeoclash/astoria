@@ -61,6 +61,7 @@ config :ueberauth, Ueberauth.Strategy.Github.OAuth,
 
 # Watch static and templates for browser reloading.
 config :astoria, AstoriaWeb.Endpoint,
+  static_url: [scheme: "http", host: "localhost", port: 4000],
   live_reload: [
     patterns: [
       ~r"priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$",
