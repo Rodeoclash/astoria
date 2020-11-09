@@ -8,13 +8,14 @@
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
-type RepositoryMergedPRs_repository$ref = any;
+type RepositoryPlotsMergedPrsPerPerson_repository$ref = any;
+type RepositoryPlotsTotalPrsMerged_repository$ref = any;
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type RepositoryShow_repository$ref: FragmentReference;
 declare export opaque type RepositoryShow_repository$fragmentType: RepositoryShow_repository$ref;
 export type RepositoryShow_repository = {|
   +name: string,
-  +$fragmentRefs: RepositoryMergedPRs_repository$ref,
+  +$fragmentRefs: RepositoryPlotsMergedPrsPerPerson_repository$ref & RepositoryPlotsTotalPrsMerged_repository$ref,
   +$refType: RepositoryShow_repository$ref,
 |};
 export type RepositoryShow_repository$data = RepositoryShow_repository;
@@ -42,13 +43,18 @@ const node/*: ReaderFragment*/ = {
     {
       "args": null,
       "kind": "FragmentSpread",
-      "name": "RepositoryMergedPRs_repository"
+      "name": "RepositoryPlotsMergedPrsPerPerson_repository"
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "RepositoryPlotsTotalPrsMerged_repository"
     }
   ],
   "type": "Repository",
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = 'a26e2391566e34065662e0fdcb8559d2';
+(node/*: any*/).hash = '4f4cfe4f384b3caeeb5d9e2bb6343ee5';
 
 module.exports = node;

@@ -6,10 +6,11 @@ import Plot from "react-plotly.js";
 
 const rootStyles = css``;
 
-export const RepositoryMergedPRs = function ({ repository }) {
-  const data = repository.mergedPrs.traces.map((trace) => {
+export const RepositoryPlotsMergedPrsPerPerson = function ({ repository }) {
+  const data = repository.mergedPrsPerPerson.traces.map((trace) => {
     return {
       ...trace,
+      connectgaps: false,
       x: trace.x.map((x) => {
         return new Date(x);
       }),
@@ -21,7 +22,7 @@ export const RepositoryMergedPRs = function ({ repository }) {
       <Plot
         config={{ staticPlot: true }}
         data={data}
-        layout={{ title: "Merged PRs", autosize: true }}
+        layout={{ title: "Merged pull requests per person", autosize: true }}
         style={{ width: "100%", height: "100%" }}
         useResizeHandler={true}
       />
@@ -30,11 +31,11 @@ export const RepositoryMergedPRs = function ({ repository }) {
   );
 };
 
-export default createFragmentContainer(RepositoryMergedPRs, {
+export default createFragmentContainer(RepositoryPlotsMergedPrsPerPerson, {
   repository: graphql`
-    fragment RepositoryMergedPRs_repository on Repository {
+    fragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {
       name
-      mergedPrs(period: $period) {
+      mergedPrsPerPerson(period: $period) {
         traces {
           name
           x

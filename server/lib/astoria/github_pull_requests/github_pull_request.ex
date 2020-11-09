@@ -61,13 +61,35 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
   @doc """
   Takes a sub query result set and converts it to a format suitable for plotly
   """
-  def source_to_traces(source) do
-    from source in subquery(source),
-      select: %{
-        name: source.entities,
-        x: fragment("ARRAY_AGG(?)", source.xs),
-        y: fragment("ARRAY_AGG(?)", source.ys),
-      },
-      group_by: source.entities
+  def count_per_person(query) do
+    query
+    |> subquery()
+    |> select([source], %{
+      name: source.entities,
+      x: fragment("ARRAY_AGG(?)", source.xs),
+      y: fragment("ARRAY_AGG(?)", source.ys),
+    })
+    |> group_by([source], source.entities)
+  end
+
+  @doc """
+  Takes a sub query result set and converts it to a format suitable for plotly
+  """
+  def total_merged_prs(query) do
+    query
+    |> subquery()
+    |> select([source], %{
+      grouper: 1,
+      x: source.xs,
+      y: fragment("SUM(?)::integer", source.ys),
+    })
+    |> group_by([source], source.xs)
+    |> subquery()
+    |> select([source], %{
+      name: 'total',
+      x: fragment("ARRAY_AGG(?)", source.x),
+      y: fragment("ARRAY_AGG(?)", source.y),
+    })
+    |> group_by([source], source.grouper)
   end
 end

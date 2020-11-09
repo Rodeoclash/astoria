@@ -9,23 +9,23 @@
 /*::
 import type { ReaderFragment } from 'relay-runtime';
 import type { FragmentReference } from "relay-runtime";
-declare export opaque type RepositoryMergedPRs_repository$ref: FragmentReference;
-declare export opaque type RepositoryMergedPRs_repository$fragmentType: RepositoryMergedPRs_repository$ref;
-export type RepositoryMergedPRs_repository = {|
+declare export opaque type RepositoryPlotsTotalPrsMerged_repository$ref: FragmentReference;
+declare export opaque type RepositoryPlotsTotalPrsMerged_repository$fragmentType: RepositoryPlotsTotalPrsMerged_repository$ref;
+export type RepositoryPlotsTotalPrsMerged_repository = {|
   +name: string,
-  +mergedPrs: {|
+  +totalPrsMerged: {|
     +traces: $ReadOnlyArray<?{|
       +name: string,
       +x: $ReadOnlyArray<?any>,
       +y: $ReadOnlyArray<?number>,
     |}>
   |},
-  +$refType: RepositoryMergedPRs_repository$ref,
+  +$refType: RepositoryPlotsTotalPrsMerged_repository$ref,
 |};
-export type RepositoryMergedPRs_repository$data = RepositoryMergedPRs_repository;
-export type RepositoryMergedPRs_repository$key = {
-  +$data?: RepositoryMergedPRs_repository$data,
-  +$fragmentRefs: RepositoryMergedPRs_repository$ref,
+export type RepositoryPlotsTotalPrsMerged_repository$data = RepositoryPlotsTotalPrsMerged_repository;
+export type RepositoryPlotsTotalPrsMerged_repository$key = {
+  +$data?: RepositoryPlotsTotalPrsMerged_repository$data,
+  +$fragmentRefs: RepositoryPlotsTotalPrsMerged_repository$ref,
   ...
 };
 */
@@ -48,7 +48,7 @@ return {
   ],
   "kind": "Fragment",
   "metadata": null,
-  "name": "RepositoryMergedPRs_repository",
+  "name": "RepositoryPlotsTotalPrsMerged_repository",
   "selections": [
     (v0/*: any*/),
     {
@@ -62,7 +62,7 @@ return {
       ],
       "concreteType": "PlotDataMergedPr",
       "kind": "LinkedField",
-      "name": "mergedPrs",
+      "name": "totalPrsMerged",
       "plural": false,
       "selections": [
         {
@@ -100,6 +100,6 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'b82fb6115d1442019079c4283c8d913f';
+(node/*: any*/).hash = '7d9549efff80d83b206f5eb3de89f344';
 
 module.exports = node;
