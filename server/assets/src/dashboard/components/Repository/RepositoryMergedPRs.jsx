@@ -7,8 +7,6 @@ import Plot from "react-plotly.js";
 const rootStyles = css``;
 
 export const RepositoryMergedPRs = function ({ repository }) {
-  console.log(repository);
-
   const data = repository.mergedPrs.traces.map((trace) => {
     return {
       ...trace,
