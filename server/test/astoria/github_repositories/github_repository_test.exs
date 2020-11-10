@@ -27,19 +27,16 @@ defmodule Astoria.GithubRepositories.GithubRepositoryTest do
 
   test "filter_by_pub_id/1" do
     github_repository_1 = insert(:github_repository)
-    github_repository_2 = insert(:github_repository)
-    github_repository_3 = insert(:github_repository)
+    insert(:github_repository)
 
     results =
-      GithubRepository.filter_by_pub_id([github_repository_1.pub_id, github_repository_3.pub_id])
+      GithubRepository.filter_by_pub_id(github_repository_1.pub_id)
       |> Repo.all()
 
     result_ids = Enum.map(results, & &1.id)
 
-    assert length(results) == 2
+    assert length(results) == 1
     assert Enum.member?(result_ids, github_repository_1.id)
-    refute Enum.member?(result_ids, github_repository_2.id)
-    assert Enum.member?(result_ids, github_repository_3.id)
   end
 
   test "count/0" do
@@ -53,7 +50,7 @@ defmodule Astoria.GithubRepositories.GithubRepositoryTest do
     assert result == 2
   end
 
-  test "for_users/1" do
+  test "for_user/1" do
     user = insert(:user)
 
     github_user =
@@ -83,7 +80,7 @@ defmodule Astoria.GithubRepositories.GithubRepositoryTest do
     github_repository_3 = insert(:github_repository)
 
     results =
-      GithubRepository.for_users([user.id])
+      GithubRepository.for_user(user.id)
       |> Repo.all()
 
     result_ids = Enum.map(results, & &1.id)

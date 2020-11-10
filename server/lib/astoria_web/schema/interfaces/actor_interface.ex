@@ -18,7 +18,7 @@ defmodule AstoriaWeb.Schema.Interfaces.ActorInterface do
     end
 
     field :repository, non_null(:repository) do
-      arg :id, non_null(:id)
+      arg(:id, non_null(:id))
       resolve(&Resolvers.GithubRepositoryResolver.get/3)
     end
   end

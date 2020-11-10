@@ -8,9 +8,10 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
   end
 
   def get(user, args, _resolution) do
-    result = GithubRepository.for_user(user.id)
-    |> GithubRepository.filter_by_pub_id(args[:id])
-    |> Repo.one()
+    result =
+      GithubRepository.for_user(user.id)
+      |> GithubRepository.filter_by_pub_id(args[:id])
+      |> Repo.one()
 
     {:ok, result}
   end

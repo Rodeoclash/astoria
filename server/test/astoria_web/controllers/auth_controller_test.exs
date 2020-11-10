@@ -8,7 +8,7 @@ defmodule AstoriaWeb.AuthControllerTest do
         extra: %Ueberauth.Auth.Extra{
           raw_info: %{
             user: %{
-              "id" => 63807,
+              "id" => 63807
             }
           }
         },
@@ -18,11 +18,12 @@ defmodule AstoriaWeb.AuthControllerTest do
         }
       }
 
-      conn = conn
-      |> bypass_through(AstoriaWeb.Router, [:browser])
-      |> get(Routes.auth_path(conn, :callback, :github))
-      |> assign(:ueberauth_auth, auth)
-      |> AstoriaWeb.AuthController.callback(%{})
+      conn =
+        conn
+        |> bypass_through(AstoriaWeb.Router, [:browser])
+        |> get(Routes.auth_path(conn, :callback, :github))
+        |> assign(:ueberauth_auth, auth)
+        |> AstoriaWeb.AuthController.callback(%{})
 
       assert get_flash(conn, :info) == "Hello John Doe, you have been logged in"
       assert redirected_to(conn) == "/dashboard"

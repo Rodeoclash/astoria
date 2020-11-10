@@ -15,12 +15,12 @@ defmodule AstoriaWeb.Schema.Types.RepositoryType do
     end
 
     field :merged_prs_per_person, non_null(:plot_data_merged_pr) do
-      arg :period, non_null(:period)
+      arg(:period, non_null(:period))
       resolve(&Resolvers.GithubPullRequestResolver.merged_prs_per_person/3)
     end
 
     field :total_prs_merged, non_null(:plot_data_merged_pr) do
-      arg :period, non_null(:period)
+      arg(:period, non_null(:period))
       resolve(&Resolvers.GithubPullRequestResolver.total_prs_merged/3)
     end
   end
