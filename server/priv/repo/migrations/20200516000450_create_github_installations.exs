@@ -6,6 +6,8 @@ defmodule Astoria.Repo.Migrations.CreateGithubInstallations do
       add :data, :map, null: false
       add :github_id, :integer, null: false
       add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")
+      add :rate_limit_remaining, :integer
+      add :rate_limit_resets_at, :utc_datetime
       timestamps()
     end
 

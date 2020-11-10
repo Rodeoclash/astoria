@@ -11,8 +11,8 @@ defmodule Astoria.Github.Api.V3.ResponseTest do
           {"X-RateLimit-Limit", "5400"},
           {"X-RateLimit-Remaining", "5398"},
           {"X-RateLimit-Reset", "1603801301"},
-          {"X-RateLimit-Used", "2"},
-        ],
+          {"X-RateLimit-Used", "2"}
+        ]
       }
 
       assert Response.rate_limit_remaining(response) == 5398
@@ -20,7 +20,7 @@ defmodule Astoria.Github.Api.V3.ResponseTest do
 
     test "when header not present" do
       response = %HTTPoison.Response{
-        headers: [],
+        headers: []
       }
 
       assert Response.rate_limit_remaining(response) == nil
@@ -34,8 +34,8 @@ defmodule Astoria.Github.Api.V3.ResponseTest do
           {"X-RateLimit-Limit", "5400"},
           {"X-RateLimit-Remaining", "5398"},
           {"X-RateLimit-Reset", "1603801301"},
-          {"X-RateLimit-Used", "2"},
-        ],
+          {"X-RateLimit-Used", "2"}
+        ]
       }
 
       assert Response.rate_limit_resets_at(response) == ~U[2020-10-27 12:21:41Z]
@@ -43,7 +43,7 @@ defmodule Astoria.Github.Api.V3.ResponseTest do
 
     test "when header not present" do
       response = %HTTPoison.Response{
-        headers: [],
+        headers: []
       }
 
       assert Response.rate_limit_remaining(response) == nil
