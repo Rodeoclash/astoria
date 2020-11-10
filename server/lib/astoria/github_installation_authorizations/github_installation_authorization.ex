@@ -6,7 +6,7 @@ defmodule Astoria.GithubInstallationAuthorizations.GithubInstallationAuthorizati
   schema "github_installation_authorizations" do
     belongs_to :github_installation, GithubInstallations.GithubInstallation
     field :data, :map
-    field :expires_at, :naive_datetime
+    field :expires_at, :utc_datetime
     field :token, :string
     timestamps()
   end

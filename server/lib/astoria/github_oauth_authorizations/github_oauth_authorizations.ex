@@ -57,10 +57,9 @@ defmodule Astoria.GithubOauthAuthorizations do
 
   def expired?(%GithubOauthAuthorization{expires_at: expires_at}) do
     with {:ok, expires_at} <- DateTime.from_unix(expires_at),
-         expires_at <- DateTime.to_naive(expires_at),
          do:
-           NaiveDateTime.compare(
-             NaiveDateTime.add(NaiveDateTime.utc_now(), -60),
+           DateTime.compare(
+             DateTime.add(DateTime.utc_now(), -60),
              expires_at
            ) == :gt
   end

@@ -6,9 +6,9 @@ defmodule Astoria.GithubInstallationAuthorizations do
   """
   @spec expired?(%GithubInstallationAuthorizations.GithubInstallationAuthorization{}) :: boolean()
   def expired?(github_installation_authorization) do
-    NaiveDateTime.compare(
-      NaiveDateTime.utc_now(),
-      NaiveDateTime.add(github_installation_authorization.expires_at, -60)
+    DateTime.compare(
+      DateTime.utc_now(),
+      DateTime.add(github_installation_authorization.expires_at, -60)
     ) == :gt
   end
 end

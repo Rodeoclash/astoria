@@ -28,7 +28,7 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizationsTest do
     test "when expired" do
       github_installation_authorization =
         insert(:github_installation_authorization, %{
-          expires_at: ~N[2014-10-02 00:29:10]
+          expires_at: ~U[2014-10-02 00:29:10Z]
         })
 
       github_installation = github_installation_authorization.github_installation
@@ -47,7 +47,7 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizationsTest do
     test "when not expired" do
       github_installation_authorization =
         insert(:github_installation_authorization, %{
-          expires_at: ~N[3014-10-02 00:29:10]
+          expires_at: ~U[3014-10-02 00:29:10Z]
         })
 
       github_installation = github_installation_authorization.github_installation
