@@ -1,5 +1,5 @@
 defmodule Astoria.GithubUsers.GithubUser do
-  alias Astoria.{Users}
+  alias Astoria.{Users, GithubInstallations}
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -8,6 +8,10 @@ defmodule Astoria.GithubUsers.GithubUser do
     field :data, :map
     field :github_id, :integer
     field :pub_id, :binary_id, read_after_writes: true
+
+    has_one :github_installation,
+            GithubInstallations.GithubInstallation
+
     timestamps()
   end
 

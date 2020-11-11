@@ -19,7 +19,7 @@ defmodule Astoria.Repo.Migrations.CreateOauthAuthorizations do
              primary_key: false,
              options: "INHERITS (oauth_authorizations)"
            ) do
-      add :user_id, references("users")
+      add :user_id, references("users"), null: false
     end
 
     create unique_index(:github_oauth_authorizations, :user_id)

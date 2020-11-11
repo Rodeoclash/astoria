@@ -36,7 +36,8 @@ defmodule Astoria.Factory do
   def github_installation_factory do
     %Astoria.GithubInstallations.GithubInstallation{
       data: %{},
-      github_id: github_id()
+      github_id: github_id(),
+      github_user: build(:github_user)
     }
   end
 

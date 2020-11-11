@@ -9,9 +9,14 @@ defmodule AstoriaWeb.InstalledController do
   Callback after installing the app, redirect to user to OAuth their account
   """
   @spec callback(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def callback(conn, _params) do
+  def callback(conn, %{
+        "installation_id" => installation_id,
+        "provider" => _provider,
+        "setup_action" => _setup_action
+      }) do
     conn
     |> put_flash(:info, "#{@public_name} was installed")
+    |> put_session(:github_installation_id, installation_id)
     |> redirect(to: Routes.auth_path(conn, :request, :github))
   end
 end

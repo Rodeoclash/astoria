@@ -1,9 +1,9 @@
 defmodule Astoria.GithubRepositories.GithubRepository do
-  alias Astoria.{GithubInstallations, GithubPullRequests, GithubUsers, Users}
+  alias Astoria.{GithubInstallations, GithubPullRequests, GithubUsers}
   alias __MODULE__
-  use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
+  use Ecto.Schema
 
   schema "github_repositories" do
     belongs_to :github_installation, GithubInstallations.GithubInstallation
@@ -68,12 +68,9 @@ defmodule Astoria.GithubRepositories.GithubRepository do
           github_installation.data
         )
     )
-    |> join(
-      :left,
+    |> where(
       [github_repository, github_installation, github_user],
-      user in Users.User,
-      on: user.id == github_user.user_id
+      github_user.user_id == ^user_id
     )
-    |> where([github_repository, github_installation, github_user, user], user.id == ^user_id)
   end
 end

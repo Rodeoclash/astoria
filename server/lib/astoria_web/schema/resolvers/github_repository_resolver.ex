@@ -3,6 +3,11 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
   alias Absinthe.Relay
 
   def list_from_user(user, args, _resolution) do
+    IO.inspect("=== here")
+    IO.inspect(user.id)
+    IO.inspect(GithubRepository.for_user(user.id) |> Repo.all())
+    IO.inspect("=== done")
+
     GithubRepository.for_user(user.id)
     |> Relay.Connection.from_query(&Repo.all/1, args)
   end

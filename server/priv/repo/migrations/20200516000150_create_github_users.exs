@@ -6,7 +6,7 @@ defmodule Astoria.Repo.Migrations.CreateGithubUsers do
       add :data, :map, null: false
       add :github_id, :integer, null: false
       add :pub_id, :binary_id, null: false, default: fragment("uuid_generate_v4()")
-      add :user_id, references("users", on_delete: :delete_all)
+      add :user_id, references("users", on_delete: :delete_all), null: false
       timestamps()
     end
 

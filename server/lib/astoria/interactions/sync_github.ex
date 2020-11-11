@@ -5,6 +5,8 @@ defmodule Astoria.Interactions.SyncGithub do
     rate_limit_remaining = Github.Api.V3.Response.rate_limit_remaining(response)
     rate_limit_resets_at = Github.Api.V3.Response.rate_limit_resets_at(response)
 
+    IO.inspect("=== RATE LIMIT REMAINING: #{rate_limit_remaining}")
+
     if rate_limit_remaining != nil && rate_limit_resets_at != nil do
       GithubInstallations.GithubInstallation.changeset(github_installation, %{
         rate_limit_remaining: rate_limit_remaining,

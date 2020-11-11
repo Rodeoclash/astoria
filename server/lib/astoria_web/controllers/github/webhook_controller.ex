@@ -31,7 +31,7 @@ defmodule AstoriaWeb.Github.WebhookController do
   # Installation updated
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, %{"action" => "added", "installation" => installation}) do
-    log("App installation create heard")
+    log("App installation update heard")
 
     with {:ok, github_installation} <- GithubInstallations.upsert(installation),
          do: GithubInstallations.GithubRepositories.sync(github_installation)
