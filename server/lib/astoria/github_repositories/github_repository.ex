@@ -61,12 +61,7 @@ defmodule Astoria.GithubRepositories.GithubRepository do
       :left,
       [github_repository, github_installation],
       github_user in GithubUsers.GithubUser,
-      on:
-        fragment(
-          "? = (?->'account'->>'id')::integer",
-          github_user.github_id,
-          github_installation.data
-        )
+      on: github_user.id == github_installation.github_user_id
     )
     |> where(
       [github_repository, github_installation, github_user],
