@@ -10,20 +10,36 @@ export const RepositoryPlotsMergedPrsPerPerson = function ({ repository }) {
   const data = repository.mergedPrsPerPerson.traces.map((trace) => {
     return {
       ...trace,
-      connectgaps: false,
+      mode: "lines",
+      line: { shape: "spline" },
       x: trace.x.map((x) => {
         return new Date(x);
       }),
     };
   });
 
+  console.log(data);
+
+  const config = {};
+
+  const layout = {
+    autosize: true,
+    title: "Merged pull requests per person",
+    yaxis: {
+      rangemode: "tozero",
+      autorange: true,
+    },
+  };
+
+  const style = { width: "100%", height: "100%" };
+
   return (
     <div css={rootStyles}>
       <Plot
-        config={{ staticPlot: true }}
+        config={config}
         data={data}
-        layout={{ title: "Merged pull requests per person", autosize: true }}
-        style={{ width: "100%", height: "100%" }}
+        layout={layout}
+        style={style}
         useResizeHandler={true}
       />
       <p>Shows the number of merged pull requests in the specified period</p>

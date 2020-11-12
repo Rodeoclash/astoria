@@ -60,11 +60,7 @@ defmodule Astoria.GithubRepositories.GithubRepositoryTest do
 
     github_installation =
       insert(:github_installation, %{
-        data: %{
-          account: %{
-            id: github_user.github_id
-          }
-        }
+        github_user: github_user
       })
 
     github_repository_1 =

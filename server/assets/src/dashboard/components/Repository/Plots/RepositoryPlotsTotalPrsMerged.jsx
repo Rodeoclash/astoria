@@ -10,7 +10,8 @@ export const RepositoryPlotsTotalPrsMerged = function ({ repository }) {
   const data = repository.totalPrsMerged.traces.map((trace) => {
     return {
       ...trace,
-      connectgaps: false,
+      mode: "lines",
+      line: { shape: "spline" },
       x: trace.x.map((x) => {
         return new Date(x);
       }),
@@ -20,7 +21,7 @@ export const RepositoryPlotsTotalPrsMerged = function ({ repository }) {
   return (
     <div css={rootStyles}>
       <Plot
-        config={{ staticPlot: true }}
+        config={{}}
         data={data}
         layout={{ title: "Total merged pull requests", autosize: true }}
         style={{ width: "100%", height: "100%" }}
