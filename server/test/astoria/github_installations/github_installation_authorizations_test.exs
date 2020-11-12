@@ -76,7 +76,7 @@ defmodule Astoria.GithubInstallations.GithubInstallationAuthorizationsTest do
     end)
 
     assert {:ok, response} = GithubInstallationAuthorizations.create(github_installation)
-    assert response.data.body["token"] == "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
+    assert response.poison_response.body["token"] == "v1.32990a00ff2a464dfccd66be81de7c413e3c60e1"
   end
 
   test "upsert/1" do

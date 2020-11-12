@@ -12,10 +12,10 @@ defmodule Astoria.Interactions.SyncGithubPullRequest do
       {:ok, response} ->
         update_github_installation_rate_limits(
           github_repository.github_installation,
-          response.data
+          response
         )
 
-        GithubRepositories.GithubPullRequests.upsert(github_repository, response.data.body)
+        GithubRepositories.GithubPullRequests.upsert(github_repository, response.poison_response.body)
     end
   end
 end

@@ -8,9 +8,9 @@ defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
 
     case Github.Api.V3.Request.perform(request) do
       {:ok, response} ->
-        update_github_installation_rate_limits(github_installation, response.data)
+        update_github_installation_rate_limits(github_installation, response)
 
-        Enum.map(response.data.body["repositories"], fn repository ->
+        Enum.map(response.poison_response.body["repositories"], fn repository ->
           with {:ok, github_repository} <-
                  GithubRepositories.upsert(github_installation, repository),
                do: GithubRepositories.GithubPullRequests.sync(github_repository)

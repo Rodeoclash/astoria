@@ -36,6 +36,11 @@ config :ueberauth, Ueberauth,
 config :absinthe,
   schema: AstoriaWeb.Schema
 
+config :astoria, Oban,
+  repo: Astoria.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [sync_github: 5]
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env()}.exs"

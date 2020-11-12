@@ -34,12 +34,13 @@ defmodule AstoriaWeb.AuthControllerTest do
     test "after post installation flow", %{conn: conn} do
       github_installation_id = "123"
 
-      github_installation = insert(:github_installation, %{
-        data: %{
-          id: github_installation_id,
-        },
-        github_user_id: nil
-      })
+      github_installation =
+        insert(:github_installation, %{
+          data: %{
+            id: github_installation_id
+          },
+          github_user_id: nil
+        })
 
       conn =
         conn

@@ -1,16 +1,13 @@
 defmodule Astoria.Interactions.SyncGithub do
-  alias Astoria.{Github, Repo, GithubInstallations}
+  alias Astoria.{Repo, GithubInstallations}
 
   def update_github_installation_rate_limits(github_installation, response) do
-    rate_limit_remaining = Github.Api.V3.Response.rate_limit_remaining(response)
-    rate_limit_resets_at = Github.Api.V3.Response.rate_limit_resets_at(response)
+    if response.has_rate_limit? do
+      IO.inspect("=== RATE LIMIT REMAINING: #{response.rate_limit_remaining}")
 
-    IO.inspect("=== RATE LIMIT REMAINING: #{rate_limit_remaining}")
-
-    if rate_limit_remaining != nil && rate_limit_resets_at != nil do
       GithubInstallations.GithubInstallation.changeset(github_installation, %{
-        rate_limit_remaining: rate_limit_remaining,
-        rate_limit_resets_at: rate_limit_resets_at
+        rate_limit_remaining: response.rate_limit_remaining,
+        rate_limit_resets_at: response.rate_limit_resets_at
       })
       |> Repo.update()
     end

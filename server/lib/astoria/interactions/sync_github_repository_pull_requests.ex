@@ -6,7 +6,7 @@ defmodule Astoria.Interactions.SyncGithubRepositoryPullRequests do
 
     with {:ok, response} <- Github.Api.V3.Request.perform(request),
          do:
-           Enum.map(response.data.body, fn pull_request ->
+           Enum.map(response.poison_response.body, fn pull_request ->
              GithubRepositories.GithubPullRequests.sync(github_repository, pull_request["number"])
            end)
   end

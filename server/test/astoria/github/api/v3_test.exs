@@ -9,6 +9,21 @@ defmodule Astoria.Github.Api.V3Test do
     body: "{\"data\":{\"viewer\":{\"name\":\"Samuel Richardson\"}}}"
   }
 
+  @result %Github.Api.V3.Response{
+    poison_response: %HTTPoison.Response{
+      body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
+      headers: [],
+      request: nil,
+      request_url: nil,
+      status_code: nil
+    },
+    rate_limit_remaining: nil,
+    rate_limit_resets_at: nil,
+    has_rate_limit?: false,
+    has_next_url?: false,
+    next_url: nil
+  }
+
   setup do
     Mox.verify_on_exit!()
 
@@ -28,16 +43,7 @@ defmodule Astoria.Github.Api.V3Test do
       end)
 
       assert V3.post(client, "/endpoint", "123abc") ==
-               {:ok,
-                %V3.Response{
-                  data: %HTTPoison.Response{
-                    body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
-                    headers: [],
-                    request: nil,
-                    request_url: nil,
-                    status_code: nil
-                  }
-                }}
+               {:ok, @result}
     end
 
     test "without payload", %{client: client} do
@@ -50,16 +56,7 @@ defmodule Astoria.Github.Api.V3Test do
       end)
 
       assert V3.post(client, "/endpoint") ==
-               {:ok,
-                %V3.Response{
-                  data: %HTTPoison.Response{
-                    body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
-                    headers: [],
-                    request: nil,
-                    request_url: nil,
-                    status_code: nil
-                  }
-                }}
+               {:ok, @result}
     end
   end
 
@@ -72,29 +69,11 @@ defmodule Astoria.Github.Api.V3Test do
     end)
 
     assert V3.get(client, "/endpoint") ==
-             {:ok,
-              %V3.Response{
-                data: %HTTPoison.Response{
-                  body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
-                  headers: [],
-                  request: nil,
-                  request_url: nil,
-                  status_code: nil
-                }
-              }}
+             {:ok, @result}
   end
 
   test "process_response/2" do
     assert V3.process_response(@response) ==
-             {:ok,
-              %V3.Response{
-                data: %HTTPoison.Response{
-                  body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
-                  headers: [],
-                  request: nil,
-                  request_url: nil,
-                  status_code: nil
-                }
-              }}
+             {:ok, @result}
   end
 end

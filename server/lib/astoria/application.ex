@@ -14,9 +14,11 @@ defmodule Astoria.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Astoria.PubSub},
       # Start the Endpoint (http/https)
-      AstoriaWeb.Endpoint
+      AstoriaWeb.Endpoint,
       # Start a worker by calling: Astoria.Worker.start_link(arg)
       # {Astoria.Worker, arg}
+      #
+      {Oban, oban_config()}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -30,5 +32,9 @@ defmodule Astoria.Application do
   def config_change(changed, _new, removed) do
     AstoriaWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp oban_config do
+    Application.get_env(:astoria, Oban)
   end
 end

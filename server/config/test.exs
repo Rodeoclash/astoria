@@ -23,3 +23,5 @@ config :astoria, AstoriaWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
+
+config :astoria, Oban, crontab: false, queues: false, plugins: false

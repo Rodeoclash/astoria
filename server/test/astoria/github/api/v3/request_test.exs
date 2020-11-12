@@ -10,13 +10,18 @@ defmodule Astoria.Github.Api.V3.RequestTest do
   }
 
   @result %Github.Api.V3.Response{
-    data: %HTTPoison.Response{
+    poison_response: %HTTPoison.Response{
       body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
       headers: [],
       request: nil,
       request_url: nil,
       status_code: nil
-    }
+    },
+    rate_limit_remaining: nil,
+    rate_limit_resets_at: nil,
+    has_rate_limit?: false,
+    has_next_url?: false,
+    next_url: nil
   }
 
   setup do
