@@ -15,6 +15,11 @@ defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
                  GithubRepositories.upsert(github_installation, repository),
                do: GithubRepositories.GithubPullRequests.sync(github_repository)
         end)
+
+        if response.has_next_url? == true do
+          request = %{request | path: response.next_url}
+          perform(request, github_installation_id)
+        end
     end
   end
 end

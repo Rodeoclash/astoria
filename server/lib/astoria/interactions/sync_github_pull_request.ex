@@ -15,7 +15,10 @@ defmodule Astoria.Interactions.SyncGithubPullRequest do
           response
         )
 
-        GithubRepositories.GithubPullRequests.upsert(github_repository, response.poison_response.body)
+        GithubRepositories.GithubPullRequests.upsert(
+          github_repository,
+          response.poison_response.body
+        )
     end
   end
 end
