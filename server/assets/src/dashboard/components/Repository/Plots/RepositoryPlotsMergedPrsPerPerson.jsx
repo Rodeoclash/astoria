@@ -18,8 +18,6 @@ export const RepositoryPlotsMergedPrsPerPerson = function ({ repository }) {
     };
   });
 
-  console.log(data);
-
   const config = {};
 
   const layout = {

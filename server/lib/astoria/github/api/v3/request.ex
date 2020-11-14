@@ -2,19 +2,19 @@ defmodule Astoria.Github.Api.V3.Request do
   alias Astoria.{Github}
   alias __MODULE__
 
-  @enforce_keys [:client, :method, :path]
-  defstruct [:client, :method, :path, :payload]
+  @enforce_keys [:client, :method, :url]
+  defstruct [:client, :method, :url, :payload]
 
   @doc ~S"""
   Create a new request struct. Once populated, this can be executed using the perform function.
   """
   @spec new(%Github.Api.Client{}, atom(), String.t(), map()) :: %Request{}
-  def new(client, method, path, payload \\ %{}) do
+  def new(client, method, url, payload \\ %{}) do
     %Request{
       client: client,
       method: method,
-      path: path,
-      payload: payload
+      payload: payload,
+      url: url
     }
   end
 
@@ -22,11 +22,11 @@ defmodule Astoria.Github.Api.V3.Request do
   Execute the supplied request against the Github API
   """
   @spec perform(%Request{}) :: {:ok, %Github.Api.V3.Response{}} | {:error, String.t()}
-  def perform(%Request{client: client, method: method, path: path, payload: payload}) do
+  def perform(%Request{client: client, method: method, url: url, payload: payload}) do
     with {:ok, encoded_payload} <- Jason.encode(payload) do
       case method do
-        :get -> Github.Api.V3.get(client, path)
-        :post -> Github.Api.V3.post(client, path, encoded_payload)
+        :get -> Github.Api.V3.get(client, url)
+        :post -> Github.Api.V3.post(client, url, encoded_payload)
         _ -> {:error, "Unknown HTTP verb, #{method}"}
       end
     end

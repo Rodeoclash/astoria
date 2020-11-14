@@ -36,40 +36,40 @@ defmodule Astoria.Github.Api.V3Test do
   describe "post/2" do
     test "with payload", %{client: client} do
       HTTPoisonMock
-      |> expect(:post, fn path, payload, _headers ->
-        assert path == "https://api.github.com/endpoint"
+      |> expect(:post, fn url, payload, _headers ->
+        assert url == "https://api.github.com/endpoint"
         assert payload == "123abc"
 
         {:ok, @response}
       end)
 
-      assert V3.post(client, "/endpoint", "123abc") ==
+      assert V3.post(client, "https://api.github.com/endpoint", "123abc") ==
                {:ok, @result}
     end
 
     test "without payload", %{client: client} do
       HTTPoisonMock
-      |> expect(:post, fn path, payload, _headers ->
-        assert path == "https://api.github.com/endpoint"
+      |> expect(:post, fn url, payload, _headers ->
+        assert url == "https://api.github.com/endpoint"
         assert payload == ""
 
         {:ok, @response}
       end)
 
-      assert V3.post(client, "/endpoint") ==
+      assert V3.post(client, "https://api.github.com/endpoint") ==
                {:ok, @result}
     end
   end
 
   test "get/2", %{client: client} do
     HTTPoisonMock
-    |> expect(:get, fn path, _headers ->
-      assert path == "https://api.github.com/endpoint"
+    |> expect(:get, fn url , _headers ->
+      assert  url== "https://api.github.com/endpoint"
 
       {:ok, @response}
     end)
 
-    assert V3.get(client, "/endpoint") ==
+    assert V3.get(client, "https://api.github.com/endpoint") ==
              {:ok, @result}
   end
 

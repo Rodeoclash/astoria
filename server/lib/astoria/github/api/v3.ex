@@ -18,10 +18,10 @@ defmodule Astoria.Github.Api.V3 do
   Post against the Github rest API
   """
   @spec post(%Github.Api.Client{}, String.t(), String.t()) :: nil
-  def post(client, path, content \\ "") do
+  def post(client, url, content \\ "") do
     with {:ok, response} <-
            @http_client.post(
-             Path.join(Github.Api.endpoint(), path),
+             url,
              content,
              headers(client)
            ),
@@ -32,10 +32,10 @@ defmodule Astoria.Github.Api.V3 do
   Get against the Github rest API
   """
   @spec get(%Github.Api.Client{}, String.t()) :: nil
-  def get(client, path) do
+  def get(client, url) do
     with {:ok, response} <-
            @http_client.get(
-             Path.join(Github.Api.endpoint(), path),
+             url,
              headers(client)
            ),
          do: process_response(response)

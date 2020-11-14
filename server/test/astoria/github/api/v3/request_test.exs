@@ -38,18 +38,18 @@ defmodule Astoria.Github.Api.V3.RequestTest do
       assert %Request{
                client: client,
                method: :get,
-               path: "/path",
-               payload: %{}
-             } == Request.new(client, :get, "/path")
+               payload: %{},
+               url: "https://example.com",
+             } == Request.new(client, :get, "https://example.com")
     end
 
     test "with payload", %{client: client} do
       assert %Request{
                client: client,
                method: :get,
-               path: "/path",
-               payload: %{"test" => "test"}
-             } == Request.new(client, :get, "/path", %{"test" => "test"})
+               payload: %{"test" => "test"},
+               url: "https://example.com",
+             } == Request.new(client, :get, "https://example.com", %{"test" => "test"})
     end
   end
 
@@ -64,7 +64,7 @@ defmodule Astoria.Github.Api.V3.RequestTest do
         )
 
       HTTPoisonMock
-      |> expect(:get, fn _path, _headers ->
+      |> expect(:get, fn _url, _headers ->
         {:ok, @response}
       end)
 
@@ -82,7 +82,7 @@ defmodule Astoria.Github.Api.V3.RequestTest do
         )
 
       HTTPoisonMock
-      |> expect(:post, fn _path, _headers, _payload ->
+      |> expect(:post, fn _url, _headers, _payload ->
         {:ok, @response}
       end)
 
