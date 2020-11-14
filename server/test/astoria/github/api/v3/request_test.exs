@@ -21,7 +21,8 @@ defmodule Astoria.Github.Api.V3.RequestTest do
     rate_limit_resets_at: nil,
     has_rate_limit?: false,
     has_next_url?: false,
-    next_url: nil
+    next_url: nil,
+    successful?: false
   }
 
   setup do

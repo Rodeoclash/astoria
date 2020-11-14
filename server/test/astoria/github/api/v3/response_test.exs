@@ -20,8 +20,27 @@ defmodule Astoria.Github.Api.V3.ResponseTest do
              has_rate_limit?: true,
              poison_response: poison_response,
              rate_limit_remaining: 5398,
-             rate_limit_resets_at: ~U[2020-10-27 12:21:41Z]
+             rate_limit_resets_at: ~U[2020-10-27 12:21:41Z],
+             successful?: false
            }
+  end
+
+  describe "successful?/1" do
+    test "when status code under 300" do
+      response = %HTTPoison.Response{
+        status_code: 200
+      }
+
+      assert Response.successful?(response) == true
+    end
+
+    test "when invalid status code" do
+      response = %HTTPoison.Response{
+        status_code: 500
+      }
+
+      assert Response.successful?(response) == false
+    end
   end
 
   describe "rate_limit_remaining/1" do

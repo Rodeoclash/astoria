@@ -7,14 +7,16 @@ defmodule Astoria.Github.Api.V3.Response do
     :rate_limit_resets_at,
     :has_rate_limit?,
     :has_next_url?,
-    :next_url
+    :next_url,
+    :successful?
   ]
   defstruct poison_response: %HTTPoison.Response{},
             rate_limit_remaining: nil,
             rate_limit_resets_at: nil,
             has_rate_limit?: false,
             has_next_url?: false,
-            next_url: nil
+            next_url: nil,
+            successful?: false
 
   @spec new(%HTTPoison.Response{}) :: %Response{}
   def new(poison_response) do
@@ -28,11 +30,20 @@ defmodule Astoria.Github.Api.V3.Response do
     %Response{
       has_next_url?: has_next_url?,
       has_rate_limit?: has_rate_limit?,
-      next_url: next_url,
+      next_url: link_results_url(poison_response, "next"),
       poison_response: poison_response,
       rate_limit_remaining: rate_limit_remaining,
-      rate_limit_resets_at: rate_limit_resets_at
+      rate_limit_resets_at: rate_limit_resets_at,
+      successful?: successful?(poison_response)
     }
+  end
+
+  @doc ~S"""
+  Extract the remaining rate limit or nil if none present
+  """
+  @spec successful?(%HTTPoison.Response{}) :: boolean()
+  def successful?(poison_response) do
+    poison_response.status_code < 300
   end
 
   @doc ~S"""

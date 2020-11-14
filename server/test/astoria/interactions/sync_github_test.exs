@@ -22,7 +22,8 @@ defmodule Astoria.Interactions.SyncGithubTest do
         rate_limit_resets_at: ~U[2020-10-27 12:21:41Z],
         has_rate_limit?: true,
         has_next_url?: false,
-        next_url: nil
+        next_url: nil,
+        successful?: false
       }
 
       refute github_installation.rate_limit_remaining
@@ -50,7 +51,8 @@ defmodule Astoria.Interactions.SyncGithubTest do
         rate_limit_resets_at: nil,
         has_rate_limit?: false,
         has_next_url?: false,
-        next_url: nil
+        next_url: nil,
+        successful?: false
       }
 
       refute github_installation.rate_limit_remaining

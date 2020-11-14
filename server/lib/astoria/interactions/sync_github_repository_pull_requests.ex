@@ -12,13 +12,16 @@ defmodule Astoria.Interactions.SyncGithubRepositoryPullRequests do
       {:ok, response} ->
         update_github_installation_rate_limits(github_repository.github_installation, response)
 
-        Enum.map(response.poison_response.body, fn pull_request ->
-          IO.inspect "=== HERE"
-          IO.inspect response
-          GithubRepositories.GithubPullRequests.sync(github_repository, pull_request["number"])
-        end)
+        if response.successful? == true do
+          Enum.map(response.poison_response.body, fn pull_request ->
+            #GithubRepositories.GithubPullRequests.sync(github_repository, pull_request["number"])
+          end)
+        end
 
+        IO.inspect "=== checking for more pull requests"
+        IO.inspect response
         if response.has_next_url? == true do
+          IO.inspect response.next_url
           request = %{request | path: response.next_url}
           perform(request, github_repository_id)
         end
