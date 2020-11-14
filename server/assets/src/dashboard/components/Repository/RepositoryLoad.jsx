@@ -3,7 +3,7 @@ import { QueryRenderer, graphql } from "react-relay";
 import { css } from "@emotion/core";
 import environment from "dashboard/services/relay/environment.js";
 import { useRouter } from "found";
-import { PERIODS } from "dashboard/services/periods.js";
+import { PERIODS, defaultPeriod } from "dashboard/services/periods.js";
 
 import RepositoryShow from "dashboard/components/Repository/RepositoryShow.jsx";
 
@@ -11,7 +11,7 @@ const rootStyles = css``;
 
 const RepositoryLoad = function ({ repositoryId }) {
   const { match } = useRouter();
-  const period = match.location.query.period;
+  const selectedPeriod = match.location.query.period;
 
   if (repositoryId === undefined) {
     return <p>Please select a repository</p>;
@@ -40,7 +40,7 @@ const RepositoryLoad = function ({ repositoryId }) {
       `}
       variables={{
         repositoryId,
-        period: period === undefined ? PERIODS[0][0] : period,
+        period: selectedPeriod === undefined ? defaultPeriod : selectedPeriod,
       }}
       render={renderQuery}
     />

@@ -1,10 +1,11 @@
 import React from "react";
 import { createFragmentContainer, graphql } from "react-relay";
 import { useRouter } from "found";
-import { PERIODS } from "dashboard/services/periods.js";
+import { PERIODS, defaultPeriod } from "dashboard/services/periods.js";
 
 export const PeriodSelector = function ({ onChangePeriod }) {
   const { match } = useRouter();
+  const selectedPeriod = match.location.query.period;
 
   const handleChange = (event) => {
     onChangePeriod(event.target.value);
@@ -19,7 +20,10 @@ export const PeriodSelector = function ({ onChangePeriod }) {
   });
 
   return (
-    <select onChange={handleChange} value={match.location.query.period}>
+    <select
+      onChange={handleChange}
+      value={selectedPeriod === undefined ? defaultPeriod : selectedPeriod}
+    >
       {renderedOptions}
     </select>
   );
