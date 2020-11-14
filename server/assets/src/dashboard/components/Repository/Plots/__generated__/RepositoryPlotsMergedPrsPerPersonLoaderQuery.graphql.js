@@ -8,34 +8,34 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type RepositoryShow_repository$ref = any;
+type RepositoryPlotsMergedPrsPerPerson_repository$ref = any;
 export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
-export type RepositoryLoadQueryVariables = {|
+export type RepositoryPlotsMergedPrsPerPersonLoaderQueryVariables = {|
   repositoryId: string,
   period: Period,
 |};
-export type RepositoryLoadQueryResponse = {|
+export type RepositoryPlotsMergedPrsPerPersonLoaderQueryResponse = {|
   +currentUser: ?{|
     +repository: {|
-      +$fragmentRefs: RepositoryShow_repository$ref
+      +$fragmentRefs: RepositoryPlotsMergedPrsPerPerson_repository$ref
     |}
   |}
 |};
-export type RepositoryLoadQuery = {|
-  variables: RepositoryLoadQueryVariables,
-  response: RepositoryLoadQueryResponse,
+export type RepositoryPlotsMergedPrsPerPersonLoaderQuery = {|
+  variables: RepositoryPlotsMergedPrsPerPersonLoaderQueryVariables,
+  response: RepositoryPlotsMergedPrsPerPersonLoaderQueryResponse,
 |};
 */
 
 
 /*
-query RepositoryLoadQuery(
+query RepositoryPlotsMergedPrsPerPersonLoaderQuery(
   $repositoryId: ID!
   $period: Period!
 ) {
   currentUser {
     repository(id: $repositoryId) {
-      ...RepositoryShow_repository
+      ...RepositoryPlotsMergedPrsPerPerson_repository
       id
     }
     id
@@ -51,23 +51,6 @@ fragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {
       y
     }
   }
-}
-
-fragment RepositoryPlotsTotalPrsMerged_repository on Repository {
-  name
-  totalPrsMerged(period: $period) {
-    traces {
-      name
-      x
-      y
-    }
-  }
-}
-
-fragment RepositoryShow_repository on Repository {
-  ...RepositoryPlotsMergedPrsPerPerson_repository
-  ...RepositoryPlotsTotalPrsMerged_repository
-  name
 }
 */
 
@@ -96,42 +79,7 @@ v3 = {
   "name": "name",
   "storageKey": null
 },
-v4 = [
-  {
-    "kind": "Variable",
-    "name": "period",
-    "variableName": "period"
-  }
-],
-v5 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "PlotDataMergedPrTrace",
-    "kind": "LinkedField",
-    "name": "traces",
-    "plural": true,
-    "selections": [
-      (v3/*: any*/),
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "x",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "y",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
-  }
-],
-v6 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -146,7 +94,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "RepositoryLoadQuery",
+    "name": "RepositoryPlotsMergedPrsPerPersonLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -167,7 +115,7 @@ return {
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "RepositoryShow_repository"
+                "name": "RepositoryPlotsMergedPrsPerPerson_repository"
               }
             ],
             "storageKey": null
@@ -186,7 +134,7 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "RepositoryLoadQuery",
+    "name": "RepositoryPlotsMergedPrsPerPersonLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -207,45 +155,68 @@ return {
               (v3/*: any*/),
               {
                 "alias": null,
-                "args": (v4/*: any*/),
+                "args": [
+                  {
+                    "kind": "Variable",
+                    "name": "period",
+                    "variableName": "period"
+                  }
+                ],
                 "concreteType": "PlotDataMergedPr",
                 "kind": "LinkedField",
                 "name": "mergedPrsPerPerson",
                 "plural": false,
-                "selections": (v5/*: any*/),
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "PlotDataMergedPrTrace",
+                    "kind": "LinkedField",
+                    "name": "traces",
+                    "plural": true,
+                    "selections": [
+                      (v3/*: any*/),
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "x",
+                        "storageKey": null
+                      },
+                      {
+                        "alias": null,
+                        "args": null,
+                        "kind": "ScalarField",
+                        "name": "y",
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  }
+                ],
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": (v4/*: any*/),
-                "concreteType": "PlotDataMergedPr",
-                "kind": "LinkedField",
-                "name": "totalPrsMerged",
-                "plural": false,
-                "selections": (v5/*: any*/),
-                "storageKey": null
-              },
-              (v6/*: any*/)
+              (v4/*: any*/)
             ],
             "storageKey": null
           },
-          (v6/*: any*/)
+          (v4/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "3f69f9d2e2ce1061901eddbd71647c06",
+    "cacheID": "a8f27f94385b2e5fc0b4102e12cf4e57",
     "id": null,
     "metadata": {},
-    "name": "RepositoryLoadQuery",
+    "name": "RepositoryPlotsMergedPrsPerPersonLoaderQuery",
     "operationKind": "query",
-    "text": "query RepositoryLoadQuery(\n  $repositoryId: ID!\n  $period: Period!\n) {\n  currentUser {\n    repository(id: $repositoryId) {\n      ...RepositoryShow_repository\n      id\n    }\n    id\n  }\n}\n\nfragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {\n  name\n  mergedPrsPerPerson(period: $period) {\n    traces {\n      name\n      x\n      y\n    }\n  }\n}\n\nfragment RepositoryPlotsTotalPrsMerged_repository on Repository {\n  name\n  totalPrsMerged(period: $period) {\n    traces {\n      name\n      x\n      y\n    }\n  }\n}\n\nfragment RepositoryShow_repository on Repository {\n  ...RepositoryPlotsMergedPrsPerPerson_repository\n  ...RepositoryPlotsTotalPrsMerged_repository\n  name\n}\n"
+    "text": "query RepositoryPlotsMergedPrsPerPersonLoaderQuery(\n  $repositoryId: ID!\n  $period: Period!\n) {\n  currentUser {\n    repository(id: $repositoryId) {\n      ...RepositoryPlotsMergedPrsPerPerson_repository\n      id\n    }\n    id\n  }\n}\n\nfragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {\n  name\n  mergedPrsPerPerson(period: $period) {\n    traces {\n      name\n      x\n      y\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '2325c2b5d038cd6ae516b08804b046a5';
+(node/*: any*/).hash = '284a077ef9ce8acc2b74390cc73afc44';
 
 module.exports = node;
