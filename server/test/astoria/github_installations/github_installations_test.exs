@@ -18,15 +18,6 @@ defmodule Astoria.GithubInstallationsTest do
     |> expect(:post, fn _path, _payload, _headers ->
       {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
     end)
-    |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.Installation.Repositories.read()}
-    end)
-    |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_list()}
-    end)
-    |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_single()}
-    end)
 
     GithubInstallations.sync()
 

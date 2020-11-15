@@ -39,7 +39,7 @@ config :absinthe,
 config :astoria, Oban,
   repo: Astoria.Repo,
   plugins: [Oban.Plugins.Pruner],
-  queues: [sync_github: 5]
+  queues: [sync_github: 10]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

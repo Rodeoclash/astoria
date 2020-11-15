@@ -5,30 +5,28 @@ defmodule Astoria.GithubInstallations.GithubRepositoriesTest do
   import Mox
 
   use Astoria.DataCase
+  use Oban.Testing, repo: Astoria.Repo
 
   doctest GithubRepositories
 
   setup :verify_on_exit!
 
   test "sync/0" do
-    github_installation = insert(:github_installation)
+    github_installation = insert(:github_installation, %{id: 1})
 
     HTTPoisonMock
     |> expect(:post, fn _path, _payload, _headers ->
       {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
     end)
-    |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.Installation.Repositories.read()}
-    end)
-    |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_list()}
-    end)
-    |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_single()}
-    end)
 
     GithubRepositories.sync(github_installation)
 
-    assert Astoria.GithubRepositories.count() == 1
+    assert_enqueued(
+      worker: Astoria.Interactions.SyncGithubInstallationRepositories,
+      args: %{
+        "encoded" =>
+          "g3QAAAACZAAWZ2l0aHViX2luc3RhbGxhdGlvbl9pZGEBZAAHcmVxdWVzdHQAAAAFZAAKX19zdHJ1Y3RfX2QAJEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuVjMuUmVxdWVzdGQABmNsaWVudHQAAAADZAAKX19zdHJ1Y3RfX2QAIEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuQ2xpZW50ZAAFdG9rZW5tAAAAK3YxLjMyOTkwYTAwZmYyYTQ2NGRmY2NkNjZiZTgxZGU3YzQxM2UzYzYwZTFkAAR0eXBlbQAAAAV0b2tlbmQABm1ldGhvZGQAA2dldGQAB3BheWxvYWR0AAAAAGQAA3VybG0AAAAwaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9pbnN0YWxsYXRpb24vcmVwb3NpdG9yaWVz"
+      }
+    )
   end
 end

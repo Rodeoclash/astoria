@@ -39,7 +39,7 @@ defmodule Astoria.Github.Api.V3.RequestTest do
                client: client,
                method: :get,
                payload: %{},
-               url: "https://example.com",
+               url: "https://example.com"
              } == Request.new(client, :get, "https://example.com")
     end
 
@@ -48,7 +48,7 @@ defmodule Astoria.Github.Api.V3.RequestTest do
                client: client,
                method: :get,
                payload: %{"test" => "test"},
-               url: "https://example.com",
+               url: "https://example.com"
              } == Request.new(client, :get, "https://example.com", %{"test" => "test"})
     end
   end

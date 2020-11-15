@@ -63,8 +63,8 @@ defmodule Astoria.Github.Api.V3Test do
 
   test "get/2", %{client: client} do
     HTTPoisonMock
-    |> expect(:get, fn url , _headers ->
-      assert  url== "https://api.github.com/endpoint"
+    |> expect(:get, fn url, _headers ->
+      assert url == "https://api.github.com/endpoint"
 
       {:ok, @response}
     end)

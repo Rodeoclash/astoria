@@ -1,9 +1,12 @@
 defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
-  alias Astoria.{Github, GithubRepositories, GithubInstallations, Repo, Interactions}
-
+  alias Astoria.{Github, GithubRepositories, GithubInstallations, Repo, Interactions, Utility}
   import Interactions.SyncGithub
+  use Oban.Worker, queue: :sync_github
 
-  def perform(request, github_installation_id) do
+  def perform(%Oban.Job{args: %{"encoded" => encoded}}) do
+    %{request: request, github_installation_id: github_installation_id} =
+      Utility.deserialise(encoded)
+
     github_installation = Repo.get(GithubInstallations.GithubInstallation, github_installation_id)
 
     case Github.Api.V3.Request.perform(request) do
@@ -11,14 +14,23 @@ defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
         update_github_installation_rate_limits(github_installation, response)
 
         Enum.map(response.poison_response.body["repositories"], fn repository ->
-          with {:ok, github_repository} <-
-                 GithubRepositories.upsert(github_installation, repository),
-               do: GithubRepositories.GithubPullRequests.sync(github_repository)
+          case GithubRepositories.upsert(github_installation, repository) do
+            {:ok, github_repository} ->
+              GithubRepositories.GithubPullRequests.sync(github_repository)
+          end
         end)
 
         if response.has_next_url? == true do
-          request = %{request | path: response.next_url}
-          perform(request, github_installation_id)
+          encoded =
+            %{
+              request: %{request | url: response.next_url},
+              github_installation_id: github_installation_id
+            }
+            |> Utility.serialise()
+
+          %{encoded: encoded}
+          |> Interactions.SyncGithubInstallationRepositories.new()
+          |> Oban.insert()
         end
     end
   end
