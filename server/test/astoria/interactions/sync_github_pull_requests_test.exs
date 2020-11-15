@@ -34,6 +34,6 @@ defmodule Astoria.Interactions.SyncGithubPullRequestTest do
       {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_single()}
     end)
 
-    SyncGithubPullRequest.perform(%Oban.Job{args: %{"encoded" => encoded}})
+    assert :ok == SyncGithubPullRequest.perform(%Oban.Job{args: %{"encoded" => encoded}})
   end
 end
