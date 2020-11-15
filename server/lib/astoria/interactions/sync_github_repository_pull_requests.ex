@@ -1,9 +1,12 @@
 defmodule Astoria.Interactions.SyncGithubRepositoryPullRequests do
-  alias Astoria.{Github, GithubRepositories, Repo, Interactions}
-
+  alias Astoria.{Github, GithubRepositories, Repo, Interactions, Utility}
   import Interactions.SyncGithub
+  use Oban.Worker, queue: :sync_github
 
-  def perform(request, github_repository_id) do
+  # def perform(request, github_repository_id) do
+  def perform(%Oban.Job{args: %{"encoded" => encoded}}) do
+    %{request: request, github_repository_id: github_repository_id} = Utility.deserialise(encoded)
+
     github_repository =
       Repo.get(GithubRepositories.GithubRepository, github_repository_id)
       |> Repo.preload(:github_installation)
@@ -17,8 +20,16 @@ defmodule Astoria.Interactions.SyncGithubRepositoryPullRequests do
         end)
 
         if response.has_next_url? == true do
-          request = %{request | url: response.next_url}
-          perform(request, github_repository_id)
+          encoded =
+            %{
+              request: %{request | url: response.next_url},
+              github_repository_id: github_repository_id
+            }
+            |> Utility.serialise()
+
+          %{encoded: encoded}
+          |> Interactions.SyncGithubRepositoryPullRequests.new()
+          |> Oban.insert()
         end
     end
   end

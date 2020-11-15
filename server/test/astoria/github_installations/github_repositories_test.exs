@@ -1,9 +1,7 @@
 defmodule Astoria.GithubInstallations.GithubRepositoriesTest do
   alias Astoria.{GithubInstallations.GithubRepositories, Fixtures}
-
   import Astoria.Factory
   import Mox
-
   use Astoria.DataCase
   use Oban.Testing, repo: Astoria.Repo
 
@@ -11,7 +9,7 @@ defmodule Astoria.GithubInstallations.GithubRepositoriesTest do
 
   setup :verify_on_exit!
 
-  test "sync/0" do
+  test "sync/1" do
     github_installation = insert(:github_installation, %{id: 1})
 
     HTTPoisonMock

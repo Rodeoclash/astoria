@@ -5,7 +5,8 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
     GithubPullRequests,
     Github,
     Interactions,
-    Repo
+    Repo,
+    Utility
   }
 
   @doc """
@@ -15,12 +16,21 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   def sync(github_repository) do
     github_repository = Repo.preload(github_repository, :github_installation)
 
-    with {:ok, client} <- GithubInstallations.client(github_repository.github_installation),
-         do:
-           Github.Api.V3.Repos.Pulls.read_list(client, github_repository.data["full_name"], %{
-             state: "all"
-           })
-           |> Interactions.SyncGithubRepositoryPullRequests.perform(github_repository.id)
+    case GithubInstallations.client(github_repository.github_installation) do
+      {:ok, client} ->
+        request =
+          Github.Api.V3.Repos.Pulls.read_list(client, github_repository.data["full_name"], %{
+            state: "all"
+          })
+
+        encoded =
+          %{request: request, github_repository_id: github_repository.id}
+          |> Utility.serialise()
+
+        %{encoded: encoded}
+        |> Interactions.SyncGithubRepositoryPullRequests.new()
+        |> Oban.insert()
+    end
   end
 
   @doc """
