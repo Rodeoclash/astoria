@@ -22,5 +22,7 @@ defmodule Astoria.Interactions.SyncGithubPullRequest do
           response.poison_response.body
         )
     end
+
+    :ok
   end
 end

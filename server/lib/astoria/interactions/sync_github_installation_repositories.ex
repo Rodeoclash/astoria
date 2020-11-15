@@ -33,5 +33,7 @@ defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
           |> Oban.insert()
         end
     end
+
+    :ok
   end
 end

@@ -16,5 +16,7 @@ defmodule Astoria.Interactions.SyncGithubInstallations do
           perform(request)
         end
     end
+
+    :ok
   end
 end
