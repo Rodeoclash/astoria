@@ -1,9 +1,11 @@
 defmodule Astoria.Interactions.SyncGithubPullRequest do
-  alias Astoria.{Github, GithubRepositories, Repo, Interactions}
-
+  alias Astoria.{Github, GithubRepositories, Repo, Interactions, Utility}
   import Interactions.SyncGithub
+  use Oban.Worker, queue: :sync_github
 
-  def perform(request, github_repository_id) do
+  def perform(%Oban.Job{args: %{"encoded" => encoded}}) do
+    %{request: request, github_repository_id: github_repository_id} = Utility.deserialise(encoded)
+
     github_repository =
       Repo.get(GithubRepositories.GithubRepository, github_repository_id)
       |> Repo.preload(:github_installation)

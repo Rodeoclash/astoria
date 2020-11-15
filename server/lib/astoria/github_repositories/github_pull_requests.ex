@@ -40,14 +40,23 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   def sync(github_repository, github_pull_request_id) do
     github_repository = Repo.preload(github_repository, :github_installation)
 
-    with {:ok, client} <- GithubInstallations.client(github_repository.github_installation),
-         do:
-           Github.Api.V3.Repos.Pulls.read_single(
-             client,
-             github_repository.data["full_name"],
-             github_pull_request_id
-           )
-           |> Interactions.SyncGithubPullRequest.perform(github_repository.id)
+    case GithubInstallations.client(github_repository.github_installation) do
+      {:ok, client} ->
+        request =
+          Github.Api.V3.Repos.Pulls.read_single(
+            client,
+            github_repository.data["full_name"],
+            github_pull_request_id
+          )
+
+        encoded =
+          %{request: request, github_repository_id: github_repository.id}
+          |> Utility.serialise()
+
+        %{encoded: encoded}
+        |> Interactions.SyncGithubPullRequest.new()
+        |> Oban.insert()
+    end
   end
 
   @doc """
