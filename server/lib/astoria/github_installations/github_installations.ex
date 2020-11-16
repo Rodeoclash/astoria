@@ -46,7 +46,7 @@ defmodule Astoria.GithubInstallations do
       github_id: data["id"]
     })
     |> Repo.insert(
-      on_conflict: {:replace_all_except, [:id, :pub_id]},
+      on_conflict: {:replace_all_except, [:id, :pub_id, :github_user_id]},
       conflict_target: :github_id
     )
   end
