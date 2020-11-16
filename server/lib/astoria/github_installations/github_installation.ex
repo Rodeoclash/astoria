@@ -44,4 +44,18 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
     query
     |> where([github_installation], fragment("(?->>'id') = ?", github_installation.data, ^id))
   end
+
+  def for_user(query \\ GithubInstallation, user_id) do
+    query
+    |> join(
+      :left,
+      [github_installation],
+      github_user in GithubUsers.GithubUser,
+      on: github_user.id == github_installation.github_user_id
+    )
+    |> where(
+      [github_installation, github_user],
+      github_user.user_id == ^user_id
+    )
+  end
 end

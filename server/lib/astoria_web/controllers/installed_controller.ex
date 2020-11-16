@@ -14,6 +14,7 @@ defmodule AstoriaWeb.InstalledController do
         "provider" => _provider,
         "setup_action" => _setup_action
       }) do
+
     conn
     |> put_flash(:info, "#{@public_name} was installed")
     |> put_session(:github_installation_id, installation_id)

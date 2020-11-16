@@ -30,6 +30,14 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
     |> where([github_pull_request], github_pull_request.github_repository_id == ^id)
   end
 
+  @doc """
+  Count the number of results
+  """
+  def count(query \\ GithubRepository) do
+    query
+    |> select([github_pull_request], count(github_pull_request.id))
+  end
+
   # @doc """
   # Get details about users, used to populate the inputs to the filters.
   # """

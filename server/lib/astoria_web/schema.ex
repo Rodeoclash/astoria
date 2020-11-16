@@ -10,14 +10,20 @@ defmodule AstoriaWeb.Schema do
   import_types(Interfaces.TimestampInterface)
 
   import_types(Types.CurrentUserType)
+  import_types(Types.GithubInstallationType)
+  import_types(Types.GithubRepositoryType)
   import_types(Types.PeriodType)
   import_types(Types.PlotDataMergedPrTraceType)
   import_types(Types.PlotDataMergedPrType)
-  import_types(Types.RepositoryType)
 
   query do
     field :current_user, :current_user do
       resolve(&Resolvers.CurrentUserResolver.get_from_context/3)
+    end
+
+    field :github_repository, non_null(:github_repository) do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.GithubRepositoryResolver.get/3)
     end
   end
 

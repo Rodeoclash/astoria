@@ -1,5 +1,5 @@
 defmodule Astoria.GithubRepositories.GithubRepository do
-  alias Astoria.{GithubInstallations, GithubPullRequests, GithubUsers}
+  alias Astoria.{GithubInstallations, GithubPullRequests}
   alias __MODULE__
   import Ecto.Changeset
   import Ecto.Query
@@ -26,22 +26,6 @@ defmodule Astoria.GithubRepositories.GithubRepository do
   end
 
   @doc """
-  Scope the query by the supplied installation id
-  """
-  def filter_by_github_installation_id(query \\ GithubRepository, id) do
-    query
-    |> where([github_repository], github_repository.github_installation_id == ^id)
-  end
-
-  @doc """
-  Scope the query by the supplied github_repositories
-  """
-  def filter_by_pub_id(query \\ GithubRepository, pub_id) do
-    query
-    |> where([github_repository], github_repository.pub_id == ^pub_id)
-  end
-
-  @doc """
   Count the number of results
   """
   def count(query \\ GithubRepository) do
@@ -49,23 +33,8 @@ defmodule Astoria.GithubRepositories.GithubRepository do
     |> select([github_repository], count(github_repository.id))
   end
 
-  def for_user(query \\ GithubRepository, user_id) do
+  def filter_by_github_installation_id(query \\ GithubRepository, github_installation_id) do
     query
-    |> join(
-      :left,
-      [github_repository],
-      github_installation in GithubInstallations.GithubInstallation,
-      on: github_installation.id == github_repository.github_installation_id
-    )
-    |> join(
-      :left,
-      [github_repository, github_installation],
-      github_user in GithubUsers.GithubUser,
-      on: github_user.id == github_installation.github_user_id
-    )
-    |> where(
-      [github_repository, github_installation, github_user],
-      github_user.user_id == ^user_id
-    )
+    |> where([github_repository], github_repository.github_installation_id == ^github_installation_id)
   end
 end
