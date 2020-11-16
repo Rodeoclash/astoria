@@ -21,8 +21,6 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       |> GithubPullRequest.total_merged_prs()
       |> Repo.one()
 
-    IO.inspect(total_current_repository)
-
     {:ok,
      %{
        traces: [total_current_repository]
