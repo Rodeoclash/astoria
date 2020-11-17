@@ -9,9 +9,9 @@
 /*::
 import type { ReaderFragment } from 'relay-runtime';
 import type { FragmentReference } from "relay-runtime";
-declare export opaque type RepositoryPlotsMergedPrsPerPerson_repository$ref: FragmentReference;
-declare export opaque type RepositoryPlotsMergedPrsPerPerson_repository$fragmentType: RepositoryPlotsMergedPrsPerPerson_repository$ref;
-export type RepositoryPlotsMergedPrsPerPerson_repository = {|
+declare export opaque type GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$ref: FragmentReference;
+declare export opaque type GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$fragmentType: GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$ref;
+export type GithubRepositoryPlotsMergedPrsPerPerson_githubRepository = {|
   +name: string,
   +mergedPrsPerPerson: {|
     +traces: $ReadOnlyArray<?{|
@@ -20,12 +20,12 @@ export type RepositoryPlotsMergedPrsPerPerson_repository = {|
       +y: $ReadOnlyArray<?number>,
     |}>
   |},
-  +$refType: RepositoryPlotsMergedPrsPerPerson_repository$ref,
+  +$refType: GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$ref,
 |};
-export type RepositoryPlotsMergedPrsPerPerson_repository$data = RepositoryPlotsMergedPrsPerPerson_repository;
-export type RepositoryPlotsMergedPrsPerPerson_repository$key = {
-  +$data?: RepositoryPlotsMergedPrsPerPerson_repository$data,
-  +$fragmentRefs: RepositoryPlotsMergedPrsPerPerson_repository$ref,
+export type GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$data = GithubRepositoryPlotsMergedPrsPerPerson_githubRepository;
+export type GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$key = {
+  +$data?: GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$data,
+  +$fragmentRefs: GithubRepositoryPlotsMergedPrsPerPerson_githubRepository$ref,
   ...
 };
 */
@@ -48,7 +48,7 @@ return {
   ],
   "kind": "Fragment",
   "metadata": null,
-  "name": "RepositoryPlotsMergedPrsPerPerson_repository",
+  "name": "GithubRepositoryPlotsMergedPrsPerPerson_githubRepository",
   "selections": [
     (v0/*: any*/),
     {
@@ -95,11 +95,11 @@ return {
       "storageKey": null
     }
   ],
-  "type": "Repository",
+  "type": "GithubRepository",
   "abstractKey": null
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '91242f7bb124c2581f5808f03354b222';
+(node/*: any*/).hash = '9b583b82e4e37d73941693f65f1e2b72';
 
 module.exports = node;

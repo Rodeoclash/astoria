@@ -6,8 +6,10 @@ import Plot from "react-plotly.js";
 
 const rootStyles = css``;
 
-export const RepositoryPlotsMergedPrsPerPerson = function ({ repository }) {
-  const data = repository.mergedPrsPerPerson.traces.map((trace) => {
+export const GithubRepositoryPlotsMergedPrsPerPerson = function ({
+  githubRepository,
+}) {
+  const data = githubRepository.mergedPrsPerPerson.traces.map((trace) => {
     return {
       ...trace,
       mode: "lines",
@@ -45,17 +47,20 @@ export const RepositoryPlotsMergedPrsPerPerson = function ({ repository }) {
   );
 };
 
-export default createFragmentContainer(RepositoryPlotsMergedPrsPerPerson, {
-  repository: graphql`
-    fragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {
-      name
-      mergedPrsPerPerson(period: $period) {
-        traces {
-          name
-          x
-          y
+export default createFragmentContainer(
+  GithubRepositoryPlotsMergedPrsPerPerson,
+  {
+    githubRepository: graphql`
+      fragment GithubRepositoryPlotsMergedPrsPerPerson_githubRepository on GithubRepository {
+        name
+        mergedPrsPerPerson(period: $period) {
+          traces {
+            name
+            x
+            y
+          }
         }
       }
-    }
-  `,
-});
+    `,
+  }
+);

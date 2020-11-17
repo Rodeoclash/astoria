@@ -7,7 +7,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
     |> Relay.Connection.from_query(&Repo.all/1, args)
   end
 
-  def get(_, args, _resolution) do
+  def get_from_user(_user, args, _resolution) do
     {:ok, Repo.get_by(GithubRepository, pub_id: args[:id])}
   end
 

@@ -2,10 +2,10 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import RepositoryPlotsMergedPrsPerPerson from "dashboard/components/Repository/Plots/RepositoryPlotsMergedPrsPerPerson.jsx";
+import GithubRepositoryPlotsTotalPrsMerged from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsTotalPrsMerged.jsx";
 
-const RepositoryPlotsMergedPrsPerPersonLoader = function ({
-  repositoryId,
+const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
+  githubRepositoryId,
   period,
 }) {
   const renderQuery = ({ error, props }) => {
@@ -13,8 +13,8 @@ const RepositoryPlotsMergedPrsPerPersonLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <RepositoryPlotsMergedPrsPerPerson
-          repository={props.currentUser.repository}
+        <GithubRepositoryPlotsTotalPrsMerged
+          githubRepository={props.currentUser.githubRepository}
         />
       );
     }
@@ -25,19 +25,19 @@ const RepositoryPlotsMergedPrsPerPersonLoader = function ({
     <QueryRenderer
       environment={environment}
       query={graphql`
-        query RepositoryPlotsMergedPrsPerPersonLoaderQuery(
-          $repositoryId: ID!
+        query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(
+          $githubRepositoryId: ID!
           $period: Period!
         ) {
           currentUser {
-            repository(id: $repositoryId) {
-              ...RepositoryPlotsMergedPrsPerPerson_repository
+            githubRepository(id: $githubRepositoryId) {
+              ...GithubRepositoryPlotsTotalPrsMerged_githubRepository
             }
           }
         }
       `}
       variables={{
-        repositoryId,
+        githubRepositoryId,
         period,
       }}
       render={renderQuery}
@@ -45,4 +45,4 @@ const RepositoryPlotsMergedPrsPerPersonLoader = function ({
   );
 };
 
-export default RepositoryPlotsMergedPrsPerPersonLoader;
+export default GithubRepositoryPlotsTotalPrsMergedLoader;

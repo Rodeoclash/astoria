@@ -9,9 +9,9 @@
 /*::
 import type { ReaderFragment } from 'relay-runtime';
 import type { FragmentReference } from "relay-runtime";
-declare export opaque type RepositoryPlotsTotalPrsMerged_repository$ref: FragmentReference;
-declare export opaque type RepositoryPlotsTotalPrsMerged_repository$fragmentType: RepositoryPlotsTotalPrsMerged_repository$ref;
-export type RepositoryPlotsTotalPrsMerged_repository = {|
+declare export opaque type GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref: FragmentReference;
+declare export opaque type GithubRepositoryPlotsTotalPrsMerged_githubRepository$fragmentType: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref;
+export type GithubRepositoryPlotsTotalPrsMerged_githubRepository = {|
   +name: string,
   +totalPrsMerged: {|
     +traces: $ReadOnlyArray<?{|
@@ -20,12 +20,12 @@ export type RepositoryPlotsTotalPrsMerged_repository = {|
       +y: $ReadOnlyArray<?number>,
     |}>
   |},
-  +$refType: RepositoryPlotsTotalPrsMerged_repository$ref,
+  +$refType: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref,
 |};
-export type RepositoryPlotsTotalPrsMerged_repository$data = RepositoryPlotsTotalPrsMerged_repository;
-export type RepositoryPlotsTotalPrsMerged_repository$key = {
-  +$data?: RepositoryPlotsTotalPrsMerged_repository$data,
-  +$fragmentRefs: RepositoryPlotsTotalPrsMerged_repository$ref,
+export type GithubRepositoryPlotsTotalPrsMerged_githubRepository$data = GithubRepositoryPlotsTotalPrsMerged_githubRepository;
+export type GithubRepositoryPlotsTotalPrsMerged_githubRepository$key = {
+  +$data?: GithubRepositoryPlotsTotalPrsMerged_githubRepository$data,
+  +$fragmentRefs: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref,
   ...
 };
 */
@@ -48,7 +48,7 @@ return {
   ],
   "kind": "Fragment",
   "metadata": null,
-  "name": "RepositoryPlotsTotalPrsMerged_repository",
+  "name": "GithubRepositoryPlotsTotalPrsMerged_githubRepository",
   "selections": [
     (v0/*: any*/),
     {
@@ -95,11 +95,11 @@ return {
       "storageKey": null
     }
   ],
-  "type": "Repository",
+  "type": "GithubRepository",
   "abstractKey": null
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '7d9549efff80d83b206f5eb3de89f344';
+(node/*: any*/).hash = 'aa185f943a02cdd0c974f21a185b569d';
 
 module.exports = node;

@@ -8,25 +8,25 @@
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
-type RepositoryNavigationItem_repository$ref = any;
+type GithubInstallationNavigationItem_githubInstallation$ref = any;
 import type { FragmentReference } from "relay-runtime";
-declare export opaque type CurrentUserRepositoryList_currentUser$ref: FragmentReference;
-declare export opaque type CurrentUserRepositoryList_currentUser$fragmentType: CurrentUserRepositoryList_currentUser$ref;
-export type CurrentUserRepositoryList_currentUser = {|
-  +repositories: ?{|
+declare export opaque type CurrentUserGithubInstallations_currentUser$ref: FragmentReference;
+declare export opaque type CurrentUserGithubInstallations_currentUser$fragmentType: CurrentUserGithubInstallations_currentUser$ref;
+export type CurrentUserGithubInstallations_currentUser = {|
+  +githubInstallations: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
         +id: string,
-        +$fragmentRefs: RepositoryNavigationItem_repository$ref,
+        +$fragmentRefs: GithubInstallationNavigationItem_githubInstallation$ref,
       |}
     |}>
   |},
-  +$refType: CurrentUserRepositoryList_currentUser$ref,
+  +$refType: CurrentUserGithubInstallations_currentUser$ref,
 |};
-export type CurrentUserRepositoryList_currentUser$data = CurrentUserRepositoryList_currentUser;
-export type CurrentUserRepositoryList_currentUser$key = {
-  +$data?: CurrentUserRepositoryList_currentUser$data,
-  +$fragmentRefs: CurrentUserRepositoryList_currentUser$ref,
+export type CurrentUserGithubInstallations_currentUser$data = CurrentUserGithubInstallations_currentUser;
+export type CurrentUserGithubInstallations_currentUser$key = {
+  +$data?: CurrentUserGithubInstallations_currentUser$data,
+  +$fragmentRefs: CurrentUserGithubInstallations_currentUser$ref,
   ...
 };
 */
@@ -36,7 +36,7 @@ const node/*: ReaderFragment*/ = {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
-  "name": "CurrentUserRepositoryList_currentUser",
+  "name": "CurrentUserGithubInstallations_currentUser",
   "selections": [
     {
       "alias": null,
@@ -47,15 +47,15 @@ const node/*: ReaderFragment*/ = {
           "value": 100
         }
       ],
-      "concreteType": "RepositoryConnection",
+      "concreteType": "GithubInstallationConnection",
       "kind": "LinkedField",
-      "name": "repositories",
+      "name": "githubInstallations",
       "plural": false,
       "selections": [
         {
           "alias": null,
           "args": null,
-          "concreteType": "RepositoryEdge",
+          "concreteType": "GithubInstallationEdge",
           "kind": "LinkedField",
           "name": "edges",
           "plural": true,
@@ -63,7 +63,7 @@ const node/*: ReaderFragment*/ = {
             {
               "alias": null,
               "args": null,
-              "concreteType": "Repository",
+              "concreteType": "GithubInstallation",
               "kind": "LinkedField",
               "name": "node",
               "plural": false,
@@ -78,7 +78,7 @@ const node/*: ReaderFragment*/ = {
                 {
                   "args": null,
                   "kind": "FragmentSpread",
-                  "name": "RepositoryNavigationItem_repository"
+                  "name": "GithubInstallationNavigationItem_githubInstallation"
                 }
               ],
               "storageKey": null
@@ -87,13 +87,13 @@ const node/*: ReaderFragment*/ = {
           "storageKey": null
         }
       ],
-      "storageKey": "repositories(first:100)"
+      "storageKey": "githubInstallations(first:100)"
     }
   ],
   "type": "CurrentUser",
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = '491576a1a3c63263dfa2f74d2802af8d';
+(node/*: any*/).hash = '9072f5a51778173341cb41b69cb95f20';
 
 module.exports = node;

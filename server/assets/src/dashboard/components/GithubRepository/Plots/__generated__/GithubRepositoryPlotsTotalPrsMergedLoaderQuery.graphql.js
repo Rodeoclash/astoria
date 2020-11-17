@@ -8,43 +8,43 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type RepositoryPlotsMergedPrsPerPerson_repository$ref = any;
+type GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref = any;
 export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
-export type RepositoryPlotsMergedPrsPerPersonLoaderQueryVariables = {|
-  repositoryId: string,
+export type GithubRepositoryPlotsTotalPrsMergedLoaderQueryVariables = {|
+  githubRepositoryId: string,
   period: Period,
 |};
-export type RepositoryPlotsMergedPrsPerPersonLoaderQueryResponse = {|
+export type GithubRepositoryPlotsTotalPrsMergedLoaderQueryResponse = {|
   +currentUser: ?{|
-    +repository: {|
-      +$fragmentRefs: RepositoryPlotsMergedPrsPerPerson_repository$ref
+    +githubRepository: {|
+      +$fragmentRefs: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref
     |}
   |}
 |};
-export type RepositoryPlotsMergedPrsPerPersonLoaderQuery = {|
-  variables: RepositoryPlotsMergedPrsPerPersonLoaderQueryVariables,
-  response: RepositoryPlotsMergedPrsPerPersonLoaderQueryResponse,
+export type GithubRepositoryPlotsTotalPrsMergedLoaderQuery = {|
+  variables: GithubRepositoryPlotsTotalPrsMergedLoaderQueryVariables,
+  response: GithubRepositoryPlotsTotalPrsMergedLoaderQueryResponse,
 |};
 */
 
 
 /*
-query RepositoryPlotsMergedPrsPerPersonLoaderQuery(
-  $repositoryId: ID!
+query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(
+  $githubRepositoryId: ID!
   $period: Period!
 ) {
   currentUser {
-    repository(id: $repositoryId) {
-      ...RepositoryPlotsMergedPrsPerPerson_repository
+    githubRepository(id: $githubRepositoryId) {
+      ...GithubRepositoryPlotsTotalPrsMerged_githubRepository
       id
     }
     id
   }
 }
 
-fragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {
+fragment GithubRepositoryPlotsTotalPrsMerged_githubRepository on GithubRepository {
   name
-  mergedPrsPerPerson(period: $period) {
+  totalPrsMerged(period: $period) {
     traces {
       name
       x
@@ -55,31 +55,33 @@ fragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {
 */
 
 const node/*: ConcreteRequest*/ = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "period"
-},
-v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "repositoryId"
-},
-v2 = [
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "githubRepositoryId"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "period"
+  }
+],
+v1 = [
   {
     "kind": "Variable",
     "name": "id",
-    "variableName": "repositoryId"
+    "variableName": "githubRepositoryId"
   }
 ],
-v3 = {
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "name",
   "storageKey": null
 },
-v4 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -88,13 +90,10 @@ v4 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "RepositoryPlotsMergedPrsPerPersonLoaderQuery",
+    "name": "GithubRepositoryPlotsTotalPrsMergedLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -106,16 +105,16 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v2/*: any*/),
-            "concreteType": "Repository",
+            "args": (v1/*: any*/),
+            "concreteType": "GithubRepository",
             "kind": "LinkedField",
-            "name": "repository",
+            "name": "githubRepository",
             "plural": false,
             "selections": [
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "RepositoryPlotsMergedPrsPerPerson_repository"
+                "name": "GithubRepositoryPlotsTotalPrsMerged_githubRepository"
               }
             ],
             "storageKey": null
@@ -129,12 +128,9 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "RepositoryPlotsMergedPrsPerPersonLoaderQuery",
+    "name": "GithubRepositoryPlotsTotalPrsMergedLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -146,13 +142,13 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v2/*: any*/),
-            "concreteType": "Repository",
+            "args": (v1/*: any*/),
+            "concreteType": "GithubRepository",
             "kind": "LinkedField",
-            "name": "repository",
+            "name": "githubRepository",
             "plural": false,
             "selections": [
-              (v3/*: any*/),
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": [
@@ -164,7 +160,7 @@ return {
                 ],
                 "concreteType": "PlotDataMergedPr",
                 "kind": "LinkedField",
-                "name": "mergedPrsPerPerson",
+                "name": "totalPrsMerged",
                 "plural": false,
                 "selections": [
                   {
@@ -175,7 +171,7 @@ return {
                     "name": "traces",
                     "plural": true,
                     "selections": [
-                      (v3/*: any*/),
+                      (v2/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -196,27 +192,27 @@ return {
                 ],
                 "storageKey": null
               },
-              (v4/*: any*/)
+              (v3/*: any*/)
             ],
             "storageKey": null
           },
-          (v4/*: any*/)
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "a8f27f94385b2e5fc0b4102e12cf4e57",
+    "cacheID": "bc20ef8ab24457a0e089264eb28cd5b7",
     "id": null,
     "metadata": {},
-    "name": "RepositoryPlotsMergedPrsPerPersonLoaderQuery",
+    "name": "GithubRepositoryPlotsTotalPrsMergedLoaderQuery",
     "operationKind": "query",
-    "text": "query RepositoryPlotsMergedPrsPerPersonLoaderQuery(\n  $repositoryId: ID!\n  $period: Period!\n) {\n  currentUser {\n    repository(id: $repositoryId) {\n      ...RepositoryPlotsMergedPrsPerPerson_repository\n      id\n    }\n    id\n  }\n}\n\nfragment RepositoryPlotsMergedPrsPerPerson_repository on Repository {\n  name\n  mergedPrsPerPerson(period: $period) {\n    traces {\n      name\n      x\n      y\n    }\n  }\n}\n"
+    "text": "query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsTotalPrsMerged_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsTotalPrsMerged_githubRepository on GithubRepository {\n  name\n  totalPrsMerged(period: $period) {\n    traces {\n      name\n      x\n      y\n    }\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '284a077ef9ce8acc2b74390cc73afc44';
+(node/*: any*/).hash = 'b479cae7d582a325dbde2c24322ae834';
 
 module.exports = node;

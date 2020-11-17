@@ -5,27 +5,27 @@ import { Link, useRouter } from "found";
 
 const rootStyles = css``;
 
-export const RepositoryNavigationItem = function ({ repository }) {
+export const GithubRepositoryNavigationItem = function ({ githubRepository }) {
   const { match } = useRouter();
 
   const to = {
     pathname: "/dashboard",
     query: {
       ...match.location.query,
-      repositoryId: repository.id,
+      githubRepositoryId: githubRepository.id,
     },
   };
 
   return (
     <div css={rootStyles}>
-      <Link to={to}>{repository.name}</Link>
+      <Link to={to}>{githubRepository.name}</Link>
     </div>
   );
 };
 
-export default createFragmentContainer(RepositoryNavigationItem, {
-  repository: graphql`
-    fragment RepositoryNavigationItem_repository on Repository {
+export default createFragmentContainer(GithubRepositoryNavigationItem, {
+  githubRepository: graphql`
+    fragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {
       id
       name
     }

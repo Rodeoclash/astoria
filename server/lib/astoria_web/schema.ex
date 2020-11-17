@@ -20,11 +20,6 @@ defmodule AstoriaWeb.Schema do
     field :current_user, :current_user do
       resolve(&Resolvers.CurrentUserResolver.get_from_context/3)
     end
-
-    field :github_repository, non_null(:github_repository) do
-      arg(:id, non_null(:id))
-      resolve(&Resolvers.GithubRepositoryResolver.get/3)
-    end
   end
 
   mutation do

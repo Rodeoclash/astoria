@@ -13,6 +13,11 @@ defmodule AstoriaWeb.Schema.Interfaces.ActorInterface do
 
     field :name, non_null(:string)
 
+    field :github_repository, non_null(:github_repository) do
+      arg(:id, non_null(:id))
+      resolve(&Resolvers.GithubRepositoryResolver.get_from_user/3)
+    end
+
     connection field :github_installations, node_type: :github_installation do
       resolve(&Resolvers.GithubInstallationResolver.list_from_user/3)
     end

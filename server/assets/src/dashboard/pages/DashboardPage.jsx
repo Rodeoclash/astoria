@@ -2,10 +2,10 @@ import React from "react";
 import { css } from "@emotion/core";
 import { PERIODS, defaultPeriod } from "dashboard/services/periods.js";
 
-import CurrentUserRepositoryList from "dashboard/components/CurrentUser/CurrentUserRepositoryList.jsx";
+import CurrentUserGithubInstallations from "dashboard/components/CurrentUser/CurrentUserGithubInstallations.jsx";
+import GithubRepositoryPlotsMergedPrsPerPersonLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPersonLoader.jsx";
+import GithubRepositoryPlotsTotalPrsMergedLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsTotalPrsMergedLoader.jsx";
 import PeriodSelector from "dashboard/components/Period/PeriodSelector.jsx";
-import RepositoryPlotsMergedPrsPerPersonLoader from "dashboard/components/Repository/Plots/RepositoryPlotsMergedPrsPerPersonLoader.jsx";
-import RepositoryPlotsTotalPrsMergedLoader from "dashboard/components/Repository/Plots/RepositoryPlotsTotalPrsMergedLoader.jsx";
 
 const rootStyles = css`
   display: flex;
@@ -30,7 +30,7 @@ const chartStyles = css`
 
 const DashboardPage = function ({ currentUser, match, router }) {
   const location = match.location;
-  const selectedRepositoryId = location.query.repositoryId;
+  const selectedGithubRepositoryId = location.query.githubRepositoryId;
   const selectedPeriod = location.query.period || defaultPeriod;
 
   const handleChangePeriod = (period) => {
@@ -51,12 +51,12 @@ const DashboardPage = function ({ currentUser, match, router }) {
 
   const renderedCharts = (
     <div css={chartStyles}>
-      <RepositoryPlotsMergedPrsPerPersonLoader
-        repositoryId={selectedRepositoryId}
+      <GithubRepositoryPlotsMergedPrsPerPersonLoader
+        githubRepositoryId={selectedGithubRepositoryId}
         period={selectedPeriod}
       />
-      <RepositoryPlotsTotalPrsMergedLoader
-        repositoryId={selectedRepositoryId}
+      <GithubRepositoryPlotsTotalPrsMergedLoader
+        githubRepositoryId={selectedGithubRepositoryId}
         period={selectedPeriod}
       />
     </div>
@@ -65,11 +65,13 @@ const DashboardPage = function ({ currentUser, match, router }) {
   return (
     <div css={rootStyles}>
       <nav css={navStyles}>
-        <CurrentUserRepositoryList currentUser={currentUser} />
+        <CurrentUserGithubInstallations currentUser={currentUser} />
       </nav>
       <main css={mainStyles}>
         <PeriodSelector onChangePeriod={handleChangePeriod} />
-        {selectedRepositoryId === undefined ? renderedNoCharts : renderedCharts}
+        {selectedGithubRepositoryId === undefined
+          ? renderedNoCharts
+          : renderedCharts}
       </main>
     </div>
   );
@@ -78,7 +80,7 @@ const DashboardPage = function ({ currentUser, match, router }) {
 export const DashboardPageQuery = graphql`
   query DashboardPage_Query {
     currentUser {
-      ...CurrentUserRepositoryList_currentUser
+      ...CurrentUserGithubInstallations_currentUser
     }
   }
 `;
