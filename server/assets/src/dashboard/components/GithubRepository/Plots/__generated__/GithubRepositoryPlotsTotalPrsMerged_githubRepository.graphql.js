@@ -8,17 +8,13 @@
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
+type PlotDateIntegerShow_plotDateInteger$ref = any;
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref: FragmentReference;
 declare export opaque type GithubRepositoryPlotsTotalPrsMerged_githubRepository$fragmentType: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref;
 export type GithubRepositoryPlotsTotalPrsMerged_githubRepository = {|
-  +name: string,
   +totalPrsMerged: {|
-    +traces: $ReadOnlyArray<?{|
-      +name: string,
-      +x: $ReadOnlyArray<?any>,
-      +y: $ReadOnlyArray<?number>,
-    |}>
+    +$fragmentRefs: PlotDateIntegerShow_plotDateInteger$ref
   |},
   +$refType: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref,
 |};
@@ -31,65 +27,53 @@ export type GithubRepositoryPlotsTotalPrsMerged_githubRepository$key = {
 */
 
 
-const node/*: ReaderFragment*/ = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-};
-return {
+const node/*: ReaderFragment*/ = {
   "argumentDefinitions": [
     {
       "kind": "RootArgument",
+      "name": "finish"
+    },
+    {
+      "kind": "RootArgument",
       "name": "period"
+    },
+    {
+      "kind": "RootArgument",
+      "name": "start"
     }
   ],
   "kind": "Fragment",
   "metadata": null,
   "name": "GithubRepositoryPlotsTotalPrsMerged_githubRepository",
   "selections": [
-    (v0/*: any*/),
     {
       "alias": null,
       "args": [
         {
           "kind": "Variable",
+          "name": "finish",
+          "variableName": "finish"
+        },
+        {
+          "kind": "Variable",
           "name": "period",
           "variableName": "period"
+        },
+        {
+          "kind": "Variable",
+          "name": "start",
+          "variableName": "start"
         }
       ],
-      "concreteType": "PlotDataMergedPr",
+      "concreteType": "PlotDateInteger",
       "kind": "LinkedField",
       "name": "totalPrsMerged",
       "plural": false,
       "selections": [
         {
-          "alias": null,
           "args": null,
-          "concreteType": "PlotDataMergedPrTrace",
-          "kind": "LinkedField",
-          "name": "traces",
-          "plural": true,
-          "selections": [
-            (v0/*: any*/),
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "x",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "y",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
+          "kind": "FragmentSpread",
+          "name": "PlotDateIntegerShow_plotDateInteger"
         }
       ],
       "storageKey": null
@@ -98,8 +82,7 @@ return {
   "type": "GithubRepository",
   "abstractKey": null
 };
-})();
 // prettier-ignore
-(node/*: any*/).hash = 'aa185f943a02cdd0c974f21a185b569d';
+(node/*: any*/).hash = 'de9419cc95d683c58119e1c69f21c504';
 
 module.exports = node;

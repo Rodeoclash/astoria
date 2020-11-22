@@ -28,6 +28,8 @@ const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
         query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(
           $githubRepositoryId: ID!
           $period: Period!
+          $start: DateTime!
+          $finish: DateTime!
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
@@ -39,6 +41,8 @@ const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
       variables={{
         githubRepositoryId,
         period,
+        start: new Date(2019, 0, 1).toISOString(),
+        finish: new Date().toISOString(),
       }}
       render={renderQuery}
     />

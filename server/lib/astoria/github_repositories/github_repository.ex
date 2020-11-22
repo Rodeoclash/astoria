@@ -35,6 +35,9 @@ defmodule Astoria.GithubRepositories.GithubRepository do
 
   def filter_by_github_installation_id(query \\ GithubRepository, github_installation_id) do
     query
-    |> where([github_repository], github_repository.github_installation_id == ^github_installation_id)
+    |> where(
+      [github_repository],
+      github_repository.github_installation_id == ^github_installation_id
+    )
   end
 end

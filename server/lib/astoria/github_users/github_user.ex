@@ -1,7 +1,7 @@
 defmodule Astoria.GithubUsers.GithubUser do
   alias Astoria.{Users, GithubInstallations}
-  use Ecto.Schema
   import Ecto.Changeset
+  use Ecto.Schema
 
   schema "github_users" do
     belongs_to :user, Users.User

@@ -16,11 +16,11 @@ defmodule Astoria.Interactions.SyncGithubPullRequestTest do
     client = Github.Api.Client.new("1234", "token")
 
     request =
-          Github.Api.V3.Repos.Pulls.read_single(
-            client,
-            github_repository.data["full_name"],
-            1
-          )
+      Github.Api.V3.Repos.Pulls.read_single(
+        client,
+        github_repository.data["full_name"],
+        1
+      )
 
     encoded =
       %{request: request, github_repository_id: github_repository.id}

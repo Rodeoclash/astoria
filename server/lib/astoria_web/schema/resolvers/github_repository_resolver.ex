@@ -16,9 +16,10 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
   end
 
   def pull_request_count(github_repository, _args, _resolution) do
-    result = GithubPullRequest.filter_by_github_repository_id(github_repository.id)
-    |> GithubPullRequest.count()
-    |> Repo.one()
+    result =
+      GithubPullRequest.filter_by_github_repository_id(github_repository.id)
+      |> GithubPullRequest.count()
+      |> Repo.one()
 
     {:ok, result}
   end

@@ -1,5 +1,5 @@
 defmodule Astoria.GithubPullRequests.GithubPullRequest do
-  alias Astoria.{GithubRepositories}
+  alias Astoria.{GithubRepositories, Repo, Charts}
   alias __MODULE__
   use Ecto.Schema
   import Ecto.Changeset
@@ -38,70 +38,107 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
     |> select([github_pull_request], count(github_pull_request.id))
   end
 
-  # @doc """
-  # Get details about users, used to populate the inputs to the filters.
-  # """
-  # def select_user_summary(query \\ GithubPullRequest) do
-  #  query
-  #  |> select([github_pull_request], %{
-  #    name: fragment("?->'user'->>'login'", github_pull_request.data),
-  #    total: count(github_pull_request.id),
-  #    first_seen: fragment("MIN(?->>'created_at')::timestamp", github_pull_request.data),
-  #    last_seen: fragment("MAX(?->>'created_at')::timestamp", github_pull_request.data)
-  #  })
-  # end
-
-  @doc """
-  Get details about users, used to populate the inputs to the filters.
-  """
-  def select_merged_prs(query \\ GithubPullRequest, period) do
-    query
-    |> select([github_pull_request], %{
-      ys: fragment("COUNT(?)", github_pull_request.id),
-      xs:
-        fragment("DATE_TRUNC(?, (?->>'merged_at')::timestamp)", ^period, github_pull_request.data),
-      entities: fragment("?->'user'->>'login'", github_pull_request.data)
-    })
-    |> where(
-      [github_pull_request],
-      fragment("?->>'merged_at' IS NOT NULL", github_pull_request.data)
-    )
-    |> group_by(fragment("xs, entities"))
-    |> order_by(fragment("xs"))
-  end
-
   @doc """
   Takes a sub query result set and converts it to a format suitable for plotly
   """
-  def count_per_person(query) do
-    query
-    |> subquery()
-    |> select([source], %{
-      name: source.entities,
-      x: fragment("ARRAY_AGG(?)", source.xs),
-      y: fragment("ARRAY_AGG(?)", source.ys)
-    })
-    |> group_by([source], source.entities)
+  def total_merged_prs(github_repository, period, start, finish) do
+    result =
+      Repo.query!("""
+        WITH days AS
+        (
+           SELECT
+              generate_series('2020-01-01'::date, '2020-10-27'::date, '1day')::timestamp AS occured_at
+        )
+        ,
+        pull_requests AS
+        (
+           SELECT
+              COUNT(id) AS count,
+              DATE_TRUNC($2,
+              (
+                 github_pull_requests.data ->> 'merged_at'
+              )
+              ::timestamp) AS merged_at
+           FROM
+              github_pull_requests
+           WHERE
+              github_repository_id = $1
+           GROUP BY
+              merged_at
+           ORDER BY
+              merged_at
+        )
+        SELECT
+           'total' AS name,
+           ARRAY_AGG(days.occured_at) AS x,
+           ARRAY_AGG(pull_requests.count) AS y
+        FROM
+           days
+           LEFT JOIN
+              pull_requests
+              ON pull_requests.merged_at = days.occured_at
+        GROUP BY
+           1;
+      """, [github_repository.id, period])
+
+    Enum.map(result.rows, &Repo.load(Charts.DateIntegerTrace, {result.columns, &1}))
   end
 
-  @doc """
-  Takes a sub query result set and converts it to a format suitable for plotly
-  """
-  def total_merged_prs(query) do
-    query
-    |> subquery()
-    |> select([source], %{
-      grouper: 1,
-      x: source.xs,
-      y: fragment("SUM(?)::integer", source.ys)
-    })
-    |> group_by([source], source.xs)
-    |> subquery()
-    |> select([source], %{
-      name: 'total',
-      x: fragment("ARRAY_AGG(?)", source.x),
-      y: fragment("ARRAY_AGG(?)", source.y)
-    })
-    |> group_by([source], source.grouper)
+  def merged_prs_per_person(github_repository, period, start, finish) do
+    result =
+      Repo.query!("""
+        WITH occurances AS
+        (
+           SELECT
+              generate_series('2020-01-01'::date, '2020-10-27'::date, '1day')::timestamp AS occured_at
+        )
+        ,
+        users AS
+        (
+           SELECT DISTINCT
+        (github_pull_requests.data -> 'user' ->> 'login') as name
+           FROM
+              github_pull_requests
+           WHERE
+              github_repository_id = $1
+        )
+        ,
+        pull_requests AS
+        (
+           SELECT
+              COUNT(id) AS count,
+              DATE_TRUNC($2,
+              (
+                 github_pull_requests.data ->> 'merged_at'
+              )
+              ::timestamp) AS merged_at,
+              github_pull_requests.data -> 'user' ->> 'login' as name
+           FROM
+              github_pull_requests
+           WHERE
+              github_repository_id = $1
+           GROUP BY
+              merged_at,
+              name
+           ORDER BY
+              merged_at
+        )
+        SELECT
+           users.name as name,
+           ARRAY_AGG(occurances.occured_at) AS x,
+           ARRAY_AGG(pull_requests.count) AS y
+        FROM
+           users
+           CROSS JOIN
+              occurances
+           LEFT JOIN
+              pull_requests
+              ON pull_requests.merged_at = occurances.occured_at
+              AND pull_requests.name = users.name
+        GROUP BY
+           users.name;
+      """, [github_repository.id, period])
+
+    Enum.map(result.rows, &Repo.load(Charts.DateIntegerTrace, {result.columns, &1}))
   end
 end
