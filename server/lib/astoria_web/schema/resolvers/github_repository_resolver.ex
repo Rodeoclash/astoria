@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
-  alias Astoria.{GithubRepositories.GithubRepository, GithubPullRequests.GithubPullRequest, Repo}
+  alias Astoria.{GithubRepositories.GithubRepository, Repo}
   alias Absinthe.Relay
 
   def list_from_installation(github_installation, args, _resolution) do
@@ -13,14 +13,5 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
 
   def name(github_repository, _args, _resolution) do
     {:ok, github_repository.data["name"]}
-  end
-
-  def pull_request_count(github_repository, _args, _resolution) do
-    result =
-      GithubPullRequest.filter_by_github_repository_id(github_repository.id)
-      |> GithubPullRequest.count()
-      |> Repo.one()
-
-    {:ok, result}
   end
 end

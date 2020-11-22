@@ -14,10 +14,6 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       resolve(&Resolvers.GithubRepositoryResolver.name/3)
     end
 
-    field :pull_request_count, non_null(:integer) do
-      resolve(&Resolvers.GithubRepositoryResolver.pull_request_count/3)
-    end
-
     field :merged_prs_per_person, non_null(:plot_date_integer) do
       arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
