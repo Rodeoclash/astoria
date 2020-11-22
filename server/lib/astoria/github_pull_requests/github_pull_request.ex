@@ -47,7 +47,7 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
         WITH days AS
         (
            SELECT
-              generate_series('2020-01-01'::date, '2020-10-27'::date, '1day')::timestamp AS occured_at
+              generate_series($3::date, $4::date, '1day')::timestamp AS occured_at
         )
         ,
         pull_requests AS
@@ -79,7 +79,7 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
               ON pull_requests.merged_at = days.occured_at
         GROUP BY
            1;
-      """, [github_repository.id, period])
+           """, [github_repository.id, period, start |> DateTime.to_date(), finish |> DateTime.to_date()])
 
     Enum.map(result.rows, &Repo.load(Charts.DateIntegerTrace, {result.columns, &1}))
   end
@@ -90,7 +90,7 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
         WITH occurances AS
         (
            SELECT
-              generate_series('2020-01-01'::date, '2020-10-27'::date, '1day')::timestamp AS occured_at
+              generate_series($3::date, $4::date, '1day')::timestamp AS occured_at
         )
         ,
         users AS
@@ -137,7 +137,7 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
               AND pull_requests.name = users.name
         GROUP BY
            users.name;
-      """, [github_repository.id, period])
+         """, [github_repository.id, period, start |> DateTime.to_date(), finish |> DateTime.to_date()])
 
     Enum.map(result.rows, &Repo.load(Charts.DateIntegerTrace, {result.columns, &1}))
   end
