@@ -21,11 +21,11 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       resolve(&Resolvers.GithubPullRequestResolver.merged_prs_per_person/3)
     end
 
-    field :total_prs_merged, non_null(:plot_date_integer) do
+    field :merged_prs, non_null(:plot_date_integer) do
       arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))
-      resolve(&Resolvers.GithubPullRequestResolver.total_prs_merged/3)
+      resolve(&Resolvers.GithubPullRequestResolver.merged_prs/3)
     end
   end
 

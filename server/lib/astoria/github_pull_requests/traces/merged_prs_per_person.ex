@@ -1,26 +1,7 @@
-defmodule Astoria.GithubPullRequests.GithubPullRequest do
-  alias Astoria.{GithubRepositories, Repo, Charts}
-  use Ecto.Schema
-  import Ecto.Changeset
+defmodule Astoria.GithubPullRequests.Traces.MergedPrsPerPerson do
+  alias Astoria.{Repo, Charts}
 
-  schema "github_pull_requests" do
-    belongs_to :github_repository, GithubRepositories.GithubRepository
-
-    field :data, :map
-    field :github_id, :integer
-    field :pub_id, :binary_id, read_after_writes: true
-
-    timestamps()
-  end
-
-  @doc false
-  def changeset(organisation, attrs) do
-    organisation
-    |> cast(attrs, [:data, :github_id, :github_repository_id])
-    |> validate_required([:data, :github_id, :github_repository_id])
-  end
-
-  def merged_prs_per_person(github_repository, period, start, finish) do
+  def generate(github_repository, period, start, finish) do
     result =
       Repo.query!(
         """

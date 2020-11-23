@@ -8,7 +8,7 @@ export const GithubRepositoryPlotsTotalPrsMerged = function ({
   return (
     <div>
       <h3>Total PRs</h3>
-      <PlotDateIntegerShow plotDateInteger={githubRepository.totalPrsMerged} />
+      <PlotDateIntegerShow plotDateInteger={githubRepository.mergedPrs} />
       <p>Total number of PRs created for this repo</p>
     </div>
   );
@@ -17,7 +17,7 @@ export const GithubRepositoryPlotsTotalPrsMerged = function ({
 export default createFragmentContainer(GithubRepositoryPlotsTotalPrsMerged, {
   githubRepository: graphql`
     fragment GithubRepositoryPlotsTotalPrsMerged_githubRepository on GithubRepository {
-      totalPrsMerged(period: $period, start: $start, finish: $finish) {
+      mergedPrs(period: $period, start: $start, finish: $finish) {
         ...PlotDateIntegerShow_plotDateInteger
       }
     }

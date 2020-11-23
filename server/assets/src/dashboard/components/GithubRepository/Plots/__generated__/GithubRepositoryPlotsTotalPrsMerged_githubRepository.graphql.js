@@ -13,7 +13,7 @@ import type { FragmentReference } from "relay-runtime";
 declare export opaque type GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref: FragmentReference;
 declare export opaque type GithubRepositoryPlotsTotalPrsMerged_githubRepository$fragmentType: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref;
 export type GithubRepositoryPlotsTotalPrsMerged_githubRepository = {|
-  +totalPrsMerged: {|
+  +mergedPrs: {|
     +$fragmentRefs: PlotDateIntegerShow_plotDateInteger$ref
   |},
   +$refType: GithubRepositoryPlotsTotalPrsMerged_githubRepository$ref,
@@ -67,7 +67,7 @@ const node/*: ReaderFragment*/ = {
       ],
       "concreteType": "PlotDateInteger",
       "kind": "LinkedField",
-      "name": "totalPrsMerged",
+      "name": "mergedPrs",
       "plural": false,
       "selections": [
         {
@@ -83,6 +83,6 @@ const node/*: ReaderFragment*/ = {
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = 'de9419cc95d683c58119e1c69f21c504';
+(node/*: any*/).hash = '7cf789b07afc912247ed0426533d670e';
 
 module.exports = node;

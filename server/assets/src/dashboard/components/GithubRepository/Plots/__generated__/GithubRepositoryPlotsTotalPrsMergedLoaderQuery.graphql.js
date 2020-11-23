@@ -47,7 +47,7 @@ query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(
 }
 
 fragment GithubRepositoryPlotsTotalPrsMerged_githubRepository on GithubRepository {
-  totalPrsMerged(period: $period, start: $start, finish: $finish) {
+  mergedPrs(period: $period, start: $start, finish: $finish) {
     ...PlotDateIntegerShow_plotDateInteger
   }
 }
@@ -187,7 +187,7 @@ return {
                 ],
                 "concreteType": "PlotDateInteger",
                 "kind": "LinkedField",
-                "name": "totalPrsMerged",
+                "name": "mergedPrs",
                 "plural": false,
                 "selections": [
                   {
@@ -236,12 +236,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "7725bb0536f72672fc1d8a38ddf5a2dc",
+    "cacheID": "5fc7fb6c9faa5c1a8ff87a9214e313da",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsTotalPrsMergedLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsTotalPrsMerged_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsTotalPrsMerged_githubRepository on GithubRepository {\n  totalPrsMerged(period: $period, start: $start, finish: $finish) {\n    ...PlotDateIntegerShow_plotDateInteger\n  }\n}\n\nfragment PlotDateIntegerShow_plotDateInteger on PlotDateInteger {\n  traces {\n    name\n    x\n    y\n  }\n}\n"
+    "text": "query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsTotalPrsMerged_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsTotalPrsMerged_githubRepository on GithubRepository {\n  mergedPrs(period: $period, start: $start, finish: $finish) {\n    ...PlotDateIntegerShow_plotDateInteger\n  }\n}\n\nfragment PlotDateIntegerShow_plotDateInteger on PlotDateInteger {\n  traces {\n    name\n    x\n    y\n  }\n}\n"
   }
 };
 })();

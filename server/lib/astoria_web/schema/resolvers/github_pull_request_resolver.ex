@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
-  alias Astoria.{GithubPullRequests.GithubPullRequest, Repo}
+  alias Astoria.{GithubPullRequests}
 
   def merged_prs_per_person(
         github_repository,
@@ -8,18 +8,18 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       ) do
     {:ok,
      %{
-       traces: GithubPullRequest.merged_prs_per_person(github_repository, period, start, finish)
+       traces: GithubPullRequests.Traces.MergedPrsPerPerson.generate(github_repository, period, start, finish)
      }}
   end
 
-  def total_prs_merged(
+  def merged_prs(
         github_repository,
         %{period: period, start: start, finish: finish},
         _resolution
       ) do
     {:ok,
      %{
-       traces: GithubPullRequest.total_merged_prs(github_repository, period, start, finish)
+       traces: GithubPullRequests.Traces.MergedPrs.generate(github_repository, period, start, finish)
      }}
   end
 end
