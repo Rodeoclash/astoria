@@ -41,7 +41,7 @@ const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
       variables={{
         githubRepositoryId,
         period,
-        start: new Date(2019, 0, 1).toISOString(),
+        start: new Date(2020, 0, 1).toISOString(),
         finish: new Date().toISOString(),
       }}
       render={renderQuery}

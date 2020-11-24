@@ -2,9 +2,9 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import GithubRepositoryPlotsMergedPrsPerPerson from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPerson.jsx";
+import GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge.jsx";
 
-const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
+const GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader = function ({
   githubRepositoryId,
   period,
 }) {
@@ -13,7 +13,7 @@ const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <GithubRepositoryPlotsMergedPrsPerPerson
+        <GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge
           githubRepository={props.currentUser.githubRepository}
         />
       );
@@ -25,7 +25,7 @@ const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
     <QueryRenderer
       environment={environment}
       query={graphql`
-        query GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery(
+        query GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQuery(
           $githubRepositoryId: ID!
           $period: Period!
           $start: DateTime!
@@ -33,7 +33,7 @@ const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              ...GithubRepositoryPlotsMergedPrsPerPerson_githubRepository
+              ...GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository
             }
           }
         }
@@ -49,4 +49,4 @@ const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
   );
 };
 
-export default GithubRepositoryPlotsMergedPrsPerPersonLoader;
+export default GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader;

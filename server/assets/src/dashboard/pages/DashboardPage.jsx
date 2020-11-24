@@ -3,6 +3,7 @@ import { css } from "@emotion/core";
 import { PERIODS, defaultPeriod } from "dashboard/services/periods.js";
 
 import CurrentUserGithubInstallations from "dashboard/components/CurrentUser/CurrentUserGithubInstallations.jsx";
+import GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader.jsx";
 import GithubRepositoryPlotsMergedPrsPerPersonLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPersonLoader.jsx";
 import GithubRepositoryPlotsTotalPrsMergedLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsTotalPrsMergedLoader.jsx";
 import PeriodSelector from "dashboard/components/Period/PeriodSelector.jsx";
@@ -25,7 +26,7 @@ const mainStyles = css`
 const chartStyles = css`
   display: grid;
   grid-template-columns: 50% 50%;
-  grid-template-rows: repeat(1, 50vh);
+  grid-template-rows: repeat(2, 50vh);
 `;
 
 const DashboardPage = function ({ currentUser, match, router }) {
@@ -56,6 +57,10 @@ const DashboardPage = function ({ currentUser, match, router }) {
         period={selectedPeriod}
       />
       <GithubRepositoryPlotsTotalPrsMergedLoader
+        githubRepositoryId={selectedGithubRepositoryId}
+        period={selectedPeriod}
+      />
+      <GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader
         githubRepositoryId={selectedGithubRepositoryId}
         period={selectedPeriod}
       />

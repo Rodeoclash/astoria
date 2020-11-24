@@ -1,4 +1,4 @@
-defmodule Astoria.GithubPullRequests.Traces.AveragePrOpenBeforeMerge do
+defmodule Astoria.GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge do
   alias Astoria.{Repo, Charts}
 
   def generate(github_repository, period, start, finish) do
@@ -8,7 +8,7 @@ defmodule Astoria.GithubPullRequests.Traces.AveragePrOpenBeforeMerge do
         WITH days AS
         (
            SELECT
-              generate_series('2020-01-01 00:00:00'::timestamp, '2020-10-27 00:00:00'::timestamp, '1day')::timestamp AS occured_at
+              generate_series($3::date, $4::date, '1day')::timestamp AS occured_at
         )
         ,
         pull_requests AS
@@ -27,28 +27,43 @@ defmodule Astoria.GithubPullRequests.Traces.AveragePrOpenBeforeMerge do
            FROM
               github_pull_requests
            WHERE
-              github_repository_id = 9
+              github_repository_id = $1
            GROUP BY
               created_at
            ORDER BY
               created_at
         )
+        ,
+        results AS
+        (
+           SELECT
+              DATE_TRUNC($2, days.occured_at) AS time_period,
+              AVG(average_days) AS average_days
+           FROM
+              days
+              LEFT JOIN
+                 pull_requests
+                 ON pull_requests.created_at = days.occured_at
+           GROUP BY
+              time_period
+           ORDER BY
+              time_period
+        )
         SELECT
-           DATE_TRUNC('month', days.occured_at) AS time_period,
-           AVG(average_days)
+           'average' AS name,
+           ARRAY_AGG(results.time_period) AS x,
+           ARRAY_AGG(results.average_days) AS y
         FROM
-           days
-           LEFT JOIN
-              pull_requests
-              ON pull_requests.created_at = days.occured_at
+           results
         GROUP BY
-           time_period
-        ORDER BY
-           time_period;
+           1;
         """,
         [github_repository.id, period, start |> DateTime.to_date(), finish |> DateTime.to_date()]
       )
 
-    Enum.map(result.rows, &Repo.load(Charts.DateIntegerTrace, {result.columns, &1}))
+    IO.inspect "=== RESULT"
+    IO.inspect result
+
+    Enum.map(result.rows, &Repo.load(Charts.DateFloatTrace, {result.columns, &1}))
   end
 end

@@ -2,8 +2,8 @@ import React from "react";
 import { createFragmentContainer, graphql } from "react-relay";
 import Plot from "react-plotly.js";
 
-export const PlotDateIntegerShow = function ({ plotDateInteger }) {
-  const data = plotDateInteger.traces.map((trace) => {
+export const PlotDateFloatShow = function ({ plotDateFloat }) {
+  const data = plotDateFloat.traces.map((trace) => {
     return {
       ...trace,
       mode: "lines",
@@ -37,9 +37,9 @@ export const PlotDateIntegerShow = function ({ plotDateInteger }) {
   );
 };
 
-export default createFragmentContainer(PlotDateIntegerShow, {
-  plotDateInteger: graphql`
-    fragment PlotDateIntegerShow_plotDateInteger on PlotDateInteger {
+export default createFragmentContainer(PlotDateFloatShow, {
+  plotDateFloat: graphql`
+    fragment PlotDateFloatShow_plotDateFloat on PlotDateFloat {
       traces {
         name
         x
