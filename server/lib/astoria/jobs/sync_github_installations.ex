@@ -1,4 +1,4 @@
-defmodule Astoria.Interactions.SyncGithubInstallations do
+defmodule Astoria.Jobs.SyncGithubInstallations do
   alias Astoria.{Github, GithubInstallations}
 
   def perform(request) do

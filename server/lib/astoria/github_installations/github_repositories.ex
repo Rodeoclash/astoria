@@ -1,5 +1,5 @@
 defmodule Astoria.GithubInstallations.GithubRepositories do
-  alias Astoria.{GithubInstallations, Github, Interactions, Utility}
+  alias Astoria.{GithubInstallations, Github, Jobs, Utility}
 
   @doc """
   Trigger a sync of all repositories for this installation
@@ -15,7 +15,7 @@ defmodule Astoria.GithubInstallations.GithubRepositories do
           |> Utility.serialise()
 
         %{encoded: encoded}
-        |> Interactions.SyncGithubInstallationRepositories.new()
+        |> Jobs.SyncGithubInstallationRepositories.new()
         |> Oban.insert()
     end
   end

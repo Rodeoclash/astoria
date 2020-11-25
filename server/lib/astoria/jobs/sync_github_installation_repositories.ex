@@ -1,6 +1,6 @@
-defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
-  alias Astoria.{Github, GithubRepositories, GithubInstallations, Repo, Interactions, Utility}
-  import Interactions.SyncGithub
+defmodule Astoria.Jobs.SyncGithubInstallationRepositories do
+  alias Astoria.{Github, GithubRepositories, GithubInstallations, Repo, Jobs, Utility}
+  import Jobs.SyncGithub
   use Oban.Worker, queue: :sync_github
 
   def perform(%Oban.Job{args: %{"encoded" => encoded}}) do
@@ -29,7 +29,7 @@ defmodule Astoria.Interactions.SyncGithubInstallationRepositories do
             |> Utility.serialise()
 
           %{encoded: encoded}
-          |> Interactions.SyncGithubInstallationRepositories.new()
+          |> Jobs.SyncGithubInstallationRepositories.new()
           |> Oban.insert()
         end
     end

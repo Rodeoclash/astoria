@@ -1,5 +1,5 @@
-defmodule Astoria.Interactions.SyncGithubPullRequestTest do
-  alias Astoria.{Interactions.SyncGithubPullRequest, Repo, Github, Utility, Fixtures}
+defmodule Astoria.Jobs.SyncGithubPullRequestTest do
+  alias Astoria.{Jobs.SyncGithubPullRequest, Repo, Github, Utility, Fixtures}
   import Astoria.Factory
   import Mox
   use Astoria.DataCase

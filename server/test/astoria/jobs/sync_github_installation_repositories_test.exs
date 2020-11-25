@@ -1,5 +1,5 @@
-defmodule Astoria.Interactions.SyncGithubInstallationRepositoriesTest do
-  alias Astoria.{Interactions.SyncGithubInstallationRepositories, Repo, Github, Utility, Fixtures}
+defmodule Astoria.Jobs.SyncGithubInstallationRepositoriesTest do
+  alias Astoria.{Jobs.SyncGithubInstallationRepositories, Repo, Github, Utility, Fixtures}
   import Astoria.Factory
   import Mox
   use Astoria.DataCase
@@ -38,7 +38,7 @@ defmodule Astoria.Interactions.SyncGithubInstallationRepositoriesTest do
              SyncGithubInstallationRepositories.perform(%Oban.Job{args: %{"encoded" => encoded}})
 
     assert_enqueued(
-      worker: Astoria.Interactions.SyncGithubInstallationRepositories,
+      worker: Astoria.Jobs.SyncGithubInstallationRepositories,
       args: %{
         "encoded" =>
           "g3QAAAACZAAWZ2l0aHViX2luc3RhbGxhdGlvbl9pZGEBZAAHcmVxdWVzdHQAAAAFZAAKX19zdHJ1Y3RfX2QAJEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuVjMuUmVxdWVzdGQABmNsaWVudHQAAAADZAAKX19zdHJ1Y3RfX2QAIEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuQ2xpZW50ZAAFdG9rZW5tAAAABDEyMzRkAAR0eXBlbQAAAAV0b2tlbmQABm1ldGhvZGQAA2dldGQAB3BheWxvYWR0AAAAAGQAA3VybG0AAABEaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9zZWFyY2gvY29kZT9xPWFkZENsYXNzK3VzZXIlM0Ftb3ppbGxhJnBhZ2U9MTU="

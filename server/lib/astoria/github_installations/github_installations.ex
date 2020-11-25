@@ -1,5 +1,5 @@
 defmodule Astoria.GithubInstallations do
-  alias Astoria.{GithubInstallations, GithubApplication, Github, Interactions, Repo}
+  alias Astoria.{GithubInstallations, GithubApplication, Github, Jobs, Repo}
 
   import Ecto.Query, only: [from: 2]
 
@@ -10,7 +10,7 @@ defmodule Astoria.GithubInstallations do
   def sync do
     GithubApplication.client()
     |> Github.Api.V3.App.Installations.read()
-    |> Interactions.SyncGithubInstallations.perform()
+    |> Jobs.SyncGithubInstallations.perform()
   end
 
   @doc """

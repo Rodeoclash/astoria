@@ -1,5 +1,5 @@
-defmodule Astoria.Interactions.SyncGithubTest do
-  alias Astoria.{Interactions.SyncGithub, Repo, GithubInstallations, Github}
+defmodule Astoria.Jobs.SyncGithubTest do
+  alias Astoria.{Jobs.SyncGithub, Repo, GithubInstallations, Github}
 
   import Astoria.Factory
   use Astoria.DataCase

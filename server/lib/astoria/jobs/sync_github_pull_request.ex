@@ -1,6 +1,6 @@
-defmodule Astoria.Interactions.SyncGithubPullRequest do
-  alias Astoria.{Github, GithubRepositories, Repo, Interactions, Utility}
-  import Interactions.SyncGithub
+defmodule Astoria.Jobs.SyncGithubPullRequest do
+  alias Astoria.{Github, GithubRepositories, Repo, Jobs, Utility}
+  import Jobs.SyncGithub
   use Oban.Worker, queue: :sync_github
 
   def perform(%Oban.Job{args: %{"encoded" => encoded}}) do

@@ -1,6 +1,6 @@
-defmodule Astoria.Interactions.SyncGithubRepositoryPullRequests do
-  alias Astoria.{Github, GithubRepositories, Repo, Interactions, Utility}
-  import Interactions.SyncGithub
+defmodule Astoria.Jobs.SyncGithubRepositoryPullRequests do
+  alias Astoria.{Github, GithubRepositories, Repo, Jobs, Utility}
+  import Jobs.SyncGithub
   use Oban.Worker, queue: :sync_github
 
   # def perform(request, github_repository_id) do
@@ -28,7 +28,7 @@ defmodule Astoria.Interactions.SyncGithubRepositoryPullRequests do
             |> Utility.serialise()
 
           %{encoded: encoded}
-          |> Interactions.SyncGithubRepositoryPullRequests.new()
+          |> Jobs.SyncGithubRepositoryPullRequests.new()
           |> Oban.insert()
         end
     end
