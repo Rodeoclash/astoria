@@ -8,7 +8,13 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       ) do
     {:ok,
      %{
-       traces: GithubPullRequests.Traces.MergedPrsPerPerson.generate(github_repository, period, start, finish)
+       traces:
+         GithubPullRequests.Traces.MergedPrsPerPerson.generate(
+           github_repository,
+           period,
+           start,
+           finish
+         )
      }}
   end
 
@@ -19,7 +25,8 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       ) do
     {:ok,
      %{
-       traces: GithubPullRequests.Traces.MergedPrs.generate(github_repository, period, start, finish)
+       traces:
+         GithubPullRequests.Traces.MergedPrs.generate(github_repository, period, start, finish)
      }}
   end
 
@@ -30,7 +37,13 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       ) do
     {:ok,
      %{
-       traces: GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge.generate(github_repository, period, start, finish)
+       traces:
+         GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge.generate(
+           github_repository,
+           period,
+           start,
+           finish
+         )
      }}
   end
 
@@ -41,7 +54,13 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       ) do
     {:ok,
      %{
-       traces: GithubPullRequests.Traces.AverageChangeInPr.generate(github_repository, period, start, finish)
+       traces:
+         GithubPullRequests.Traces.AverageChangeInPr.generate(
+           github_repository,
+           period,
+           start,
+           finish
+         )
      }}
   end
 end
