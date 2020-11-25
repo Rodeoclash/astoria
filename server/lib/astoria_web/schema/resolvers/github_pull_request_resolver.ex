@@ -33,4 +33,15 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
        traces: GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge.generate(github_repository, period, start, finish)
      }}
   end
+
+  def average_change_in_pr(
+        github_repository,
+        %{period: period, start: start, finish: finish},
+        _resolution
+      ) do
+    {:ok,
+     %{
+       traces: GithubPullRequests.Traces.AverageChangeInPr.generate(github_repository, period, start, finish)
+     }}
+  end
 end

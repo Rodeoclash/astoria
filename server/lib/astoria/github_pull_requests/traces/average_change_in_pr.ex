@@ -1,4 +1,4 @@
-defmodule Astoria.GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge do
+defmodule Astoria.GithubPullRequests.Traces.AverageChangeInPr do
   alias Astoria.{Repo, Charts}
 
   def generate(github_repository, period, start, finish) do
@@ -19,11 +19,7 @@ defmodule Astoria.GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge do
                  github_pull_requests.data ->> 'created_at'
               )
               ::timestamp) AS created_at,
-              AVG(DATE_PART('day', AGE((github_pull_requests.data ->> 'merged_at' )::timestamp,
-              (
-                 github_pull_requests.data ->> 'created_at'
-              )
-              ::timestamp))) AS average_days
+              AVG((github_pull_requests.data ->> 'additions')::integer + (github_pull_requests.data ->> 'deletions')::integer)::float AS average_change
            FROM
               github_pull_requests
            WHERE
@@ -38,7 +34,7 @@ defmodule Astoria.GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge do
         (
            SELECT
               DATE_TRUNC($2, days.occured_at) AS time_period,
-              AVG(average_days) AS average_days
+              AVG(average_change) AS average_change
            FROM
               days
               LEFT JOIN
@@ -52,7 +48,7 @@ defmodule Astoria.GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge do
         SELECT
            'average' AS name,
            ARRAY_AGG(results.time_period) AS x,
-           ARRAY_AGG(results.average_days) AS y
+           ARRAY_AGG(results.average_change) AS y
         FROM
            results
         GROUP BY
@@ -60,6 +56,9 @@ defmodule Astoria.GithubPullRequests.Traces.AverageDaysPrOpenBeforeMerge do
         """,
         [github_repository.id, period, start |> DateTime.to_date(), finish |> DateTime.to_date()]
       )
+
+    IO.inspect "=== results"
+    IO.inspect result
 
     Enum.map(result.rows, &Repo.load(Charts.DateFloatTrace, {result.columns, &1}))
   end

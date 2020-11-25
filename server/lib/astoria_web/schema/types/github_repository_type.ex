@@ -34,6 +34,13 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.average_days_pr_open_before_merge/3)
     end
+
+    field :average_change_in_pr, non_null(:plot_date_float) do
+      arg(:period, non_null(:period))
+      arg(:start, non_null(:datetime))
+      arg(:finish, non_null(:datetime))
+      resolve(&Resolvers.GithubPullRequestResolver.average_change_in_pr/3)
+    end
   end
 
   connection(node_type: :github_repository)
