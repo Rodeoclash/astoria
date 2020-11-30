@@ -4,7 +4,7 @@
   vars:
     ansible_python_interpreter: "/usr/bin/python3"
     deploy_image_file_local: '{{lookup("env","HOME")}}/deploy_{{lookup("env","SHA")}}.tar'
-    deploy_image_name: 'academy/academy:{{lookup("env","SHA")}}'
+    deploy_image_name: 'astoria/astoria:{{lookup("env","SHA")}}'
   tasks:
     - pip:
         name: docker
@@ -27,8 +27,8 @@
 
     - name: Export ssh key
       copy:
-        src: id_ed25519_academy.enc
-        dest: '{{lookup("env","HOME")}}/id_ed25519_academy'
+        src: id_ed25519_astoria.enc
+        dest: '{{lookup("env","HOME")}}/id_ed25519_astoria'
         mode: 0600
         owner: "{{ ansible_user_id }}"
 
@@ -36,10 +36,10 @@
   hosts: app
   vars:
     ansible_python_interpreter: "/usr/bin/python3"
-    ansible_ssh_private_key_file: '{{lookup("env","HOME")}}/id_ed25519_academy'
+    ansible_ssh_private_key_file: '{{lookup("env","HOME")}}/id_ed25519_astoria'
     deploy_image_file_local: '{{lookup("env","HOME")}}/deploy_{{lookup("env","SHA")}}.tar'
     deploy_image_file_remote: '/tmp/deploy_{{lookup("env","SHA")}}.tar'
-    deploy_image_name: 'academy/academy:{{lookup("env","SHA")}}'
+    deploy_image_name: 'astoria/astoria:{{lookup("env","SHA")}}'
   tasks:
     - pip:
         name: docker
@@ -57,11 +57,11 @@
 
     - name: Run migrations
       docker_container:
-        name: academy-migrations
+        name: astoria-migrations
         image: "{{deploy_image_name}}"
         restart_policy: no
         state: started
-        command: bin/academy eval "Academy.Release.migrate"
+        command: bin/astoria eval "Academy.Release.migrate"
         env: &env
           DATABASE_URL: "{{database_url}}"
           SECRET_KEY_BASE: "{{secret_key_base}}"
@@ -72,7 +72,7 @@
 
     - name: Ensure app running
       docker_container:
-        name: academy
+        name: astoria
         image: "{{deploy_image_name}}"
         log_driver: json-file
         restart_policy: unless-stopped
