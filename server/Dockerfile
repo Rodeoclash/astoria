@@ -51,9 +51,9 @@ COPY ./priv priv
 COPY ./test test
 
 # build frontend
-#RUN npm install --prefix assets
-#RUN npm run deploy --prefix assets
-#RUN mix phx.digest
+RUN npm install --prefix assets
+RUN npm run deploy --prefix assets
+RUN mix phx.digest
 
 # create a release
 # RUN MIX_ENV=prod mix release astoria
