@@ -22,7 +22,7 @@ jobs:
       #  run: docker pull ${IMAGE_PATH_LATEST}
 
       - name: Build the Docker image
-        run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST} --cache-from ${IMAGE_PATH_LATEST} --target=development .
+        run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST} --cache-from ${IMAGE_PATH_LATEST} --target=development ./server
 
       - name: Publish the image to GPR
         run: docker push ${IMAGE_PATH_LATEST}
