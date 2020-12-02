@@ -45,6 +45,11 @@
     - pip:
         name: docker
 
+    - name: Copy private key to remote
+      copy:
+        src: github_app_key.enc
+        dest: "/root/github_app_key.pem"
+
     - name: Copy image file to remote
       copy:
         src: "{{deploy_image_file_local}}"
@@ -64,8 +69,14 @@
         state: started
         command: bin/astoria eval "Astoria.Release.migrate"
         env: &env
-          DATABASE_URL: "{{database_url}}"
-          SECRET_KEY_BASE: "{{secret_key_base}}"
+          DATABASE_URL: "{{ database_url }}"
+          GITHUB_APP_ID: 91034
+          GITHUB_APP_PRIVATE_KEY: /usr/src/app/priv/keys/github_app_key.pem
+          GITHUB_CLIENT_ID: Iv1.72f681082d3f83aa
+          GITHUB_CLIENT_SECRET: "{{ github_client_secret }}"
+          SECRET_KEY_BASE: "{{ secret_key_base }}"
+        volumes: &volumes
+          - /root/github_app_key.pem:/usr/src/app/priv/keys/github_app_key.pem
 
     - name: Create websites network
       docker_network:
