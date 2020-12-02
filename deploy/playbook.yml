@@ -70,7 +70,7 @@
         command: bin/astoria eval "Astoria.Release.migrate"
         env: &env
           DATABASE_URL: "{{ database_url }}"
-          GITHUB_APP_ID: 91034
+          GITHUB_APP_ID: "91034"
           GITHUB_APP_PRIVATE_KEY: /usr/src/app/priv/keys/github_app_key.pem
           GITHUB_CLIENT_ID: Iv1.72f681082d3f83aa
           GITHUB_CLIENT_SECRET: "{{ github_client_secret }}"
