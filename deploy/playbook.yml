@@ -50,40 +50,40 @@
         src: "{{deploy_image_file_local}}"
         dest: "{{deploy_image_file_remote}}"
 
-      #- name: Load image
-      #  docker_image:
-      #    name: "{{deploy_image_name}}"
-      #    load_path: "{{deploy_image_file_remote}}"
-      #    source: load
+    - name: Load image
+      docker_image:
+        name: "{{deploy_image_name}}"
+        load_path: "{{deploy_image_file_remote}}"
+        source: load
 
-      #- name: Run migrations
-      #  docker_container:
-      #    name: astoria-migrations
-      #    image: "{{deploy_image_name}}"
-      #    restart_policy: no
-      #    state: started
-      #    command: bin/astoria eval "Academy.Release.migrate"
-      #    env: &env
-      #      DATABASE_URL: "{{database_url}}"
-      #      SECRET_KEY_BASE: "{{secret_key_base}}"
+    - name: Run migrations
+      docker_container:
+        name: astoria-migrations
+        image: "{{deploy_image_name}}"
+        restart_policy: no
+        state: started
+        command: bin/astoria eval "Academy.Release.migrate"
+        env: &env
+          DATABASE_URL: "{{database_url}}"
+          SECRET_KEY_BASE: "{{secret_key_base}}"
 
-      #- name: Create websites network
-      #  docker_network:
-      #    name: websites
+    - name: Create websites network
+      docker_network:
+        name: websites
 
-      #- name: Ensure app running
-      #  docker_container:
-      #    name: astoria
-      #    image: "{{deploy_image_name}}"
-      #    log_driver: json-file
-      #    restart_policy: unless-stopped
-      #    log_options:
-      #      "max-size": "5m"
-      #      "max-file": "3"
-      #    state: started
-      #    networks:
-      #      - name: websites
-      #    env: *env
+    - name: Ensure app running
+      docker_container:
+        name: astoria
+        image: "{{deploy_image_name}}"
+        log_driver: json-file
+        restart_policy: unless-stopped
+        log_options:
+          "max-size": "5m"
+          "max-file": "3"
+        state: started
+        networks:
+          - name: websites
+        env: *env
 
     - name: Remove uploaded image
       file:
