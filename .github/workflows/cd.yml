@@ -1,0 +1,21 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  SHA: ${{ github.SHA }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Run deploy playbook
+        run: |
+          make infra-deploy

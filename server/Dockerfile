@@ -4,10 +4,14 @@
 
 FROM elixir:1.11 as development
 
-ENV APP_HOME /usr/src/app
-ENV LANG C.UTF-8
-
 EXPOSE 4000
+
+ENV APP_HOME=/usr/src/app \
+  HEX_HOME=/opt/hex \
+  LANG=C.UTF-8 \
+  MIX_HOME=/opt/mix \
+  REFRESHED_AT=2020-12-01 \
+  WATCHMAN_VERSION=2020.08.03.00
 
 WORKDIR $APP_HOME
 
@@ -22,7 +26,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Watchman
-ENV WATCHMAN_VERSION=2020.08.03.00
 RUN curl -LO https://github.com/facebook/watchman/releases/download/v${WATCHMAN_VERSION}/watchman-v${WATCHMAN_VERSION}-linux.zip && \
     unzip watchman-v${WATCHMAN_VERSION}-linux.zip && \
     cd watchman-v${WATCHMAN_VERSION}-linux && \
@@ -51,9 +54,9 @@ COPY ./priv priv
 COPY ./test test
 
 # build frontend
-#RUN npm install --prefix assets
-#RUN npm run deploy --prefix assets
-#RUN mix phx.digest
+RUN npm install --prefix assets
+RUN npm run deploy --prefix assets
+RUN mix phx.digest
 
 # create a release
 # RUN MIX_ENV=prod mix release astoria

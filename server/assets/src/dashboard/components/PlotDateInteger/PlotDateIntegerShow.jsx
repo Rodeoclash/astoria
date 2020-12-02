@@ -1,6 +1,7 @@
 import React from "react";
 import { createFragmentContainer, graphql } from "react-relay";
 import Plot from "react-plotly.js";
+import { config, layout, style } from "dashboard/services/charts.js";
 
 export const PlotDateIntegerShow = function ({ plotDateInteger }) {
   const data = plotDateInteger.traces.map((trace) => {
@@ -13,18 +14,6 @@ export const PlotDateIntegerShow = function ({ plotDateInteger }) {
       }),
     };
   });
-
-  const config = {};
-
-  const layout = {
-    autosize: true,
-    yaxis: {
-      rangemode: "tozero",
-      autorange: true,
-    },
-  };
-
-  const style = { width: "100%", height: "80%" };
 
   return (
     <Plot

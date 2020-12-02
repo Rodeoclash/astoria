@@ -1,0 +1,59 @@
+name: CI
+
+on: [push]
+
+env:
+  GPR_URL: "docker.pkg.github.com"
+  GPR_USER: "rodeoclash"
+  IMAGE_PATH_LATEST: "docker.pkg.github.com/rodeoclash/astoria/astoria:latest"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Log in to GPR
+        run: docker login ${GPR_URL} -u ${GPR_USER} -p ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Pull the image from GPR
+        run: docker pull ${IMAGE_PATH_LATEST}
+
+      - name: Build the Docker image
+        run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST} --cache-from ${IMAGE_PATH_LATEST} --target=development ./server
+
+      - name: Publish the image to GPR
+        run: docker push ${IMAGE_PATH_LATEST}
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Log in to GPR
+        run: docker login ${GPR_URL} -u ${GPR_USER} -p ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Test
+        run: docker-compose -f docker-compose.ci.yml run server mix test
+
+  lint:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - name: Log in to GPR
+        run: docker login ${GPR_URL} -u ${GPR_USER} -p ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint all
+        run: npx prettier --check .
+
+      - name: Lint elixir
+        run: docker-compose -f docker-compose.ci.yml run server mix format --check-formatted
