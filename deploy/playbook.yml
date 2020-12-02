@@ -62,7 +62,7 @@
         image: "{{deploy_image_name}}"
         restart_policy: no
         state: started
-        command: bin/astoria eval "Academy.Release.migrate"
+        command: bin/astoria eval "Astoria.Release.migrate"
         env: &env
           DATABASE_URL: "{{database_url}}"
           SECRET_KEY_BASE: "{{secret_key_base}}"
