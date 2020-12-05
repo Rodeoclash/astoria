@@ -24,35 +24,11 @@ defmodule Astoria.GithubInstallationsTest do
   end
 
   test "sync/1" do
-    user =
-      insert(:user, %{
-        id: 1,
-        email: "email@example.com"
-      })
-
-    github_user =
-      insert(:github_user, %{
-        id: 1,
-        github_id: 1,
-        user: user
-      })
-
-    github_installation =
-      insert(:github_installation, %{
-        id: 1,
-        github_id: 1,
-        github_user: github_user
-      })
+    github_installation = insert(:github_installation)
 
     GithubInstallations.sync(github_installation)
 
-    assert_enqueued(
-      worker: Astoria.Jobs.SyncGithubInstallation,
-      args: %{
-        "encoded" =>
-          "g3QAAAABZAAHcmVxdWVzdHQAAAAFZAAKX19zdHJ1Y3RfX2QAJEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuVjMuUmVxdWVzdGQABmNsaWVudHQAAAADZAAKX19zdHJ1Y3RfX2QAIEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuQ2xpZW50ZAAFdG9rZW5tAAACEGV5SmhiR2NpT2lKU1V6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUpoZFdRaU9pSktiMnRsYmlJc0ltVjRjQ0k2TVRZd056RXpOamMwT1N3aWFXRjBJam94TmpBM01UTTJNVFE1TENKcGMzTWlPaUl4TWpNaUxDSnFkR2tpT2lJeWNEWnlNMnN3Wld3NU9XWnhhR2R6Tlc4d01EQXlZellpTENKdVltWWlPakUyTURjeE16WXhORGw5LllVSC0xU25DZGFDalVUOTEzX0hRLWRVZGtYMlB2Q0pfM2g2OEVyR2JaSjUzVlk4cks1SU1wMUpaWHBXWkNhQS1QTWN6bXFUWFlYMFI3Z0lIZzhYYmh5NkJIVTRwQWpWOXViM3MwT29sOUVXNnRDa01yMGFFWlg5YzJydHcwVm5hS0JaRlFTd0xROURyMjIyWlFzVE8xZWs0VXNUZndkQV9RcVZWdEVRajdnTXVtVEtsSTRYS1RKRENaSWR4clVyTi1xYmRZVGlzOGNmdXdKY3dwNFRiZjVfa0Y0anUyNU1uajNLcV9zVGFYMktZcWxwUXdaUEZ4WkFSTTJDYkFYcGlGcGZzRzBYOWpFVm5jTVNPeFJ0NlVCUXN2Z2ljd0FyeUxVLU8xNmt0bnRxdUVKakM0VU5IelZwTm0tZmR6aVpQbFpmemtvREJKNUR5SnJ3TnpBbEFuZ2QABHR5cGVtAAAABkJlYXJlcmQABm1ldGhvZGQAA2dldGQAB3BheWxvYWR0AAAAAGQAA3VybG0AAAAqaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9hcHAvaW5zdGFsbGF0aW9ucy8x"
-      }
-    )
+    assert_enqueued(worker: Astoria.Jobs.SyncGithubInstallation)
   end
 
   test "count/0" do

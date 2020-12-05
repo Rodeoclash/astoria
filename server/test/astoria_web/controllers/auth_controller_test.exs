@@ -95,7 +95,9 @@ defmodule AstoriaWeb.AuthControllerTest do
 
       github_installation = Repo.reload(github_installation)
 
-      assert get_flash(conn, :info) == "Hello John Doe, your app has been installed and you have been logged in"
+      assert get_flash(conn, :info) ==
+               "Hello John Doe, your app has been installed and you have been logged in"
+
       assert redirected_to(conn) == "/dashboard"
       assert github_installation.github_user_id
       assert get_session(conn, :current_user_id)
