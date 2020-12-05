@@ -40,24 +40,45 @@ defmodule AstoriaWeb.AuthController do
       if github_installation_id != nil do
         multi
         |> Ecto.Multi.run(:github_installation, fn _repo, %{github_user: github_user} ->
-          GithubInstallations.GithubInstallation.where_installation_id(github_installation_id)
-          |> Repo.one()
-          |> GithubInstallations.GithubInstallation.changeset(%{
-            github_user_id: github_user.id
-          })
-          |> Repo.update()
+          case Repo.get(GithubInstallations.GithubInstallation, github_installation_id) do
+            nil ->
+              raise "Github installation id provided but github installation could not be found in the database"
+
+            github_installation ->
+              # Check here to see if ownership already exists for the installation. If so, it means a user manually triggered the installation callback endpoint then authed.
+              if github_installation.github_user_id do
+                raise "Went to assign ownership to installation but it already existed!"
+              end
+
+              # An unowned installation was found, assign this user to it.
+              github_installation
+              |> GithubInstallations.GithubInstallation.changeset(%{
+                github_user_id: github_user.id
+              })
+              |> Repo.update()
+          end
         end)
       else
         multi
       end
 
     case Repo.transaction(multi) do
+      {:ok, %{user: user, github_installation: github_installation}} ->
+        GithubInstallations.sync(github_installation)
+
+        conn
+        |> put_session(:current_user_id, user.id)
+        |> put_flash(
+          :info,
+          "Hello #{user.name}, your app has been installed and you have been logged in"
+        )
+
       {:ok, %{user: user}} ->
         conn
-        |> put_session(:github_installation_id, nil)
-        |> put_session("current_user_id", user.id)
+        |> put_session(:current_user_id, user.id)
         |> put_flash(:info, "Hello #{user.name}, you have been logged in")
-        |> redirect(to: Routes.dashboard_path(conn, :show))
     end
+    |> put_session(:github_installation_id, nil)
+    |> redirect(to: Routes.dashboard_path(conn, :show))
   end
 end

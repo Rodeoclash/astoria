@@ -1,12 +1,9 @@
 defmodule AstoriaWeb.Github.WebhookControllerTest do
-  alias Astoria.{Fixtures.Github.Webhooks, GithubInstallations, Fixtures}
+  alias Astoria.{Fixtures.Github.Webhooks, GithubInstallations}
   import Astoria.Factory
-  import Mox
   use AstoriaWeb.ConnCase
 
   setup %{conn: conn} do
-    Mox.verify_on_exit!()
-
     {:ok, conn: put_req_header(conn, "accept", "application/json")}
   end
 
@@ -23,11 +20,6 @@ defmodule AstoriaWeb.Github.WebhookControllerTest do
     end
 
     test "app install created", %{conn: conn} do
-      HTTPoisonMock
-      |> expect(:post, fn _path, _payload, _headers ->
-        {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
-      end)
-
       conn =
         post(
           conn,

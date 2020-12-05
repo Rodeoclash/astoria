@@ -1,16 +1,38 @@
 defmodule Astoria.GithubInstallations do
-  alias Astoria.{GithubInstallations, GithubApplication, Github, Jobs, Repo}
+  alias Astoria.{GithubInstallations, GithubApplication, Github, Jobs, Repo, Utility}
 
   import Ecto.Query, only: [from: 2]
 
   @doc """
   Trigger a sync of all installations in the system
+
+  # TODO: Convert this to a job
   """
   @spec sync() :: :ok
   def sync do
     GithubApplication.client()
     |> Github.Api.V3.App.Installations.read()
     |> Jobs.SyncGithubInstallations.perform()
+  end
+
+  @doc """
+  Trigger a sync of a singular github installation. Called after app installation.
+  """
+  @spec sync(%GithubInstallations.GithubInstallation{}) :: :ok
+  def sync(github_installation) do
+    request =
+      GithubApplication.client()
+      |> Github.Api.V3.App.Installations.read(%{
+        installation_id: github_installation.github_id
+      })
+
+    encoded =
+      %{request: request}
+      |> Utility.serialise()
+
+    %{encoded: encoded}
+    |> Jobs.SyncGithubInstallation.new()
+    |> Oban.insert()
   end
 
   @doc """
@@ -36,10 +58,10 @@ defmodule Astoria.GithubInstallations do
   end
 
   @doc """
-  Insert data about the installation. Will update if matches github_id
+  Insert data about the installation based on data provided from Github.
   """
-  @spec upsert(map()) :: :ok
-  def upsert(data) do
+  @spec upsert_from_github_data(map()) :: :ok
+  def upsert_from_github_data(data) do
     %GithubInstallations.GithubInstallation{}
     |> GithubInstallations.GithubInstallation.changeset(%{
       data: data,

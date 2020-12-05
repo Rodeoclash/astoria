@@ -1,4 +1,5 @@
 defmodule AstoriaWeb.InstalledController do
+  alias Astoria.{GithubInstallations, Repo}
   use AstoriaWeb, :controller
 
   action_fallback AstoriaWeb.FallbackController
@@ -14,9 +15,20 @@ defmodule AstoriaWeb.InstalledController do
         "provider" => _provider,
         "setup_action" => _setup_action
       }) do
-    conn
-    |> put_flash(:info, "#{@public_name} was installed")
-    |> put_session(:github_installation_id, installation_id)
-    |> redirect(to: Routes.auth_path(conn, :request, :github))
+    # the installation likely exists at this point in time due to the webhook arriving.
+    case %GithubInstallations.GithubInstallation{}
+         |> GithubInstallations.GithubInstallation.changeset(%{
+           github_id: installation_id
+         })
+         |> Repo.insert(
+           on_conflict: {:replace, [:github_id]},
+           conflict_target: :github_id
+         ) do
+      {:ok, github_installation} ->
+        conn
+        |> put_flash(:info, "#{@public_name} was installed")
+        |> put_session(:github_installation_id, github_installation.id)
+        |> redirect(to: Routes.auth_path(conn, :request, :github))
+    end
   end
 end

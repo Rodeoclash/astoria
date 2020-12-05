@@ -34,15 +34,7 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
       :rate_limit_resets_at,
       :github_user_id
     ])
-    |> validate_required([:data, :github_id])
-  end
-
-  @doc """
-  Scope the query by the supplied installation id
-  """
-  def where_installation_id(query \\ GithubInstallation, id) do
-    query
-    |> where([github_installation], fragment("(?->>'id') = ?", github_installation.data, ^id))
+    |> validate_required([:github_id])
   end
 
   def for_user(query \\ GithubInstallation, user_id) do
