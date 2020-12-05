@@ -95,6 +95,7 @@
         networks:
           - name: websites
         env: *env
+        volumes: *volumes
 
     - name: Remove uploaded image
       file:
