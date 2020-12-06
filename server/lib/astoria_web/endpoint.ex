@@ -1,4 +1,5 @@
 defmodule AstoriaWeb.Endpoint do
+  use Sentry.PlugCapture
   use Phoenix.Endpoint, otp_app: :astoria
 
   # The session will be stored in the cookie and signed,
@@ -45,4 +46,10 @@ defmodule AstoriaWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug AstoriaWeb.Router
+
+  plug Plug.Parsers,
+   parsers: [:urlencoded, :multipart, :json],
+   pass: ["*/*"],
+   json_decoder: Phoenix.json_library()
+  plug Sentry.PlugContext
 end

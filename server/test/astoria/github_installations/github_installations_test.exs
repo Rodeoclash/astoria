@@ -10,17 +10,8 @@ defmodule Astoria.GithubInstallationsTest do
   setup :verify_on_exit!
 
   test "sync/0" do
-    HTTPoisonMock
-    |> expect(:get, fn _path, _headers ->
-      {:ok, Fixtures.Github.Api.V3.App.Installations.read_list()}
-    end)
-    |> expect(:post, fn _path, _payload, _headers ->
-      {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
-    end)
-
     GithubInstallations.sync()
-
-    assert GithubInstallations.count() == 1
+    assert_enqueued(worker: Astoria.Jobs.SyncGithubInstallations)
   end
 
   test "sync/1" do

@@ -5,14 +5,20 @@ defmodule Astoria.GithubInstallations do
 
   @doc """
   Trigger a sync of all installations in the system
-
-  # TODO: Convert this to a job
   """
   @spec sync() :: :ok
   def sync do
-    GithubApplication.client()
-    |> Github.Api.V3.App.Installations.read()
-    |> Jobs.SyncGithubInstallations.perform()
+    request =
+      GithubApplication.client()
+      |> Github.Api.V3.App.Installations.read()
+
+    encoded =
+      %{request: request}
+      |> Utility.serialise()
+
+    %{encoded: encoded}
+    |> Jobs.SyncGithubInstallations.new()
+    |> Oban.insert()
   end
 
   @doc """

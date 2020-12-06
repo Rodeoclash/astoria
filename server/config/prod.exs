@@ -16,6 +16,16 @@ config :astoria, AstoriaWeb.Endpoint,
 # Do not print debug messages in production
 config :logger, level: :info
 
+config :sentry,
+  dsn: "https://992d2254e2524e2f9d97e39574db7060@o487458.ingest.sentry.io/5546259",
+  environment_name: :prod,
+  enable_source_code_context: true,
+  root_source_code_path: File.cwd!(),
+  tags: %{
+    env: "production"
+  },
+  included_environments: [:prod]
+
 # ## SSL Support
 #
 # To get SSL working, you will need to add the `https` key

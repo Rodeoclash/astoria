@@ -22,6 +22,7 @@ config :astoria, AstoriaWeb.Endpoint,
 
 # Configures Elixir's Logger
 config :logger, :console,
+  backends: [:console, Sentry.LoggerBackend],
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
@@ -39,7 +40,13 @@ config :absinthe,
 config :astoria, Oban,
   repo: Astoria.Repo,
   plugins: [Oban.Plugins.Pruner],
-  queues: [sync_github: 10]
+  crontab: [
+    {"@daily", Astoria.Jobs.Daily, queue: :scheduled}
+  ],
+  queues: [
+    scheduled: 1,
+    sync_github: 10
+  ]
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
