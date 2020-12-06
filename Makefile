@@ -23,7 +23,7 @@ server-bash-root:
 	docker-compose run --user=root:root --rm server bash
 
 infra-deploy:
-	ansible-playbook --vault-password-file=deploy/vault_password.sh -i deploy/hosts deploy/playbook.yml
+	ansible-playbook --vault-password-file=infra/vault_password.sh -i infra/hosts infra/playbook.yml
 
 graphql-update-schema:
 	docker-compose run --rm server mix absinthe.schema.json assets/src/schema.json
