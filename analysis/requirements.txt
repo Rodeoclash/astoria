@@ -1,0 +1,4 @@
+jsonlite=1.7.1
+dplyr=1.0.2
+data.table=1.13.0
+lubridate=1.7.9
