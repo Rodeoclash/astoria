@@ -63,4 +63,12 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
          )
      }}
   end
+
+  def analysis_monthly_total_change(
+        github_repository,
+        %{period: _period, start: start, finish: finish},
+        _resolution
+      ) do
+        # TODO Fetch prs here, pass to analysis function
+  end
 end

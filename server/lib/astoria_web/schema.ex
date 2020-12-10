@@ -9,6 +9,7 @@ defmodule AstoriaWeb.Schema do
   import_types(Interfaces.NodeInterface)
   import_types(Interfaces.TimestampInterface)
 
+  import_types(Types.AnalysisMonthlyTotalChangeType)
   import_types(Types.ChartTraceDateFloatType)
   import_types(Types.ChartTraceDateIntegerType)
   import_types(Types.CurrentUserType)

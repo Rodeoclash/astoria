@@ -17,18 +17,12 @@ defmodule Astoria.Analysis.Api.Request do
   end
 
   @doc ~S"""
-  Execute the supplied request against the Github API
+  Execute the supplied request against the analysis API
   """
   @spec perform(%Request{}) :: {:ok, %Analysis.Api.Response{}} | {:error, String.t()}
   def perform(%Request{url: url, payload: payload}) do
     with {:ok, encoded_payload} <- Jason.encode(payload) do
-      query =
-        %{
-          json: encoded_payload
-        }
-        |> URI.encode_query()
-
-      Analysis.Api.post(url <> "?" <> query)
+      Analysis.Api.post(url, encoded_payload)
     end
   end
 end

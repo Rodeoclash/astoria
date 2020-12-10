@@ -2,16 +2,17 @@ defmodule Astoria.Analysis.Api.Response do
   alias __MODULE__
 
   @enforce_keys [
-    :poison_response,
+    :body,
+    :poison,
     :successful?
   ]
-  defstruct poison_response: %HTTPoison.Response{},
-            successful?: false
+  defstruct poison: %HTTPoison.Response{}, body: nil, successful?: false
 
   @spec new(%HTTPoison.Response{}) :: %Response{}
   def new(poison_response) do
     %Response{
-      poison_response: poison_response,
+      body: poison_response.body,
+      poison: poison_response,
       successful?: successful?(poison_response)
     }
   end
