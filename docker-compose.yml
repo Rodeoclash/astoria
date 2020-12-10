@@ -25,6 +25,7 @@ services:
       target: development
     command: mix phx.server
     depends_on:
+      - analysis
       - postgres
     environment:
       - AWS_ACCESS_KEY_ID
@@ -44,6 +45,17 @@ services:
       - ./passwd:/etc/passwd
       - ./server:/usr/src/app
       - home:/home/server
+
+  analysis:
+    build:
+      context: ./analysis
+    image: rodeoclash/analysis:latest
+    logging: *logging
+    ports:
+      - "8000:8000"
+    user: "1000"
+    volumes:
+      - ./analysis:/usr/src/app
 
   pgadmin:
     depends_on:

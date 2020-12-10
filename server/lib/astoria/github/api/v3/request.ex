@@ -8,7 +8,7 @@ defmodule Astoria.Github.Api.V3.Request do
   @doc ~S"""
   Create a new request struct. Once populated, this can be executed using the perform function.
   """
-  @spec new(%Github.Api.Client{}, atom(), String.t(), map()) :: %Request{}
+  @spec new(%Github.Api.Client{}, atom(), String.t(), any()) :: %Request{}
   def new(client, method, url, payload \\ %{}) do
     %Request{
       client: client,

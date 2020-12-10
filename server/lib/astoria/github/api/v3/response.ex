@@ -39,7 +39,7 @@ defmodule Astoria.Github.Api.V3.Response do
   end
 
   @doc ~S"""
-  Extract the remaining rate limit or nil if none present
+  Was this request successful?
   """
   @spec successful?(%HTTPoison.Response{}) :: boolean()
   def successful?(poison_response) do
