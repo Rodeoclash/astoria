@@ -13,9 +13,6 @@ defmodule Astoria.GithubPullRequests.Analysis do
         }
       end)
 
-    IO.inspect("=== payload")
-    IO.inspect(payload, limit: :infinity)
-
     response =
       Analysis.Api.Endpoints.MonthlyTotalChange.create(payload)
       |> Analysis.Api.Request.perform()
