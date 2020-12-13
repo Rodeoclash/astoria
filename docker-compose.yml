@@ -15,7 +15,7 @@ services:
   ngrok:
     command: $NGROK_COMMAND
     depends_on:
-      - server
+      - astoria-server
     logging: *logging
     image: wernight/ngrok:latest
 
@@ -25,7 +25,7 @@ services:
       target: development
     command: mix phx.server
     depends_on:
-      - analysis
+      - astoria-analysis
       - postgres
     environment:
       - AWS_ACCESS_KEY_ID

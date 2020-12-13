@@ -49,7 +49,7 @@ jobs:
         run: docker login ${GPR_URL} -u ${GPR_USER} -p ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test
-        run: docker-compose -f docker-compose.ci.yml run server mix test
+        run: docker-compose -f docker-compose.ci.yml run astoria-server mix test
 
   lint:
     runs-on: ubuntu-latest
@@ -66,4 +66,4 @@ jobs:
         run: npx prettier --check .
 
       - name: Lint elixir
-        run: docker-compose -f docker-compose.ci.yml run server mix format --check-formatted
+        run: docker-compose -f docker-compose.ci.yml run astoria-server mix format --check-formatted

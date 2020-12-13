@@ -12,7 +12,7 @@ services:
         max-file: "10"
     image: postgres:11
 
-  server:
+  astoria-server:
     depends_on:
       - postgres
     image: ${IMAGE_PATH_LATEST}
