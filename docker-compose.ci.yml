@@ -15,5 +15,5 @@ services:
   astoria-server:
     depends_on:
       - postgres
-    image: ${IMAGE_PATH_LATEST}
+    image: ${IMAGE_PATH_LATEST_SERVER}
     logging: *logging
