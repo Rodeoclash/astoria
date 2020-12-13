@@ -4,20 +4,19 @@ library(lubridate)
 library(anytime)
 
 #* Return the monthly changes of PRs merged
-#* @param json input json payload
 #* @post /monthly_total_change
-function(json) {
-   payload <- jsonlite::fromJSON(json) %>% as.data.table()
+function(req) {
+   payload <- req$body %>% as.data.table()
    payload %>%
     mutate(
       merged_at = lubridate::ymd_hms(merged_at),
       year_month = format(merged_at, '%Y-%m'),
-      date = anytime::iso8601(anytime(paste0(year_month, '-01')))
+      datetime = anytime::iso8601(anytime(paste0(year_month, '-01')))
     ) %>%
     filter(!is.na(year_month)) %>%
-    group_by(date) %>%
+    group_by(datetime) %>%
     summarise(total = n()) %>%
-    arrange(date) %>%
+    arrange(datetime) %>%
     mutate(
       change = (total - lag(total)) / lag(total),
       mom_change  = (total - lag(total, 12)) / lag(total,12)
@@ -25,10 +24,9 @@ function(json) {
 }
 
 #* Return the weekly changes of PRs merged
-#* @param json input json payload
 #* @post /weekly_total_change
-function(json) {
-  payload <- jsonlite::fromJSON(json) %>% as.data.table()
+function(req) {
+  payload <- req$body %>% as.data.table()
   payload %>%
     mutate(
       merged_at = lubridate::ymd_hms(merged_at),
@@ -45,10 +43,9 @@ function(json) {
 }
 
 #* Return the monthly changes of PRs merged last 30 days compared to previous
-#* @param json input json payload
 #* @post /last30_total
-function(json) {
-  payload <- jsonlite::fromJSON(json) %>% as.data.table()
+function(req) {
+  payload <- req$body %>% as.data.table()
   payload %>%
     mutate(
       merged_at = lubridate::ymd_hms(merged_at)) %>%
@@ -65,5 +62,3 @@ function(json) {
       change = (total - lag(total)) / lag(total)
     )
 }
-
-

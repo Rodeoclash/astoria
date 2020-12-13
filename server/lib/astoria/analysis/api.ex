@@ -8,7 +8,7 @@ defmodule Astoria.Analysis.Api do
   """
   @spec endpoint() :: String.t()
   def endpoint() do
-    "http://analysis:8000"
+    "http://astoria-analysis:8000"
   end
 
   @doc ~S"""
