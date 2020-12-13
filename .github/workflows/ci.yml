@@ -29,7 +29,7 @@ jobs:
         run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST_SERVER} --cache-from ${IMAGE_PATH_LATEST_SERVER} --target=development ./server
 
       - name: Build the analysis Docker image
-        run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST_ANALYSIS} --cache-from ${IMAGE_PATH_LATEST_ANALYSIS} ./analysis
+        run: docker build --file analysis/Dockerfile --tag ${IMAGE_PATH_LATEST_ANALYSIS} --cache-from ${IMAGE_PATH_LATEST_ANALYSIS} ./analysis
 
       - name: Publish the server image to GPR
         run: docker push ${IMAGE_PATH_LATEST_SERVER}
