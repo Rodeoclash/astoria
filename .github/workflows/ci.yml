@@ -5,7 +5,8 @@ on: [push]
 env:
   GPR_URL: "docker.pkg.github.com"
   GPR_USER: "rodeoclash"
-  IMAGE_PATH_LATEST: "docker.pkg.github.com/rodeoclash/astoria/astoria:latest"
+  IMAGE_PATH_LATEST_SERVER: "docker.pkg.github.com/rodeoclash/astoria/astoria-server:latest"
+  IMAGE_PATH_LATEST_ANALYSIS: "docker.pkg.github.com/rodeoclash/astoria/astoria-analysis:latest"
 
 jobs:
   build:
@@ -18,14 +19,23 @@ jobs:
       - name: Log in to GPR
         run: docker login ${GPR_URL} -u ${GPR_USER} -p ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull the image from GPR
-        run: docker pull ${IMAGE_PATH_LATEST}
+      - name: Pull the server image from GPR
+        run: docker pull ${IMAGE_PATH_LATEST_SERVER}
 
-      - name: Build the Docker image
-        run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST} --cache-from ${IMAGE_PATH_LATEST} --target=development ./server
+      - name: Pull the analysis image from GPR
+        run: docker pull ${IMAGE_PATH_LATEST_ANALYSIS}
 
-      - name: Publish the image to GPR
-        run: docker push ${IMAGE_PATH_LATEST}
+      - name: Build the server Docker image
+        run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST_SERVER} --cache-from ${IMAGE_PATH_LATEST_SERVER} --target=development ./server
+
+      - name: Build the analysis Docker image
+        run: docker build --file server/Dockerfile --tag ${IMAGE_PATH_LATEST_ANALYSIS} --cache-from ${IMAGE_PATH_LATEST_ANALYSIS} ./analysis
+
+      - name: Publish the server image to GPR
+        run: docker push ${IMAGE_PATH_LATEST_SERVER}
+
+      - name: Publish the analysis image to GPR
+        run: docker push ${IMAGE_PATH_LATEST_ANALYSIS}
 
   test:
     runs-on: ubuntu-latest
