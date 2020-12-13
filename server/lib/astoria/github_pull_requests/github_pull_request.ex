@@ -1,7 +1,8 @@
 defmodule Astoria.GithubPullRequests.GithubPullRequest do
-  alias Astoria.{GithubRepositories, Repo, Charts}
-  use Ecto.Schema
+  alias Astoria.{GithubRepositories}
   import Ecto.Changeset
+  import Ecto.Query
+  use Ecto.Schema
 
   schema "github_pull_requests" do
     belongs_to :github_repository, GithubRepositories.GithubRepository
@@ -20,64 +21,35 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
     |> validate_required([:data, :github_id, :github_repository_id])
   end
 
-  def merged_prs_per_person(github_repository, period, start, finish) do
-    result =
-      Repo.query!(
-        """
-        WITH occurances AS
-        (
-          SELECT
-             generate_series($3::date, $4::date, '1day')::timestamp AS occured_at
-        )
-        ,
-        users AS
-        (
-          SELECT DISTINCT
-        (github_pull_requests.data -> 'user' ->> 'login') as name
-          FROM
-             github_pull_requests
-          WHERE
-             github_repository_id = $1
-        )
-        ,
-        pull_requests AS
-        (
-          SELECT
-             COUNT(id) AS count,
-             DATE_TRUNC($2,
-             (
-                github_pull_requests.data ->> 'merged_at'
-             )
-             ::timestamp) AS merged_at,
-             github_pull_requests.data -> 'user' ->> 'login' as name
-          FROM
-             github_pull_requests
-          WHERE
-             github_repository_id = $1
-          GROUP BY
-             merged_at,
-             name
-          ORDER BY
-             merged_at
-        )
-        SELECT
-          users.name as name,
-          ARRAY_AGG(occurances.occured_at) AS x,
-          ARRAY_AGG(pull_requests.count) AS y
-        FROM
-          users
-          CROSS JOIN
-             occurances
-          LEFT JOIN
-             pull_requests
-             ON pull_requests.merged_at = occurances.occured_at
-             AND pull_requests.name = users.name
-        GROUP BY
-          users.name;
-        """,
-        [github_repository.id, period, start |> DateTime.to_date(), finish |> DateTime.to_date()]
-      )
+  def where_repository_id(query \\ GithubPullRequest, github_repository_id) do
+    query
+    |> where(
+      [github_pull_request],
+      github_pull_request.github_repository_id == ^github_repository_id
+    )
+  end
 
-    Enum.map(result.rows, &Repo.load(Charts.DateIntegerTrace, {result.columns, &1}))
+  def where_created_after(query \\ GithubPullRequest, date) do
+    query
+    |> where(
+      [github_pull_request],
+      fragment("(?->>'created_at')::timestamp > ?", github_pull_request.data, ^date)
+    )
+  end
+
+  def where_created_before(query \\ GithubPullRequest, date) do
+    query
+    |> where(
+      [github_pull_request],
+      fragment("(?->>'created_at')::timestamp < ?", github_pull_request.data, ^date)
+    )
+  end
+
+  def where_merged(query \\ GithubPullRequest) do
+    query
+    |> where(
+      [github_pull_request],
+      fragment("?->>'merged_at' IS NOT NULL", github_pull_request.data)
+    )
   end
 end

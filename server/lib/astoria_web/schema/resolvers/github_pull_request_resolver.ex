@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
-  alias Astoria.{GithubPullRequests}
+  alias Astoria.{GithubPullRequests, GithubPullRequests.GithubPullRequest, Repo}
 
   def merged_prs_per_person(
         github_repository,
@@ -69,6 +69,22 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{period: _period, start: start, finish: finish},
         _resolution
       ) do
-        # TODO Fetch prs here, pass to analysis function
+    {:ok, traces} =
+      case GithubPullRequest
+           |> GithubPullRequest.where_repository_id(github_repository.id)
+           |> GithubPullRequest.where_created_after(start)
+           |> GithubPullRequest.where_created_before(finish)
+           |> Repo.all() do
+        results when results == [] ->
+          {:ok, results}
+
+        results ->
+          GithubPullRequests.Analysis.monthly_total_change(results)
+      end
+
+    {:ok,
+     %{
+       traces: traces
+     }}
   end
 end

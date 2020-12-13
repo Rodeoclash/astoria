@@ -57,9 +57,6 @@ defmodule Astoria.GithubPullRequests.Traces.AverageChangeInPr do
         [github_repository.id, period, start |> DateTime.to_date(), finish |> DateTime.to_date()]
       )
 
-    IO.inspect("=== results")
-    IO.inspect(result)
-
     Enum.map(result.rows, &Repo.load(Charts.DateFloatTrace, {result.columns, &1}))
   end
 end

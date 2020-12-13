@@ -16,8 +16,16 @@ defmodule Astoria.GithubPullRequests.Analysis do
     case Analysis.Api.Endpoints.MonthlyTotalChange.create(payload)
          |> Analysis.Api.Request.perform() do
       {:ok, response} ->
-        Enum.filter(response.body, &Map.has_key?(&1, "change"))
-        |> Enum.sort(&(&2["date"] >= &1["date"]))
+        {:ok,
+         Enum.filter(response.body, &Map.has_key?(&1, "change"))
+         |> Enum.sort(&(&2["date"] >= &1["date"]))
+         |> Enum.map(fn result ->
+           %{
+             change: result["change"],
+             datetime: result["datetime"],
+             total: result["total"]
+           }
+         end)}
     end
   end
 end
