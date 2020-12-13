@@ -3,27 +3,45 @@
   hosts: localhost
   vars:
     ansible_python_interpreter: "/usr/bin/python3"
-    deploy_image_file_local: '{{lookup("env","HOME")}}/deploy_{{lookup("env","SHA")}}.tar'
-    deploy_image_name: 'astoria/astoria:{{lookup("env","SHA")}}'
+    deploy_image_file_local_analysis: '{{lookup("env","HOME")}}/analysis_deploy_{{lookup("env","SHA")}}.tar'
+    deploy_image_file_local_server: '{{lookup("env","HOME")}}/server_deploy_{{lookup("env","SHA")}}.tar'
+    deploy_image_name_analysis: 'astoria/astoria-analysis:{{lookup("env","SHA")}}'
+    deploy_image_name_server: 'astoria/astoria-server:{{lookup("env","SHA")}}'
   tasks:
     - pip:
         name: docker
 
-    - name: Build deployment image
+    - name: Build server deployment image
       docker_image:
-        name: "{{deploy_image_name}}"
+        name: "{{deploy_image_name_server}}"
         build:
-          cache_from: '{{lookup("env","IMAGE_PATH_LATEST")}}'
+          cache_from: '{{lookup("env","IMAGE_PATH_LATEST_SERVER")}}'
           dockerfile: Dockerfile
           path: ../server
           target: deploy
           pull: no
         source: build
 
-    - name: Save locally before copy
+    - name: Build analysis deployment image
       docker_image:
-        name: "{{deploy_image_name}}"
-        archive_path: "{{deploy_image_file_local}}"
+        name: "{{deploy_image_name_analysis}}"
+        build:
+          cache_from: '{{lookup("env","IMAGE_PATH_LATEST_ANALYSIS")}}'
+          dockerfile: Dockerfile
+          path: ../analysis
+          pull: no
+        source: build
+
+    - name: Save server locally before copy
+      docker_image:
+        name: "{{deploy_image_name_server}}"
+        archive_path: "{{deploy_image_file_local_server}}"
+        source: local
+
+    - name: Save analysis locally before copy
+      docker_image:
+        name: "{{deploy_image_name_analysis}}"
+        archive_path: "{{deploy_image_file_local_analysis}}"
         source: local
 
     - name: Export ssh key
@@ -38,9 +56,12 @@
   vars:
     ansible_python_interpreter: "/usr/bin/python3"
     ansible_ssh_private_key_file: '{{lookup("env","HOME")}}/id_ed25519_astoria'
-    deploy_image_file_local: '{{lookup("env","HOME")}}/deploy_{{lookup("env","SHA")}}.tar'
-    deploy_image_file_remote: '/tmp/deploy_{{lookup("env","SHA")}}.tar'
-    deploy_image_name: 'astoria/astoria:{{lookup("env","SHA")}}'
+    deploy_image_file_local_analysis: '{{lookup("env","HOME")}}/deploy_analysis_{{lookup("env","SHA")}}.tar'
+    deploy_image_file_local_server: '{{lookup("env","HOME")}}/deploy_server_{{lookup("env","SHA")}}.tar'
+    deploy_image_file_remote_analysis: '/tmp/deploy_analysis_{{lookup("env","SHA")}}.tar'
+    deploy_image_file_remote_server: '/tmp/deploy_server_{{lookup("env","SHA")}}.tar'
+    deploy_image_name_analysis: 'astoria/astoria-analysis:{{lookup("env","SHA")}}'
+    deploy_image_name_server: 'astoria/astoria-server:{{lookup("env","SHA")}}'
   tasks:
     - pip:
         name: docker
@@ -50,21 +71,32 @@
         src: github_app_key.enc
         dest: "/root/github_app_key.pem"
 
-    - name: Copy image file to remote
+    - name: Copy server image file to remote
       copy:
-        src: "{{deploy_image_file_local}}"
-        dest: "{{deploy_image_file_remote}}"
+        src: "{{deploy_image_file_local_server}}"
+        dest: "{{deploy_image_file_remote_server}}"
 
-    - name: Load image
+    - name: Copy analysis image file to remote
+      copy:
+        src: "{{deploy_image_file_local_analysis}}"
+        dest: "{{deploy_image_file_remote_analysis}}"
+
+    - name: Load server image
       docker_image:
-        name: "{{deploy_image_name}}"
-        load_path: "{{deploy_image_file_remote}}"
+        name: "{{deploy_image_name_server}}"
+        load_path: "{{deploy_image_file_remote_server}}"
+        source: load
+
+    - name: Load analysis image
+      docker_image:
+        name: "{{deploy_image_name_analysis}}"
+        load_path: "{{deploy_image_file_remote_analysis}}"
         source: load
 
     - name: Run migrations
       docker_container:
         name: astoria-migrations
-        image: "{{deploy_image_name}}"
+        image: "{{deploy_image_name_server}}"
         restart_policy: no
         state: started
         command: bin/astoria eval "Astoria.Release.migrate"
@@ -82,10 +114,14 @@
       docker_network:
         name: websites
 
-    - name: Ensure app running
-      docker_container:
+    - name: Create astoria network
+      docker_network:
         name: astoria
-        image: "{{deploy_image_name}}"
+
+    - name: Ensure analysis running
+      docker_container:
+        name: astoria-analysis
+        image: "{{deploy_image_name_analysis}}"
         log_driver: json-file
         restart_policy: unless-stopped
         log_options:
@@ -94,10 +130,32 @@
         state: started
         networks:
           - name: websites
+          - name: astoria
         env: *env
         volumes: *volumes
 
-    - name: Remove uploaded image
+    - name: Ensure server running
+      docker_container:
+        name: astoria-server
+        image: "{{deploy_image_name_server}}"
+        log_driver: json-file
+        restart_policy: unless-stopped
+        log_options:
+          "max-size": "5m"
+          "max-file": "3"
+        state: started
+        networks:
+          - name: websites
+          - name: astoria
+        env: *env
+        volumes: *volumes
+
+    - name: Remove uploaded server image
       file:
-        path: "{{deploy_image_file_remote}}"
+        path: "{{deploy_image_file_remote_server}}"
+        state: absent
+
+    - name: Remove uploaded analysis image
+      file:
+        path: "{{deploy_image_file_remote_server}}"
         state: absent

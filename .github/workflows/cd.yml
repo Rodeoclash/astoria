@@ -8,7 +8,8 @@ on:
 env:
   GPR_URL: "docker.pkg.github.com"
   GPR_USER: "rodeoclash"
-  IMAGE_PATH_LATEST: "docker.pkg.github.com/rodeoclash/astoria/astoria:latest"
+  IMAGE_PATH_LATEST_SERVER: "docker.pkg.github.com/rodeoclash/astoria/astoria-server:latest"
+  IMAGE_PATH_LATEST_ANALYSIS: "docker.pkg.github.com/rodeoclash/astoria/astoria-analysis:latest"
   SHA: ${{ github.SHA }}
 
 jobs:

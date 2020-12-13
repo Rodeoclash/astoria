@@ -19,7 +19,7 @@ services:
     logging: *logging
     image: wernight/ngrok:latest
 
-  server:
+  astoria-server:
     build:
       context: ./server
       target: development
@@ -46,7 +46,7 @@ services:
       - ./server:/usr/src/app
       - home:/home/server
 
-  analysis:
+  astoria-analysis:
     build:
       context: ./analysis
     image: rodeoclash/analysis:latest
