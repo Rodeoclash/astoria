@@ -99,7 +99,7 @@ function(req) {
   payload <- req$body %>% as.data.table()
   payload %>%
     select(created_at, merged_at, closed_at) %>% 
-    filter(is.na(closed_at) & is.na(merged_at) & !is.na(merged_at)) %>%
+    filter(is.na(closed_at) & is.na(merged_at)) %>%
     mutate(
       created_at = lubridate::ymd_hms(created_at),
       merged_at = lubridate::ymd_hms(merged_at),
