@@ -68,26 +68,27 @@ function(req) {
 function(req) {
   payload <- req$body %>% as.data.table()
   payload %>%
-    select(merged_at, closed_at) %>% 
+    select(created_at, merged_at, closed_at) %>% 
     filter(!is.na(closed_at)) %>%
     mutate(
+      created_at = lubridate::ymd_hms(created_at),
       merged_at = lubridate::ymd_hms(merged_at),
       closed_at = lubridate::ymd_hms(closed_at),
       group = ifelse(is.na(merged_at) & !is.na(closed_at),
                       'closed',
-                      'merged')) %>%
-    filter(closed_at < Sys.Date() - years(1))
-    mutate(group = factor(case_when(
-      merged_at < Sys.Date() - days(30) ~ 'previous',
-      TRUE ~ 'current'),
-      ordered = TRUE,
-      levels = c('previous','current'))) %>%
+                      'merged'),
+      age_days = round(difftime(closed_at, created_at, units = 'days'), 0)) %>%
+    filter(closed_at > Sys.Date() - years(1)) %>% 
     group_by(group) %>%
-    summarise(total = n()) %>%
-    arrange(group) %>%
+    summarise(
+      total = n(),
+      median_age_days_annual = as.numeric(median(age_days, na.rm = TRUE)),
+      median_age_days_current = as.numeric(median(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE)),
+      avg_age_days_annual = as.numeric(mean(age_days, na.rm = TRUE)),
+      avg_age_days_current = as.numeric(mean(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE))
+    ) %>% 
     mutate(
-      change = (total - lag(total)) / lag(total)
+      diff = avg_age_days_current - avg_age_days_annual,
+      change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
 }
-
-payload <- jsonlite::fromJSON('payload_test/payload_large.json')
