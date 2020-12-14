@@ -27,13 +27,28 @@ defmodule AstoriaWeb.Github.WebhookController do
     |> send_resp(:no_content, "")
   end
 
-  # Installation updated
-  # TODO: Needs test
+  # Installation added
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
-  def create(conn, %{"action" => "added", "installation" => installation}) do
-    log("App installation update heard")
+  def create(conn, %{"action" => "added", "installation" => installation} = params) do
+    log("App installation added heard")
+    log(inspect(params))
 
     GithubInstallations.upsert_from_github_data(installation)
+
+    # TODO: ADD REPOS
+
+    conn
+    |> send_resp(:no_content, "")
+  end
+
+  # Installation removed
+  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def create(conn, %{"action" => "removed", "installation" => installation}) do
+    log("App installation removed heard")
+
+    GithubInstallations.upsert_from_github_data(installation)
+
+    # TODO: REMOVE REPOS
 
     conn
     |> send_resp(:no_content, "")
@@ -52,6 +67,7 @@ defmodule AstoriaWeb.Github.WebhookController do
     |> send_resp(:no_content, "")
   end
 
+  # Unknown event
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, params) do
     log("Unknown webhook heard")

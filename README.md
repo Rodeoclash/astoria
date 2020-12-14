@@ -1,6 +1,9 @@
-# Gotchas Proto
+# Astoria
 
-![Docker Image CI](https://github.com/AndrewRPerkins/gotchas_proto/workflows/Docker%20Image%20CI/badge.svg)
+## TODO
+
+1. Add/Remove webhooks need to be implemented
+2. Suspend needs to be implemented
 
 ## Server
 

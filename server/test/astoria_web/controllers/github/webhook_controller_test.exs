@@ -51,6 +51,40 @@ defmodule AstoriaWeb.Github.WebhookControllerTest do
       assert response(conn, 204)
     end
 
+    test "app install added", %{conn: conn} do
+      response = Webhooks.Installation.added()
+
+      insert(:github_installation, %{
+        github_id: response["installation"]["id"]
+      })
+
+      conn =
+        post(
+          conn,
+          Routes.api_github_webhook_path(conn, :create),
+          response
+        )
+
+      assert response(conn, 204)
+    end
+
+    test "app install removed", %{conn: conn} do
+      response = Webhooks.Installation.removed()
+
+      insert(:github_installation, %{
+        github_id: response["installation"]["id"]
+      })
+
+      conn =
+        post(
+          conn,
+          Routes.api_github_webhook_path(conn, :create),
+          response
+        )
+
+      assert response(conn, 204)
+    end
+
     test "unknown event", %{conn: conn} do
       conn = post(conn, Routes.api_github_webhook_path(conn, :create), %{"unknown" => "event"})
 

@@ -7,6 +7,11 @@ defmodule Astoria.Analysis.Api.Request do
 
   @doc ~S"""
   Create a new request struct. Once populated, this can be executed using the perform function.
+
+  ## Examples
+
+      iex> Astoria.Analysis.Api.Request.new("http://www.example.com", "123")
+      %Request{payload: "123", url: "http://www.example.com"}
   """
   @spec new(String.t(), any()) :: %Request{}
   def new(url, payload \\ "") do

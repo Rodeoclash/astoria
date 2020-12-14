@@ -5,6 +5,11 @@ defmodule Astoria.Analysis.Api do
 
   @doc ~S"""
   Analysis API endpoint
+
+  ## Examples
+
+      iex> Astoria.Analysis.Api.endpoint()
+      "http://astoria-analysis:8000"
   """
   @spec endpoint() :: String.t()
   def endpoint() do
@@ -13,6 +18,11 @@ defmodule Astoria.Analysis.Api do
 
   @doc ~S"""
   Required headers for all Analysis API calls
+
+  ## Examples
+
+      iex> Astoria.Analysis.Api.headers()
+      [{"Content-Type", "application/json"}]
   """
   @spec headers() :: [{String.t(), String.t()}]
   def headers() do

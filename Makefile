@@ -17,10 +17,10 @@ server-start: server-setup
 	docker-compose up
 
 server-bash:
-	docker-compose run --rm server bash
+	docker-compose run --rm astoria-server bash
 
 server-bash-root:
-	docker-compose run --user=root:root --rm server bash
+	docker-compose run --user=root:root --rm astoria-server bash
 
 infra-deploy:
 	ansible-playbook --vault-password-file=infra/vault_password.sh -i infra/hosts infra/playbook.yml
