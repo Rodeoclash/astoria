@@ -49,7 +49,7 @@ function(req) {
   payload %>%
     mutate(
       merged_at = lubridate::ymd_hms(merged_at)) %>%
-    filter(!is.na(year_month) & merged_at > (Sys.Date() - days(60))) %>%
+    filter(merged_at > (Sys.Date() - days(60))) %>%
     mutate(group = factor(case_when(
       merged_at < Sys.Date() - days(30) ~ 'previous',
       TRUE ~ 'current'),
@@ -62,3 +62,32 @@ function(req) {
       change = (total - lag(total)) / lag(total)
     )
 }
+
+#* Return the longterm (annual) average ages of merged and closed PRs against current month 
+#* @post /merged_closed_age
+function(req) {
+  payload <- req$body %>% as.data.table()
+  payload %>%
+    select(merged_at, closed_at) %>% 
+    filter(!is.na(closed_at)) %>%
+    mutate(
+      merged_at = lubridate::ymd_hms(merged_at),
+      closed_at = lubridate::ymd_hms(closed_at),
+      group = ifelse(is.na(merged_at) & !is.na(closed_at),
+                      'closed',
+                      'merged')) %>%
+    filter(closed_at < Sys.Date() - years(1))
+    mutate(group = factor(case_when(
+      merged_at < Sys.Date() - days(30) ~ 'previous',
+      TRUE ~ 'current'),
+      ordered = TRUE,
+      levels = c('previous','current'))) %>%
+    group_by(group) %>%
+    summarise(total = n()) %>%
+    arrange(group) %>%
+    mutate(
+      change = (total - lag(total)) / lag(total)
+    )
+}
+
+payload <- jsonlite::fromJSON('payload_test/payload_large.json')
