@@ -92,3 +92,26 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
 }
+
+#* Return average age of all PRs currently open 
+#* @post /current_open_age
+function(req) {
+  payload <- req$body %>% as.data.table()
+  payload %>%
+    select(created_at, merged_at, closed_at) %>% 
+    filter(is.na(closed_at) & is.na(merged_at) & !is.na(merged_at)) %>%
+    mutate(
+      created_at = lubridate::ymd_hms(created_at),
+      merged_at = lubridate::ymd_hms(merged_at),
+      closed_at = lubridate::ymd_hms(closed_at),
+      age_days = round(difftime(Sys.Date(), created_at, units = 'days'), 0)) %>%
+    summarise(
+      total = n(),
+      avg_days_currently_open = as.numeric(mean(age_days, na.rm = TRUE)),
+      median_days_currently_open = as.numeric(median(age_days, na.rm = TRUE))
+    ) %>% 
+    mutate(
+      avg_days_currently_open = ifelse(is.nan(avg_days_currently_open), 0, avg_days_currently_open),
+      median_days_currently_open = ifelse(is.na(median_days_currently_open), 0, median_days_currently_open)
+    )
+}
