@@ -4,6 +4,9 @@
 
 1. Add/Remove webhooks need to be implemented
 2. Suspend needs to be implemented
+3. Need to pass period to R code
+4. See if we can make all Github requests one job with callback functions.
+5. User management
 
 ## Server
 

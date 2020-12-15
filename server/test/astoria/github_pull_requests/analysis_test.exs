@@ -1,6 +1,5 @@
 defmodule Astoria.GithubPullRequests.AnalysisTest do
   alias Astoria.{GithubPullRequests.Analysis}
-  import Astoria.Factory
   import Mox
   use Astoria.DataCase
 
@@ -9,8 +8,6 @@ defmodule Astoria.GithubPullRequests.AnalysisTest do
   setup :verify_on_exit!
 
   test "monthly_total_change/1" do
-    github_pull_request = insert(:github_pull_request)
-
     HTTPoisonMock
     |> expect(:post, fn url, payload, _headers ->
       assert url == "http://astoria-analysis:8000/monthly_total_change"
@@ -22,6 +19,8 @@ defmodule Astoria.GithubPullRequests.AnalysisTest do
        }}
     end)
 
-    assert Analysis.monthly_total_change([github_pull_request])
+    assert Analysis.monthly_total_change([
+             %{merged_at: ~U[2014-10-02 00:29:10Z]}
+           ])
   end
 end

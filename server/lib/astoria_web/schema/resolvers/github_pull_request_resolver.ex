@@ -1,5 +1,6 @@
 defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
   alias Astoria.{GithubPullRequests, GithubPullRequests.GithubPullRequest, Repo}
+  import Ecto.Query
 
   def merged_prs_per_person(
         github_repository,
@@ -74,12 +75,19 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       |> GithubPullRequest.where_repository_id(github_repository.id)
       |> GithubPullRequest.where_created_after(start)
       |> GithubPullRequest.where_created_before(finish)
+      |> GithubPullRequest.where_merged()
+      |> select([github_pull_request], %{
+        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
+      })
       |> Repo.all()
 
     if github_pull_requests == [] do
-      {:ok, []}
+      {:ok, %{traces: []}}
     else
-      {:ok, GithubPullRequests.Analysis.monthly_total_change(github_pull_requests)}
+      case GithubPullRequests.Analysis.monthly_total_change(github_pull_requests) do
+        {:ok, traces} ->
+          {:ok, %{traces: traces}}
+      end
     end
   end
 end

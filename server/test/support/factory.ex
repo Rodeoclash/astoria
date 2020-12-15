@@ -60,9 +60,6 @@ defmodule Astoria.Factory do
 
   def github_pull_request_factory do
     %Astoria.GithubPullRequests.GithubPullRequest{
-      data: %{
-        "merged_at" => ~U[2014-10-02 00:29:10Z]
-      },
       github_id: github_id(),
       github_repository: build(:github_repository)
     }
