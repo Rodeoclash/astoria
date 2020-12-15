@@ -69,22 +69,17 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{period: _period, start: start, finish: finish},
         _resolution
       ) do
-    {:ok, traces} =
-      case GithubPullRequest
-           |> GithubPullRequest.where_repository_id(github_repository.id)
-           |> GithubPullRequest.where_created_after(start)
-           |> GithubPullRequest.where_created_before(finish)
-           |> Repo.all() do
-        results when results == [] ->
-          {:ok, results}
+    github_pull_requests =
+      GithubPullRequest
+      |> GithubPullRequest.where_repository_id(github_repository.id)
+      |> GithubPullRequest.where_created_after(start)
+      |> GithubPullRequest.where_created_before(finish)
+      |> Repo.all()
 
-        results ->
-          GithubPullRequests.Analysis.monthly_total_change(results)
-      end
-
-    {:ok,
-     %{
-       traces: traces
-     }}
+    if github_pull_requests == [] do
+      {:ok, []}
+    else
+      {:ok, GithubPullRequests.Analysis.monthly_total_change(github_pull_requests)}
+    end
   end
 end
