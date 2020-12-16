@@ -8,30 +8,30 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository$ref = any;
+type GithubRepositoryPlotsAnalysisLast30Total_githubRepository$ref = any;
 export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
-export type GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQueryVariables = {|
+export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryVariables = {|
   githubRepositoryId: string,
   period: Period,
   start: any,
   finish: any,
 |};
-export type GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQueryResponse = {|
+export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryResponse = {|
   +currentUser: ?{|
     +githubRepository: {|
-      +$fragmentRefs: GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository$ref
+      +$fragmentRefs: GithubRepositoryPlotsAnalysisLast30Total_githubRepository$ref
     |}
   |}
 |};
-export type GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery = {|
-  variables: GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQueryVariables,
-  response: GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQueryResponse,
+export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery = {|
+  variables: GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryVariables,
+  response: GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryResponse,
 |};
 */
 
 
 /*
-query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(
+query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(
   $githubRepositoryId: ID!
   $period: Period!
   $start: DateTime!
@@ -39,24 +39,24 @@ query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      ...GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository
+      ...GithubRepositoryPlotsAnalysisLast30Total_githubRepository
       id
     }
     id
   }
 }
 
-fragment GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository on GithubRepository {
-  analysisMonthlyTotalChange(period: $period, start: $start, finish: $finish) {
-    ...PlotDateFloatShow_plotDateFloat
+fragment GithubRepositoryPlotsAnalysisLast30Total_githubRepository on GithubRepository {
+  analysisLast30Total(period: $period, start: $start, finish: $finish) {
+    ...PlotChangeShow_plotChange
   }
 }
 
-fragment PlotDateFloatShow_plotDateFloat on PlotDateFloat {
-  traces {
-    name
-    x
-    y
+fragment PlotChangeShow_plotChange on PlotChange {
+  trace {
+    change
+    currentTotal
+    previousTotal
   }
 }
 */
@@ -106,7 +106,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery",
+    "name": "GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -127,7 +127,7 @@ return {
               {
                 "args": null,
                 "kind": "FragmentSpread",
-                "name": "GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository"
+                "name": "GithubRepositoryPlotsAnalysisLast30Total_githubRepository"
               }
             ],
             "storageKey": null
@@ -148,7 +148,7 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery",
+    "name": "GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -185,38 +185,38 @@ return {
                     "variableName": "start"
                   }
                 ],
-                "concreteType": "PlotDateFloat",
+                "concreteType": "PlotChange",
                 "kind": "LinkedField",
-                "name": "analysisMonthlyTotalChange",
+                "name": "analysisLast30Total",
                 "plural": false,
                 "selections": [
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "ChartTraceDateFloat",
+                    "concreteType": "ChartTraceChange",
                     "kind": "LinkedField",
-                    "name": "traces",
-                    "plural": true,
+                    "name": "trace",
+                    "plural": false,
                     "selections": [
                       {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
-                        "name": "name",
+                        "name": "change",
                         "storageKey": null
                       },
                       {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
-                        "name": "x",
+                        "name": "currentTotal",
                         "storageKey": null
                       },
                       {
                         "alias": null,
                         "args": null,
                         "kind": "ScalarField",
-                        "name": "y",
+                        "name": "previousTotal",
                         "storageKey": null
                       }
                     ],
@@ -236,16 +236,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "59809ff0661879a9b48bd22df6d4366b",
+    "cacheID": "6a6a02ecb1225da803ea33ce32b225ef",
     "id": null,
     "metadata": {},
-    "name": "GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery",
+    "name": "GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository on GithubRepository {\n  analysisMonthlyTotalChange(period: $period, start: $start, finish: $finish) {\n    ...PlotDateFloatShow_plotDateFloat\n  }\n}\n\nfragment PlotDateFloatShow_plotDateFloat on PlotDateFloat {\n  traces {\n    name\n    x\n    y\n  }\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsAnalysisLast30Total_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsAnalysisLast30Total_githubRepository on GithubRepository {\n  analysisLast30Total(period: $period, start: $start, finish: $finish) {\n    ...PlotChangeShow_plotChange\n  }\n}\n\nfragment PlotChangeShow_plotChange on PlotChange {\n  trace {\n    change\n    currentTotal\n    previousTotal\n  }\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '3ab4cfdd530a234953ec53a7dfc16e65';
+(node/*: any*/).hash = 'b0a506c27b55e37aeac5a0e1ca225a34';
 
 module.exports = node;

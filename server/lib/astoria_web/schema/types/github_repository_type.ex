@@ -42,11 +42,18 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       resolve(&Resolvers.GithubPullRequestResolver.average_change_in_pr/3)
     end
 
-    field :analysis_monthly_total_change, non_null(:plot_change) do
+    field :analysis_monthly_total_change, non_null(:plot_date_float) do
       arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.analysis_monthly_total_change/3)
+    end
+
+    field :analysis_last30_total, non_null(:plot_change) do
+      arg(:period, non_null(:period))
+      arg(:start, non_null(:datetime))
+      arg(:finish, non_null(:datetime))
+      resolve(&Resolvers.GithubPullRequestResolver.analysis_last30_total/3)
     end
   end
 

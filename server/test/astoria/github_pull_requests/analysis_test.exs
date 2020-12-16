@@ -15,12 +15,17 @@ defmodule Astoria.GithubPullRequests.AnalysisTest do
 
       {:ok,
        %HTTPoison.Response{
-         body: ~s([{"change":0.5, "datetime":"2020-12-15T10:49:31+0000", "total":5}])
+         body: ~s([{"change":0.5, "datetime":"2014-10-02 00:29:10", "total":5}])
        }}
     end)
 
     assert Analysis.monthly_total_change([
              %{merged_at: ~U[2014-10-02 00:29:10Z]}
-           ])
+           ]) ==
+             {:ok,
+              [
+                %{name: "total", x: [~U[2014-10-02 00:29:10Z]], y: [5]},
+                %{name: "change", x: [~U[2014-10-02 00:29:10Z]], y: [0.5]}
+              ]}
   end
 end

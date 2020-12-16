@@ -4,6 +4,9 @@ import Plot from "react-plotly.js";
 import { config, layout, style } from "dashboard/services/charts.js";
 
 export const PlotDateIntegerShow = function ({ plotDateInteger }) {
+  console.log("=== date integer");
+  console.log(plotDateInteger);
+
   const data = plotDateInteger.traces.map((trace) => {
     return {
       ...trace,

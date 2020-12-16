@@ -1,6 +1,6 @@
 import React from "react";
 import { createFragmentContainer, graphql } from "react-relay";
-import PlotChangeShow from "dashboard/components/PlotChange/PlotChangeShow.jsx";
+import PlotDateFloatShow from "dashboard/components/PlotDateFloat/PlotDateFloatShow.jsx";
 
 export const GithubRepositoryPlotsAnalysisMonthlyTotalChange = function ({
   githubRepository,
@@ -8,8 +8,8 @@ export const GithubRepositoryPlotsAnalysisMonthlyTotalChange = function ({
   return (
     <div>
       <h3>PRs created this month</h3>
-      <PlotChangeShow
-        plotChange={githubRepository.analysisMonthlyTotalChange}
+      <PlotDateFloatShow
+        plotDateFloat={githubRepository.analysisMonthlyTotalChange}
       />
       The amount of PRs created this month vs. last month
     </div>
@@ -26,7 +26,7 @@ export default createFragmentContainer(
           start: $start
           finish: $finish
         ) {
-          ...PlotChangeShow_plotChange
+          ...PlotDateFloatShow_plotDateFloat
         }
       }
     `,

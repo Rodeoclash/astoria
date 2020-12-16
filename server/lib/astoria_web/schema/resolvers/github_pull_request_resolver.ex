@@ -90,4 +90,30 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       end
     end
   end
+
+  def analysis_last30_total(
+        github_repository,
+        %{period: _period, start: start, finish: finish},
+        _resolution
+      ) do
+    github_pull_requests =
+      GithubPullRequest
+      |> GithubPullRequest.where_repository_id(github_repository.id)
+      |> GithubPullRequest.where_created_after(start)
+      |> GithubPullRequest.where_created_before(finish)
+      |> GithubPullRequest.where_merged()
+      |> select([github_pull_request], %{
+        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
+      })
+      |> Repo.all()
+
+    if github_pull_requests == [] do
+      {:ok, %{trace: nil}}
+    else
+      case GithubPullRequests.Analysis.last30_total(github_pull_requests) do
+        {:ok, trace} ->
+          {:ok, %{trace: trace}}
+      end
+    end
+  end
 end
