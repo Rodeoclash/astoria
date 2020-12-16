@@ -4,7 +4,7 @@ defmodule AstoriaWeb.Schema.Types.ChartTraceChangeType do
 
   object :chart_trace_change do
     field :change, non_null(:float)
-    field :datetime, non_null(:string)
-    field :total, non_null(:integer)
+    field :current_total, non_null(:integer)
+    field :previous_total, non_null(:integer)
   end
 end

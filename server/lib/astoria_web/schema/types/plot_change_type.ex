@@ -3,6 +3,6 @@ defmodule AstoriaWeb.Schema.Types.PlotChangeType do
   use Absinthe.Relay.Schema.Notation, :modern
 
   object :plot_change do
-    field :traces, non_null(list_of(:chart_trace_change))
+    field :trace, non_null(:chart_trace_change)
   end
 end

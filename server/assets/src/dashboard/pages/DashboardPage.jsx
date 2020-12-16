@@ -3,6 +3,7 @@ import { css } from "@emotion/core";
 import { PERIODS, defaultPeriod } from "dashboard/services/periods.js";
 
 import CurrentUserGithubInstallations from "dashboard/components/CurrentUser/CurrentUserGithubInstallations.jsx";
+import GithubRepositoryPlotsAnalysisLast30TotalLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisLast30TotalLoader.jsx";
 import GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader.jsx";
 import GithubRepositoryPlotsAverageChangeInPrLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageChangeInPrLoader.jsx";
 import GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader.jsx";
@@ -54,6 +55,10 @@ const DashboardPage = function ({ currentUser, match, router }) {
 
   const renderedCharts = (
     <div css={chartStyles}>
+      <GithubRepositoryPlotsAnalysisLast30TotalLoader
+        githubRepositoryId={selectedGithubRepositoryId}
+        period={selectedPeriod}
+      />
       <GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader
         githubRepositoryId={selectedGithubRepositoryId}
         period={selectedPeriod}

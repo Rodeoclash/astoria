@@ -49,7 +49,7 @@ function(req) {
   payload %>%
     mutate(
       merged_at = lubridate::ymd_hms(merged_at)) %>%
-    filter(!is.na(year_month) & merged_at > (Sys.Date() - days(60))) %>%
+    filter(merged_at > (Sys.Date() - days(60))) %>%
     mutate(group = factor(case_when(
       merged_at < Sys.Date() - days(30) ~ 'previous',
       TRUE ~ 'current'),

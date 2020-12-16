@@ -12,11 +12,11 @@ import type { FragmentReference } from "relay-runtime";
 declare export opaque type PlotChangeShow_plotChange$ref: FragmentReference;
 declare export opaque type PlotChangeShow_plotChange$fragmentType: PlotChangeShow_plotChange$ref;
 export type PlotChangeShow_plotChange = {|
-  +traces: $ReadOnlyArray<?{|
+  +trace: {|
     +change: number,
-    +datetime: string,
-    +total: number,
-  |}>,
+    +currentTotal: number,
+    +previousTotal: number,
+  |},
   +$refType: PlotChangeShow_plotChange$ref,
 |};
 export type PlotChangeShow_plotChange$data = PlotChangeShow_plotChange;
@@ -39,8 +39,8 @@ const node/*: ReaderFragment*/ = {
       "args": null,
       "concreteType": "ChartTraceChange",
       "kind": "LinkedField",
-      "name": "traces",
-      "plural": true,
+      "name": "trace",
+      "plural": false,
       "selections": [
         {
           "alias": null,
@@ -53,14 +53,14 @@ const node/*: ReaderFragment*/ = {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "datetime",
+          "name": "currentTotal",
           "storageKey": null
         },
         {
           "alias": null,
           "args": null,
           "kind": "ScalarField",
-          "name": "total",
+          "name": "previousTotal",
           "storageKey": null
         }
       ],
@@ -71,6 +71,6 @@ const node/*: ReaderFragment*/ = {
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = 'b5bb249899caf56c41759c51564d512b';
+(node/*: any*/).hash = 'e664c0339a75b178c641855ce5defd42';
 
 module.exports = node;

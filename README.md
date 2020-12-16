@@ -6,7 +6,8 @@
 2. Suspend needs to be implemented
 3. Need to pass period to R code
 4. See if we can make all Github requests one job with callback functions.
-5. User management
+5. User management (invites, roles)
+6. Audit log
 
 ## Server
 
