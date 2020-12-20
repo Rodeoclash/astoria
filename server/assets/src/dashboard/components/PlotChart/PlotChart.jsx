@@ -22,13 +22,17 @@ export const PlotChart = function ({ plotChart }) {
   });
 
   return (
-    <Plot
-      config={config}
-      data={data}
-      layout={layout}
-      style={style}
-      useResizeHandler={true}
-    />
+    <div>
+      <h3>{plotChart.name}</h3>
+      <Plot
+        config={config}
+        data={data}
+        layout={layout}
+        style={style}
+        useResizeHandler={true}
+      />
+      <p>{plotChart.description}</p>
+    </div>
   );
 };
 
