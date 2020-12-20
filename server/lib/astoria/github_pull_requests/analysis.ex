@@ -40,9 +40,18 @@ defmodule Astoria.GithubPullRequests.Analysis do
          |> Analysis.Api.Request.perform() do
       {:ok, response} ->
         grouped_response = Enum.group_by(response.body, & &1["group"])
+        change = grouped_response["current"] |> Enum.at(0) |> Map.get("change")
+
+        change_direction =
+          if change >= 0 do
+            "positive"
+          else
+            "negative"
+          end
 
         results = %{
-          change: grouped_response["current"] |> Enum.at(0) |> Map.get("change"),
+          change: change,
+          change_direction: change_direction,
           current_total: grouped_response["current"] |> Enum.at(0) |> Map.get("total"),
           previous_total: grouped_response["previous"] |> Enum.at(0) |> Map.get("total")
         }

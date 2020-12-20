@@ -2,7 +2,7 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import GithubRepositoryPlotsAnalysisLast30Total from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisLast30Total.jsx";
+import PlotHero from "dashboard/components/PlotHero/PlotHero.jsx";
 
 const GithubRepositoryPlotsAnalysisLast30TotalLoader = function ({
   githubRepositoryId,
@@ -13,8 +13,8 @@ const GithubRepositoryPlotsAnalysisLast30TotalLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <GithubRepositoryPlotsAnalysisLast30Total
-          githubRepository={props.currentUser.githubRepository}
+        <PlotHero
+          plotHero={props.currentUser.githubRepository.analysisLast30Total}
         />
       );
     }
@@ -33,7 +33,13 @@ const GithubRepositoryPlotsAnalysisLast30TotalLoader = function ({
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              ...GithubRepositoryPlotsAnalysisLast30Total_githubRepository
+              analysisLast30Total(
+                period: $period
+                start: $start
+                finish: $finish
+              ) {
+                ...PlotHero_plotHero
+              }
             }
           }
         }

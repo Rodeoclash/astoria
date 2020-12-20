@@ -96,6 +96,14 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{period: _period, start: start, finish: finish},
         _resolution
       ) do
+    data = %{
+      change: nil,
+      current_total: nil,
+      description: "Shows the last thirty days compared to now",
+      name: "Last 30 Day Total",
+      previous_total: nil
+    }
+
     github_pull_requests =
       GithubPullRequest
       |> GithubPullRequest.where_repository_id(github_repository.id)
@@ -108,11 +116,11 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       |> Repo.all()
 
     if github_pull_requests == [] do
-      {:ok, %{trace: nil}}
+      {:ok, data}
     else
       case GithubPullRequests.Analysis.last30_total(github_pull_requests) do
-        {:ok, trace} ->
-          {:ok, %{trace: trace}}
+        {:ok, fetched_data} ->
+          {:ok, Map.merge(data, fetched_data)}
       end
     end
   end
