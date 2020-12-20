@@ -8,7 +8,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type GithubRepositoryPlotsAverageChangeInPr_githubRepository$ref = any;
+type PlotChart_plotChart$ref = any;
 export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
 export type GithubRepositoryPlotsAverageChangeInPrLoaderQueryVariables = {|
   githubRepositoryId: string,
@@ -19,7 +19,9 @@ export type GithubRepositoryPlotsAverageChangeInPrLoaderQueryVariables = {|
 export type GithubRepositoryPlotsAverageChangeInPrLoaderQueryResponse = {|
   +currentUser: ?{|
     +githubRepository: {|
-      +$fragmentRefs: GithubRepositoryPlotsAverageChangeInPr_githubRepository$ref
+      +averageChangeInPr: {|
+        +$fragmentRefs: PlotChart_plotChart$ref
+      |}
     |}
   |}
 |};
@@ -39,25 +41,19 @@ query GithubRepositoryPlotsAverageChangeInPrLoaderQuery(
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      ...GithubRepositoryPlotsAverageChangeInPr_githubRepository
+      averageChangeInPr(period: $period, start: $start, finish: $finish) {
+        ...PlotChart_plotChart
+      }
       id
     }
     id
   }
 }
 
-fragment GithubRepositoryPlotsAverageChangeInPr_githubRepository on GithubRepository {
-  averageChangeInPr(period: $period, start: $start, finish: $finish) {
-    ...PlotDateFloatShow_plotDateFloat
-  }
-}
-
-fragment PlotDateFloatShow_plotDateFloat on PlotDateFloat {
-  traces {
-    name
-    x
-    y
-  }
+fragment PlotChart_plotChart on PlotChart {
+  description
+  name
+  traces
 }
 */
 
@@ -89,7 +85,24 @@ v4 = [
     "variableName": "githubRepositoryId"
   }
 ],
-v5 = {
+v5 = [
+  {
+    "kind": "Variable",
+    "name": "finish",
+    "variableName": "finish"
+  },
+  {
+    "kind": "Variable",
+    "name": "period",
+    "variableName": "period"
+  },
+  {
+    "kind": "Variable",
+    "name": "start",
+    "variableName": "start"
+  }
+],
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -125,9 +138,20 @@ return {
             "plural": false,
             "selections": [
               {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "GithubRepositoryPlotsAverageChangeInPr_githubRepository"
+                "alias": null,
+                "args": (v5/*: any*/),
+                "concreteType": "PlotChart",
+                "kind": "LinkedField",
+                "name": "averageChangeInPr",
+                "plural": false,
+                "selections": [
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "PlotChart_plotChart"
+                  }
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -168,24 +192,8 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": [
-                  {
-                    "kind": "Variable",
-                    "name": "finish",
-                    "variableName": "finish"
-                  },
-                  {
-                    "kind": "Variable",
-                    "name": "period",
-                    "variableName": "period"
-                  },
-                  {
-                    "kind": "Variable",
-                    "name": "start",
-                    "variableName": "start"
-                  }
-                ],
-                "concreteType": "PlotDateFloat",
+                "args": (v5/*: any*/),
+                "concreteType": "PlotChart",
                 "kind": "LinkedField",
                 "name": "averageChangeInPr",
                 "plural": false,
@@ -193,59 +201,48 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "ChartTraceDateFloat",
-                    "kind": "LinkedField",
+                    "kind": "ScalarField",
+                    "name": "description",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "name",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
                     "name": "traces",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "name",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "x",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "y",
-                        "storageKey": null
-                      }
-                    ],
                     "storageKey": null
                   }
                 ],
                 "storageKey": null
               },
-              (v5/*: any*/)
+              (v6/*: any*/)
             ],
             "storageKey": null
           },
-          (v5/*: any*/)
+          (v6/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "755340c7d52b3fb09bdfe54eb8d82121",
+    "cacheID": "09e0fdbf9f19753f5b6f39c6ef3adae2",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAverageChangeInPrLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAverageChangeInPrLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsAverageChangeInPr_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsAverageChangeInPr_githubRepository on GithubRepository {\n  averageChangeInPr(period: $period, start: $start, finish: $finish) {\n    ...PlotDateFloatShow_plotDateFloat\n  }\n}\n\nfragment PlotDateFloatShow_plotDateFloat on PlotDateFloat {\n  traces {\n    name\n    x\n    y\n  }\n}\n"
+    "text": "query GithubRepositoryPlotsAverageChangeInPrLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      averageChangeInPr(period: $period, start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '16529c78457ba620f723dd8b0430bad0';
+(node/*: any*/).hash = '59fc1c1a73d761989e112a1543092ca9';
 
 module.exports = node;

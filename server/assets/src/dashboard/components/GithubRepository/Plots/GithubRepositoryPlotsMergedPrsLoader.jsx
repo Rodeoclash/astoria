@@ -2,9 +2,9 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import GithubRepositoryPlotsTotalPrsMerged from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsTotalPrsMerged.jsx";
+import PlotChart from "dashboard/components/PlotChart/PlotChart.jsx";
 
-const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
+const GithubRepositoryPlotsMergedPrsLoader = function ({
   githubRepositoryId,
   period,
 }) {
@@ -13,9 +13,7 @@ const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <GithubRepositoryPlotsTotalPrsMerged
-          githubRepository={props.currentUser.githubRepository}
-        />
+        <PlotChart plotChart={props.currentUser.githubRepository.mergedPrs} />
       );
     }
     return <div>Loading</div>;
@@ -25,7 +23,7 @@ const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
     <QueryRenderer
       environment={environment}
       query={graphql`
-        query GithubRepositoryPlotsTotalPrsMergedLoaderQuery(
+        query GithubRepositoryPlotsMergedPrsLoaderQuery(
           $githubRepositoryId: ID!
           $period: Period!
           $start: DateTime!
@@ -33,7 +31,9 @@ const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              ...GithubRepositoryPlotsTotalPrsMerged_githubRepository
+              mergedPrs(period: $period, start: $start, finish: $finish) {
+                ...PlotChart_plotChart
+              }
             }
           }
         }
@@ -49,4 +49,4 @@ const GithubRepositoryPlotsTotalPrsMergedLoader = function ({
   );
 };
 
-export default GithubRepositoryPlotsTotalPrsMergedLoader;
+export default GithubRepositoryPlotsMergedPrsLoader;

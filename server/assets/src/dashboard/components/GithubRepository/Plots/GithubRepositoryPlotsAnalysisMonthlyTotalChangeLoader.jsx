@@ -2,7 +2,7 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import GithubRepositoryPlotsAnalysisMonthlyTotalChange from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMonthlyTotalChange.jsx";
+import PlotChart from "dashboard/components/PlotChart/PlotChart.jsx";
 
 const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
   githubRepositoryId,
@@ -13,8 +13,10 @@ const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <GithubRepositoryPlotsAnalysisMonthlyTotalChange
-          githubRepository={props.currentUser.githubRepository}
+        <PlotChart
+          plotChart={
+            props.currentUser.githubRepository.analysisMonthlyTotalChange
+          }
         />
       );
     }
@@ -33,7 +35,13 @@ const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              ...GithubRepositoryPlotsAnalysisMonthlyTotalChange_githubRepository
+              analysisMonthlyTotalChange(
+                period: $period
+                start: $start
+                finish: $finish
+              ) {
+                ...PlotChart_plotChart
+              }
             }
           }
         }

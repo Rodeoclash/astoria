@@ -10,30 +10,30 @@
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotChart_plotChart$ref = any;
 export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
-export type GithubRepositoryPlotsMergedPrsPerPersonLoaderQueryVariables = {|
+export type GithubRepositoryPlotsMergedPrsLoaderQueryVariables = {|
   githubRepositoryId: string,
   period: Period,
   start: any,
   finish: any,
 |};
-export type GithubRepositoryPlotsMergedPrsPerPersonLoaderQueryResponse = {|
+export type GithubRepositoryPlotsMergedPrsLoaderQueryResponse = {|
   +currentUser: ?{|
     +githubRepository: {|
-      +mergedPrsPerPerson: {|
+      +mergedPrs: {|
         +$fragmentRefs: PlotChart_plotChart$ref
       |}
     |}
   |}
 |};
-export type GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery = {|
-  variables: GithubRepositoryPlotsMergedPrsPerPersonLoaderQueryVariables,
-  response: GithubRepositoryPlotsMergedPrsPerPersonLoaderQueryResponse,
+export type GithubRepositoryPlotsMergedPrsLoaderQuery = {|
+  variables: GithubRepositoryPlotsMergedPrsLoaderQueryVariables,
+  response: GithubRepositoryPlotsMergedPrsLoaderQueryResponse,
 |};
 */
 
 
 /*
-query GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery(
+query GithubRepositoryPlotsMergedPrsLoaderQuery(
   $githubRepositoryId: ID!
   $period: Period!
   $start: DateTime!
@@ -41,7 +41,7 @@ query GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery(
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      mergedPrsPerPerson(period: $period, start: $start, finish: $finish) {
+      mergedPrs(period: $period, start: $start, finish: $finish) {
         ...PlotChart_plotChart
       }
       id
@@ -119,7 +119,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery",
+    "name": "GithubRepositoryPlotsMergedPrsLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -142,7 +142,7 @@ return {
                 "args": (v5/*: any*/),
                 "concreteType": "PlotChart",
                 "kind": "LinkedField",
-                "name": "mergedPrsPerPerson",
+                "name": "mergedPrs",
                 "plural": false,
                 "selections": [
                   {
@@ -172,7 +172,7 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery",
+    "name": "GithubRepositoryPlotsMergedPrsLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -195,7 +195,7 @@ return {
                 "args": (v5/*: any*/),
                 "concreteType": "PlotChart",
                 "kind": "LinkedField",
-                "name": "mergedPrsPerPerson",
+                "name": "mergedPrs",
                 "plural": false,
                 "selections": [
                   {
@@ -233,16 +233,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "090d76e735bb3fd8d5e7965b7b13a1ae",
+    "cacheID": "fbdbbfee0a84016817fe2e902d1f7f32",
     "id": null,
     "metadata": {},
-    "name": "GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery",
+    "name": "GithubRepositoryPlotsMergedPrsLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsMergedPrsPerPersonLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      mergedPrsPerPerson(period: $period, start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
+    "text": "query GithubRepositoryPlotsMergedPrsLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      mergedPrs(period: $period, start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'cfaabefff4884845eb2d227fb54496b7';
+(node/*: any*/).hash = 'ccae4518c9b3b0178e18f1380adaba23';
 
 module.exports = node;

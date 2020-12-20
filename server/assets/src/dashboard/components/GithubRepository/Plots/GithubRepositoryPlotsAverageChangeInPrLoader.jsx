@@ -2,7 +2,7 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import GithubRepositoryPlotsAverageChangeInPr from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageChangeInPr.jsx";
+import PlotChart from "dashboard/components/PlotChart/PlotChart.jsx";
 
 const GithubRepositoryPlotsAverageChangeInPrLoader = function ({
   githubRepositoryId,
@@ -13,8 +13,8 @@ const GithubRepositoryPlotsAverageChangeInPrLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <GithubRepositoryPlotsAverageChangeInPr
-          githubRepository={props.currentUser.githubRepository}
+        <PlotChart
+          plotChart={props.currentUser.githubRepository.averageChangeInPr}
         />
       );
     }
@@ -33,7 +33,13 @@ const GithubRepositoryPlotsAverageChangeInPrLoader = function ({
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              ...GithubRepositoryPlotsAverageChangeInPr_githubRepository
+              averageChangeInPr(
+                period: $period
+                start: $start
+                finish: $finish
+              ) {
+                ...PlotChart_plotChart
+              }
             }
           }
         }

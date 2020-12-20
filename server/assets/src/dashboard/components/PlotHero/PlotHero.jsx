@@ -6,6 +6,7 @@ export const PlotHero = function ({ plotHero }) {
   if (plotHero.currentTotal === null) {
     return <p>No data</p>;
   }
+
   const rootStyles = css``;
 
   const mainStyles = css`
