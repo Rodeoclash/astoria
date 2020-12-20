@@ -49,7 +49,7 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       resolve(&Resolvers.GithubPullRequestResolver.analysis_monthly_total_change/3)
     end
 
-    field :analysis_last30_total, non_null(:plot_change) do
+    field :analysis_last30_total, non_null(:plot_hero) do
       arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))

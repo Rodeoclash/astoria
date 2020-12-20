@@ -8,7 +8,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type GithubRepositoryPlotsAnalysisLast30Total_githubRepository$ref = any;
+type PlotHero_plotHero$ref = any;
 export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
 export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryVariables = {|
   githubRepositoryId: string,
@@ -19,7 +19,9 @@ export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryVariables = {|
 export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryResponse = {|
   +currentUser: ?{|
     +githubRepository: {|
-      +$fragmentRefs: GithubRepositoryPlotsAnalysisLast30Total_githubRepository$ref
+      +analysisLast30Total: {|
+        +$fragmentRefs: PlotHero_plotHero$ref
+      |}
     |}
   |}
 |};
@@ -39,25 +41,22 @@ query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      ...GithubRepositoryPlotsAnalysisLast30Total_githubRepository
+      analysisLast30Total(period: $period, start: $start, finish: $finish) {
+        ...PlotHero_plotHero
+      }
       id
     }
     id
   }
 }
 
-fragment GithubRepositoryPlotsAnalysisLast30Total_githubRepository on GithubRepository {
-  analysisLast30Total(period: $period, start: $start, finish: $finish) {
-    ...PlotChangeShow_plotChange
-  }
-}
-
-fragment PlotChangeShow_plotChange on PlotChange {
-  trace {
-    change
-    currentTotal
-    previousTotal
-  }
+fragment PlotHero_plotHero on PlotHero {
+  change
+  changeDirection
+  currentTotal
+  description
+  name
+  previousTotal
 }
 */
 
@@ -89,7 +88,24 @@ v4 = [
     "variableName": "githubRepositoryId"
   }
 ],
-v5 = {
+v5 = [
+  {
+    "kind": "Variable",
+    "name": "finish",
+    "variableName": "finish"
+  },
+  {
+    "kind": "Variable",
+    "name": "period",
+    "variableName": "period"
+  },
+  {
+    "kind": "Variable",
+    "name": "start",
+    "variableName": "start"
+  }
+],
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -125,9 +141,20 @@ return {
             "plural": false,
             "selections": [
               {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "GithubRepositoryPlotsAnalysisLast30Total_githubRepository"
+                "alias": null,
+                "args": (v5/*: any*/),
+                "concreteType": "PlotHero",
+                "kind": "LinkedField",
+                "name": "analysisLast30Total",
+                "plural": false,
+                "selections": [
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "PlotHero_plotHero"
+                  }
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -168,24 +195,8 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": [
-                  {
-                    "kind": "Variable",
-                    "name": "finish",
-                    "variableName": "finish"
-                  },
-                  {
-                    "kind": "Variable",
-                    "name": "period",
-                    "variableName": "period"
-                  },
-                  {
-                    "kind": "Variable",
-                    "name": "start",
-                    "variableName": "start"
-                  }
-                ],
-                "concreteType": "PlotChange",
+                "args": (v5/*: any*/),
+                "concreteType": "PlotHero",
                 "kind": "LinkedField",
                 "name": "analysisLast30Total",
                 "plural": false,
@@ -193,59 +204,69 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "ChartTraceChange",
-                    "kind": "LinkedField",
-                    "name": "trace",
-                    "plural": false,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "change",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "currentTotal",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "previousTotal",
-                        "storageKey": null
-                      }
-                    ],
+                    "kind": "ScalarField",
+                    "name": "change",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "changeDirection",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "currentTotal",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "description",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "name",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "previousTotal",
                     "storageKey": null
                   }
                 ],
                 "storageKey": null
               },
-              (v5/*: any*/)
+              (v6/*: any*/)
             ],
             "storageKey": null
           },
-          (v5/*: any*/)
+          (v6/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "6a6a02ecb1225da803ea33ce32b225ef",
+    "cacheID": "90fa11bd0a1c37fe8273067089e658ed",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsAnalysisLast30Total_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsAnalysisLast30Total_githubRepository on GithubRepository {\n  analysisLast30Total(period: $period, start: $start, finish: $finish) {\n    ...PlotChangeShow_plotChange\n  }\n}\n\nfragment PlotChangeShow_plotChange on PlotChange {\n  trace {\n    change\n    currentTotal\n    previousTotal\n  }\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisLast30Total(period: $period, start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  change\n  changeDirection\n  currentTotal\n  description\n  name\n  previousTotal\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'b0a506c27b55e37aeac5a0e1ca225a34';
+(node/*: any*/).hash = '7f5729a60ce497791b1d3832544a1011';
 
 module.exports = node;
