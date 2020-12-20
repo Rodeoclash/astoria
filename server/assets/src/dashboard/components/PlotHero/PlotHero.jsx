@@ -14,12 +14,12 @@ export const PlotHero = function ({ plotHero }) {
   `;
 
   const changeStyles =
-    plotHero.changeDirection === "negative"
+    plotHero.changeDirection === "POSITIVE"
       ? css`
-          color: red;
+          color: green;
         `
       : css`
-          color: green;
+          color: red;
         `;
 
   const icon = plotHero.changeDirection === "negative" ? "↓" : "↑";
