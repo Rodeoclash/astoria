@@ -70,6 +70,12 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{period: _period, start: start, finish: finish},
         _resolution
       ) do
+    data = %{
+      description: "The amount and change of PRs",
+      name: "PRs created this month",
+      traces: nil,
+    }
+
     github_pull_requests =
       GithubPullRequest
       |> GithubPullRequest.where_repository_id(github_repository.id)
@@ -82,11 +88,13 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       |> Repo.all()
 
     if github_pull_requests == [] do
-      {:ok, %{traces: []}}
+      {:ok, data}
     else
       case GithubPullRequests.Analysis.monthly_total_change(github_pull_requests) do
-        {:ok, traces} ->
-          {:ok, %{traces: traces}}
+        {:ok, fetched_data} ->
+          {:ok, Map.merge(data, %{
+            traces: Jason.encode!(fetched_data)
+          })}
       end
     end
   end

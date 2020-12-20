@@ -16,6 +16,7 @@ defmodule AstoriaWeb.Schema do
   import_types(Types.GithubInstallationType)
   import_types(Types.GithubRepositoryType)
   import_types(Types.PeriodType)
+  import_types(Types.PlotChartType)
   import_types(Types.PlotDateFloatType)
   import_types(Types.PlotDateIntegerType)
   import_types(Types.PlotHeroType)
