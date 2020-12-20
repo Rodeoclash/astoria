@@ -2,7 +2,7 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge.jsx";
+import PlotChart from "dashboard/components/PlotChart/PlotChart.jsx";
 
 const GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader = function ({
   githubRepositoryId,
@@ -13,8 +13,10 @@ const GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge
-          githubRepository={props.currentUser.githubRepository}
+        <PlotChart
+          plotChart={
+            props.currentUser.githubRepository.averageDaysPrOpenBeforeMerge
+          }
         />
       );
     }
@@ -33,7 +35,13 @@ const GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader = function ({
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              ...GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository
+              averageDaysPrOpenBeforeMerge(
+                period: $period
+                start: $start
+                finish: $finish
+              ) {
+                ...PlotChart_plotChart
+              }
             }
           }
         }

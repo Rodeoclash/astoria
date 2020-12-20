@@ -2,6 +2,8 @@ defmodule Astoria.Charts.DateFloatTrace do
   import Ecto.Changeset
   use Ecto.Schema
 
+  @derive {Jason.Encoder, only: [:name, :x, :y]}
+
   schema "chart" do
     field :name, :string
     field :x, {:array, :utc_datetime}

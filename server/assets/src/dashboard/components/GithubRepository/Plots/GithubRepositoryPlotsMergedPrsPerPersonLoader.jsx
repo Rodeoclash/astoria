@@ -2,7 +2,7 @@ import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 
-import GithubRepositoryPlotsMergedPrsPerPerson from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPerson.jsx";
+import PlotChart from "dashboard/components/PlotChart/PlotChart.jsx";
 
 const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
   githubRepositoryId,
@@ -13,8 +13,8 @@ const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
       return <div>{error.message}</div>;
     } else if (props) {
       return (
-        <GithubRepositoryPlotsMergedPrsPerPerson
-          githubRepository={props.currentUser.githubRepository}
+        <PlotChart
+          plotChart={props.currentUser.githubRepository.mergedPrsPerPerson}
         />
       );
     }
@@ -33,7 +33,13 @@ const GithubRepositoryPlotsMergedPrsPerPersonLoader = function ({
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              ...GithubRepositoryPlotsMergedPrsPerPerson_githubRepository
+              mergedPrsPerPerson(
+                period: $period
+                start: $start
+                finish: $finish
+              ) {
+                ...PlotChart_plotChart
+              }
             }
           }
         }

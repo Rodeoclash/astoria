@@ -8,7 +8,7 @@ import GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader from "dashboard/com
 import GithubRepositoryPlotsAverageChangeInPrLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageChangeInPrLoader.jsx";
 import GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader.jsx";
 import GithubRepositoryPlotsMergedPrsPerPersonLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPersonLoader.jsx";
-import GithubRepositoryPlotsTotalPrsMergedLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsTotalPrsMergedLoader.jsx";
+import GithubRepositoryPlotsMergedPrsLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsLoader.jsx";
 import PeriodSelector from "dashboard/components/Period/PeriodSelector.jsx";
 
 const rootStyles = css`
@@ -67,7 +67,7 @@ const DashboardPage = function ({ currentUser, match, router }) {
         githubRepositoryId={selectedGithubRepositoryId}
         period={selectedPeriod}
       />
-      <GithubRepositoryPlotsTotalPrsMergedLoader
+      <GithubRepositoryPlotsMergedPrsLoader
         githubRepositoryId={selectedGithubRepositoryId}
         period={selectedPeriod}
       />

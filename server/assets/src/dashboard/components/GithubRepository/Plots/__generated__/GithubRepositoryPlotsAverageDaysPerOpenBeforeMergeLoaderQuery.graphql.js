@@ -8,7 +8,7 @@
 
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
-type GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository$ref = any;
+type PlotChart_plotChart$ref = any;
 export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
 export type GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQueryVariables = {|
   githubRepositoryId: string,
@@ -19,7 +19,9 @@ export type GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQueryVariabl
 export type GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQueryResponse = {|
   +currentUser: ?{|
     +githubRepository: {|
-      +$fragmentRefs: GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository$ref
+      +averageDaysPrOpenBeforeMerge: {|
+        +$fragmentRefs: PlotChart_plotChart$ref
+      |}
     |}
   |}
 |};
@@ -39,25 +41,19 @@ query GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQuery(
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      ...GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository
+      averageDaysPrOpenBeforeMerge(period: $period, start: $start, finish: $finish) {
+        ...PlotChart_plotChart
+      }
       id
     }
     id
   }
 }
 
-fragment GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository on GithubRepository {
-  averageDaysPrOpenBeforeMerge(period: $period, start: $start, finish: $finish) {
-    ...PlotDateFloatShow_plotDateFloat
-  }
-}
-
-fragment PlotDateFloatShow_plotDateFloat on PlotDateFloat {
-  traces {
-    name
-    x
-    y
-  }
+fragment PlotChart_plotChart on PlotChart {
+  description
+  name
+  traces
 }
 */
 
@@ -89,7 +85,24 @@ v4 = [
     "variableName": "githubRepositoryId"
   }
 ],
-v5 = {
+v5 = [
+  {
+    "kind": "Variable",
+    "name": "finish",
+    "variableName": "finish"
+  },
+  {
+    "kind": "Variable",
+    "name": "period",
+    "variableName": "period"
+  },
+  {
+    "kind": "Variable",
+    "name": "start",
+    "variableName": "start"
+  }
+],
+v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -125,9 +138,20 @@ return {
             "plural": false,
             "selections": [
               {
-                "args": null,
-                "kind": "FragmentSpread",
-                "name": "GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository"
+                "alias": null,
+                "args": (v5/*: any*/),
+                "concreteType": "PlotChart",
+                "kind": "LinkedField",
+                "name": "averageDaysPrOpenBeforeMerge",
+                "plural": false,
+                "selections": [
+                  {
+                    "args": null,
+                    "kind": "FragmentSpread",
+                    "name": "PlotChart_plotChart"
+                  }
+                ],
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -168,24 +192,8 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": [
-                  {
-                    "kind": "Variable",
-                    "name": "finish",
-                    "variableName": "finish"
-                  },
-                  {
-                    "kind": "Variable",
-                    "name": "period",
-                    "variableName": "period"
-                  },
-                  {
-                    "kind": "Variable",
-                    "name": "start",
-                    "variableName": "start"
-                  }
-                ],
-                "concreteType": "PlotDateFloat",
+                "args": (v5/*: any*/),
+                "concreteType": "PlotChart",
                 "kind": "LinkedField",
                 "name": "averageDaysPrOpenBeforeMerge",
                 "plural": false,
@@ -193,59 +201,48 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "concreteType": "ChartTraceDateFloat",
-                    "kind": "LinkedField",
+                    "kind": "ScalarField",
+                    "name": "description",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
+                    "name": "name",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
                     "name": "traces",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "name",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "x",
-                        "storageKey": null
-                      },
-                      {
-                        "alias": null,
-                        "args": null,
-                        "kind": "ScalarField",
-                        "name": "y",
-                        "storageKey": null
-                      }
-                    ],
                     "storageKey": null
                   }
                 ],
                 "storageKey": null
               },
-              (v5/*: any*/)
+              (v6/*: any*/)
             ],
             "storageKey": null
           },
-          (v5/*: any*/)
+          (v6/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "1ee46a22b2cdd6e718a433dd3792e8b5",
+    "cacheID": "1b695231cf971242fac48bb651e1fc96",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryPlotsAverageDaysPerOpenBeforeMerge_githubRepository on GithubRepository {\n  averageDaysPrOpenBeforeMerge(period: $period, start: $start, finish: $finish) {\n    ...PlotDateFloatShow_plotDateFloat\n  }\n}\n\nfragment PlotDateFloatShow_plotDateFloat on PlotDateFloat {\n  traces {\n    name\n    x\n    y\n  }\n}\n"
+    "text": "query GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      averageDaysPrOpenBeforeMerge(period: $period, start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'a3cafef314c58e0b003ecf5450e6c2dc';
+(node/*: any*/).hash = '1135135111ed97787fd271c11765fa98';
 
 module.exports = node;
