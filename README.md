@@ -8,6 +8,7 @@
 4. See if we can make all Github requests one job with callback functions.
 5. User management (invites, roles)
 6. Audit log
+7. Handle push events for PRs
 
 ## Server
 
