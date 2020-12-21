@@ -51,12 +51,11 @@ query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(
 }
 
 fragment PlotHero_plotHero on PlotHero {
-  change
+  byline
   changeDirection
-  currentTotal
   description
   name
-  previousTotal
+  value
 }
 */
 
@@ -205,7 +204,7 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "change",
+                    "name": "byline",
                     "storageKey": null
                   },
                   {
@@ -213,13 +212,6 @@ return {
                     "args": null,
                     "kind": "ScalarField",
                     "name": "changeDirection",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "currentTotal",
                     "storageKey": null
                   },
                   {
@@ -240,7 +232,7 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
-                    "name": "previousTotal",
+                    "name": "value",
                     "storageKey": null
                   }
                 ],
@@ -257,12 +249,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "90fa11bd0a1c37fe8273067089e658ed",
+    "cacheID": "fc61869b02e8df85df50f5418e9f4408",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisLast30Total(period: $period, start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  change\n  changeDirection\n  currentTotal\n  description\n  name\n  previousTotal\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisLast30Total(period: $period, start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  value\n}\n"
   }
 };
 })();

@@ -138,11 +138,12 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         _resolution
       ) do
     data = %{
+      byline: nil,
       change: nil,
-      current_total: nil,
       description: "Shows the last thirty days compared to now",
       name: "Last 30 Day Total",
-      previous_total: nil
+      previous_total: nil,
+      value: nil,
     }
 
     github_pull_requests =

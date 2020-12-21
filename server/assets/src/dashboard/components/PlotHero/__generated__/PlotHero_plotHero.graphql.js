@@ -13,12 +13,11 @@ import type { FragmentReference } from "relay-runtime";
 declare export opaque type PlotHero_plotHero$ref: FragmentReference;
 declare export opaque type PlotHero_plotHero$fragmentType: PlotHero_plotHero$ref;
 export type PlotHero_plotHero = {|
-  +change: ?number,
+  +byline: string,
   +changeDirection: ?ChangeDirection,
-  +currentTotal: ?string,
   +description: string,
   +name: string,
-  +previousTotal: ?string,
+  +value: string,
   +$refType: PlotHero_plotHero$ref,
 |};
 export type PlotHero_plotHero$data = PlotHero_plotHero;
@@ -40,7 +39,7 @@ const node/*: ReaderFragment*/ = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "change",
+      "name": "byline",
       "storageKey": null
     },
     {
@@ -48,13 +47,6 @@ const node/*: ReaderFragment*/ = {
       "args": null,
       "kind": "ScalarField",
       "name": "changeDirection",
-      "storageKey": null
-    },
-    {
-      "alias": null,
-      "args": null,
-      "kind": "ScalarField",
-      "name": "currentTotal",
       "storageKey": null
     },
     {
@@ -75,7 +67,7 @@ const node/*: ReaderFragment*/ = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
-      "name": "previousTotal",
+      "name": "value",
       "storageKey": null
     }
   ],
@@ -83,6 +75,6 @@ const node/*: ReaderFragment*/ = {
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = 'e10086edf18052a4b9efd3d22114ef8f';
+(node/*: any*/).hash = '8c9d6f8e0a2e2f2233bbdda6eadde77c';
 
 module.exports = node;

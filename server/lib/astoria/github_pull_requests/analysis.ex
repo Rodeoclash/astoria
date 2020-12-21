@@ -49,11 +49,12 @@ defmodule Astoria.GithubPullRequests.Analysis do
             "negative"
           end
 
+        previous_total = grouped_response["previous"] |> Enum.at(0) |> Map.get("total")
+
         results = %{
-          change: change,
+          byline: "#{previous_total} last month (#{floor(change * 100)}% change)",
           change_direction: change_direction,
-          current_total: grouped_response["current"] |> Enum.at(0) |> Map.get("total"),
-          previous_total: grouped_response["previous"] |> Enum.at(0) |> Map.get("total")
+          value: grouped_response["current"] |> Enum.at(0) |> Map.get("total"),
         }
 
         {:ok, results}
