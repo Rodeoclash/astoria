@@ -54,7 +54,7 @@ defmodule Astoria.GithubPullRequests.Analysis do
         results = %{
           byline: "#{previous_total} last month (#{floor(change * 100)}% change)",
           change_direction: change_direction,
-          value: grouped_response["current"] |> Enum.at(0) |> Map.get("total"),
+          value: grouped_response["current"] |> Enum.at(0) |> Map.get("total")
         }
 
         {:ok, results}

@@ -143,7 +143,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       description: "Shows the last thirty days compared to now",
       name: "Last 30 Day Total",
       previous_total: nil,
-      value: nil,
+      value: nil
     }
 
     github_pull_requests =
