@@ -46,9 +46,10 @@ function(req) {
 #* @post /last30_total
 function(req) {
   payload <- req$body %>% as.data.table()
-  payload %>%
+  store <- payload %>%
     mutate(
-      merged_at = lubridate::ymd_hms(merged_at)) %>%
+      merged_at = lubridate::ymd_hms(merged_at)
+      ) %>%
     filter(merged_at > (Sys.Date() - days(60))) %>%
     mutate(group = factor(case_when(
       merged_at < Sys.Date() - days(30) ~ 'previous',
@@ -61,6 +62,19 @@ function(req) {
     mutate(
       change = (total - lag(total)) / lag(total)
     )
+  out <- tibble(
+    name = 'last30days',
+    value = as.character(round(store$total[store$group == 'current'],1)),
+    description = "Last 30 Days Total Merged PRs",
+    change_direction = ifelse(store$change[store$group == 'current'] > 0,
+                              'positive',
+                              'negative'),
+    byline = paste0('Change of ',
+                    round(100*store$change[store$group == 'current'],1),
+                    '% compared to previous 30 Day interval of ',
+                    round(store$total[store$group == 'previous'],1), ' PRs')
+  )
+  return(out)
 }
 
 #* Return the longterm (annual) average ages of merged PRs against current month 
