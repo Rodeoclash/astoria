@@ -46,9 +46,10 @@ function(req) {
 #* @post /last30_total
 function(req) {
   payload <- req$body %>% as.data.table()
-  payload %>%
+  store <- payload %>%
     mutate(
-      merged_at = lubridate::ymd_hms(merged_at)) %>%
+      merged_at = lubridate::ymd_hms(merged_at)
+      ) %>%
     filter(merged_at > (Sys.Date() - days(60))) %>%
     mutate(group = factor(case_when(
       merged_at < Sys.Date() - days(30) ~ 'previous',
@@ -61,13 +62,26 @@ function(req) {
     mutate(
       change = (total - lag(total)) / lag(total)
     )
+  out <- tibble(
+    name = 'last30days',
+    value = as.character(round(store$total[store$group == 'current'],1)),
+    description = "Last 30 Days Total Merged PRs",
+    change_direction = ifelse(store$change[store$group == 'current'] > 0,
+                              'positive',
+                              'negative'),
+    byline = paste0('Change of ',
+                    round(100*store$change[store$group == 'current'],1),
+                    '% compared to previous 30 Day interval of ',
+                    round(store$total[store$group == 'previous'],1), ' PRs')
+  )
+  return(out)
 }
 
-#* Return the longterm (annual) average ages of merged and closed PRs against current month 
-#* @post /merged_closed_age
+#* Return the longterm (annual) average ages of merged PRs against current month 
+#* @post /merged_age
 function(req) {
   payload <- req$body %>% as.data.table()
-  payload %>%
+  store <- payload %>%
     select(created_at, merged_at, closed_at) %>% 
     filter(!is.na(closed_at)) %>%
     mutate(
@@ -78,12 +92,11 @@ function(req) {
                       'closed',
                       'merged'),
       age_days = round(difftime(closed_at, created_at, units = 'days'), 0)) %>%
-    filter(closed_at > Sys.Date() - years(1)) %>% 
+    filter(closed_at > Sys.Date() - years(1) &
+             group == 'merged') %>% 
     group_by(group) %>%
     summarise(
       total = n(),
-      median_age_days_annual = as.numeric(median(age_days, na.rm = TRUE)),
-      median_age_days_current = as.numeric(median(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE)),
       avg_age_days_annual = as.numeric(mean(age_days, na.rm = TRUE)),
       avg_age_days_current = as.numeric(mean(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE))
     ) %>% 
@@ -91,27 +104,94 @@ function(req) {
       diff = avg_age_days_current - avg_age_days_annual,
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
+  out <- tibble(
+    name = 'merged_age',
+    value = as.character(round(store$avg_age_days_current[store$group == 'merged'],1)),
+    description = "Average Age in Days for Merged PRs (Last 30 Days)",
+    change_direction = ifelse(store$change[store$group == 'merged'] > 0,
+                              'positive',
+                              'negative'),
+    byline = paste0('Change of ',
+                    round(100*store$change[store$group == 'merged'],1),
+                    '% compared to annual average of ',
+                    round(store$avg_age_days_annual[store$group == 'merged'],1),
+                    ' days')
+  )
+  return(out)
 }
 
-#* Return average age of all PRs currently open 
-#* @post /current_open_age
+#* Return the longterm (annual) average ages of closed PRs against current month 
+#* @post /closed_age
 function(req) {
   payload <- req$body %>% as.data.table()
-  payload %>%
+  store <- payload %>%
     select(created_at, merged_at, closed_at) %>% 
-    filter(is.na(closed_at) & is.na(merged_at)) %>%
+    filter(!is.na(closed_at)) %>%
     mutate(
       created_at = lubridate::ymd_hms(created_at),
       merged_at = lubridate::ymd_hms(merged_at),
       closed_at = lubridate::ymd_hms(closed_at),
-      age_days = round(difftime(Sys.Date(), created_at, units = 'days'), 0)) %>%
+      group = ifelse(is.na(merged_at) & !is.na(closed_at),
+                     'closed',
+                     'merged'),
+      age_days = round(difftime(closed_at, created_at, units = 'days'), 0)) %>%
+    filter(closed_at > Sys.Date() - years(1) &
+             group == 'closed') %>% 
+    group_by(group) %>%
     summarise(
       total = n(),
-      avg_days_currently_open = as.numeric(mean(age_days, na.rm = TRUE)),
-      median_days_currently_open = as.numeric(median(age_days, na.rm = TRUE))
+      avg_age_days_annual = as.numeric(mean(age_days, na.rm = TRUE)),
+      avg_age_days_current = as.numeric(mean(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE))
     ) %>% 
     mutate(
-      avg_days_currently_open = ifelse(is.nan(avg_days_currently_open), 0, avg_days_currently_open),
-      median_days_currently_open = ifelse(is.na(median_days_currently_open), 0, median_days_currently_open)
+      diff = avg_age_days_current - avg_age_days_annual,
+      change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
+  out <- tibble(
+    name = 'closed_age',
+    value = as.character(round(store$avg_age_days_current[store$group == 'closed'],1)),
+    description = "Average Age in Days for Unmerged Closed PRs (Last 30 Days)",
+    change_direction = ifelse(store$change[store$group == 'closed'] > 0,
+                              'positive',
+                              'negative'),
+    byline = paste0('Change of ',
+                    round(100*store$change[store$group == 'closed'],1),
+                    '% compared to annual average of ',
+                    round(store$avg_age_days_annual[store$group == 'closed'],1),
+                    ' days')
+  )
+  return(out)
+}
+
+#* Return average age of all PRs currently open 
+#* @post /open_age
+function(req) {
+  payload <- req$body %>% as.data.table()
+  store <- payload %>%
+    select(created_at, merged_at, closed_at) %>% 
+    mutate(
+      created_at = lubridate::ymd_hms(created_at),
+      condition_date = as.Date(ifelse(is.na(merged_at), Sys.Date(), merged_at), origin = '1970-01-01'),
+      age_days = round(difftime(
+        condition_date,
+        created_at, units = 'days'), 0)) %>%
+    summarise(
+      total = sum(is.na(closed_at) & is.na(merged_at)),
+      avg_days_currently_open = as.numeric(mean(age_days[is.na(closed_at) & is.na(merged_at)], na.rm = TRUE)),
+      annual_avg_days = as.numeric(mean(age_days[!is.na(merged_at)], na.rm = TRUE))
+    ) %>% 
+    mutate(
+      diff = avg_days_currently_open - annual_avg_days,
+      change = diff / annual_avg_days)
+  out <- tibble(
+    name = 'total_PRs_open',
+    value = as.character(store$total),
+    description = "Total Open PRs",
+    change_direction = "NULL",
+    byline = paste0('Current Average Days for Open PRs ',
+                    round(store$avg_days_currently_open, 1), 
+                    ' Compared to Annual Average of ',
+                    round(store$annual_avg_days, 1),
+                    ' (', round(100*store$change,1), '%)'))
+  return(out)
 }
