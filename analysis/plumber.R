@@ -67,7 +67,7 @@ function(req) {
 #* @post /merged_closed_age
 function(req) {
   payload <- req$body %>% as.data.table()
-  payload %>%
+  store <- payload %>%
     select(created_at, merged_at, closed_at) %>% 
     filter(!is.na(closed_at)) %>%
     mutate(
@@ -82,8 +82,6 @@ function(req) {
     group_by(group) %>%
     summarise(
       total = n(),
-      median_age_days_annual = as.numeric(median(age_days, na.rm = TRUE)),
-      median_age_days_current = as.numeric(median(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE)),
       avg_age_days_annual = as.numeric(mean(age_days, na.rm = TRUE)),
       avg_age_days_current = as.numeric(mean(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE))
     ) %>% 
@@ -91,6 +89,20 @@ function(req) {
       diff = avg_age_days_current - avg_age_days_annual,
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
+  out <- tibble(
+    name = 'merged_age',
+    value = as.character(round(store$avg_age_days_current[store$group == 'merged'],1)),
+    description = "Average Age in Days for Merged PRs (Last 30 Days)",
+    change_direction = ifelse(store$change[store$group == 'merged'] > 0,
+                              'positive',
+                              'negative'),
+    byline = paste0('Change of ',
+                    round(100*store$change[store$group == 'merged'],1),
+                    '% compared to annual average of ',
+                    round(store$avg_age_days_annual[store$group == 'merged'],1),
+                    ' days')
+  )
+  return(out)
 }
 
 #* Return average age of all PRs currently open 
@@ -101,17 +113,21 @@ function(req) {
     select(created_at, merged_at, closed_at) %>% 
     filter(is.na(closed_at) & is.na(merged_at)) %>%
     mutate(
-      created_at = lubridate::ymd_hms(created_at),
-      merged_at = lubridate::ymd_hms(merged_at),
-      closed_at = lubridate::ymd_hms(closed_at),
+      # created_at = lubridate::ymd_hms(created_at),
       age_days = round(difftime(Sys.Date(), created_at, units = 'days'), 0)) %>%
+
     summarise(
       total = n(),
-      avg_days_currently_open = as.numeric(mean(age_days, na.rm = TRUE)),
-      median_days_currently_open = as.numeric(median(age_days, na.rm = TRUE))
+      avg_days_currently_open = as.numeric(mean(age_days, na.rm = TRUE))
     ) %>% 
     mutate(
-      avg_days_currently_open = ifelse(is.nan(avg_days_currently_open), 0, avg_days_currently_open),
-      median_days_currently_open = ifelse(is.na(median_days_currently_open), 0, median_days_currently_open)
+      byline = ifelse(is.nan(avg_days_currently_open), 0, avg_days_currently_open),
+      value = 
+      description = 
+      
     )
 }
+
+payload$created_at <- as.Date(payload$created_at) + difftime(Sys.Date(), as.Date(max(payload$created_at)))
+payload$merged_at <- as.Date(payload$merged_at) + difftime(Sys.Date(), as.Date(max(payload$merged_at, na.rm = TRUE)))
+payload$closed_at <- as.Date(payload$closed_at) + difftime(Sys.Date(), as.Date(max(payload$closed_at, na.rm = TRUE)))
