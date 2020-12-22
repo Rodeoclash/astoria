@@ -39,25 +39,7 @@ defmodule Astoria.GithubPullRequests.Analysis do
     case Analysis.Api.Endpoints.Last30Total.create(payload)
          |> Analysis.Api.Request.perform() do
       {:ok, response} ->
-        grouped_response = Enum.group_by(response.body, & &1["group"])
-        change = grouped_response["current"] |> Enum.at(0) |> Map.get("change")
-
-        change_direction =
-          if change >= 0 do
-            "positive"
-          else
-            "negative"
-          end
-
-        previous_total = grouped_response["previous"] |> Enum.at(0) |> Map.get("total")
-
-        results = %{
-          byline: "#{previous_total} last month (#{floor(change * 100)}% change)",
-          change_direction: change_direction,
-          value: grouped_response["current"] |> Enum.at(0) |> Map.get("total")
-        }
-
-        {:ok, results}
+        {:ok, Enum.at(response.body, 0)}
     end
   end
 end

@@ -50,7 +50,7 @@ defmodule Astoria.Analysis.Api do
   """
   @spec process_response(%HTTPoison.Response{}) :: %Analysis.Api.Response{}
   def process_response(response) do
-    case Jason.decode(response.body) do
+    case Jason.decode(response.body, keys: :atoms) do
       {:ok, decoded_body} ->
         {:ok, Analysis.Api.Response.new(%{response | body: decoded_body})}
     end

@@ -3,7 +3,7 @@ import { createFragmentContainer, graphql } from "react-relay";
 import { css } from "@emotion/core";
 
 export const PlotHero = function ({ plotHero }) {
-  if (plotHero.value === null) {
+  if (plotHero === null) {
     return <p>No data</p>;
   }
 

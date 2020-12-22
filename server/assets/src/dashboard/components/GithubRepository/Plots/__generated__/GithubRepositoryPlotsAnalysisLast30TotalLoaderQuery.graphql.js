@@ -19,7 +19,7 @@ export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryVariables = {|
 export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryResponse = {|
   +currentUser: ?{|
     +githubRepository: {|
-      +analysisLast30Total: {|
+      +analysisLast30Total: ?{|
         +$fragmentRefs: PlotHero_plotHero$ref
       |}
     |}
