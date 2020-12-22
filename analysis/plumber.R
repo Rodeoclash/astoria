@@ -138,8 +138,8 @@ function(req) {
     value = as.character(round(store$avg_age_days_current[store$group == 'closed'],1)),
     description = "Average Age in Days for Unmerged Closed PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'closed'] > 0,
-                              'negative',
-                              'positive'),
+                              'positive',
+                              'negative'),
     byline = paste0('Change of ',
                     round(100*store$change[store$group == 'closed'],1),
                     '% compared to annual average of ',
@@ -150,10 +150,10 @@ function(req) {
 }
 
 #* Return average age of all PRs currently open 
-#* @post /current_open_age
+#* @post /open_age
 function(req) {
   payload <- req$body %>% as.data.table()
-  payload %>%
+  store <- payload %>%
     select(created_at, merged_at, closed_at) %>% 
     filter(is.na(closed_at) & is.na(merged_at)) %>%
     mutate(
@@ -163,15 +163,14 @@ function(req) {
     summarise(
       total = n(),
       avg_days_currently_open = as.numeric(mean(age_days, na.rm = TRUE))
-    ) %>% 
-    mutate(
-      byline = ifelse(is.nan(avg_days_currently_open), 0, avg_days_currently_open),
-      value = 
-      description = 
-      
-    )
+    ) 
+  out <- tibble(
+    name = 'total_PRs_open',
+    value = as.character(store$total),
+    description = "Average Age in Days for Open PRs",
+    change_direction = "NULL",
+    byline = paste0('Average Days Open PRs ',
+                    round(store$avg_days_currently_open, 1))
+  )
+  return(out)
 }
-
-payload$created_at <- as.Date(payload$created_at) + difftime(Sys.Date(), as.Date(max(payload$created_at)))
-payload$merged_at <- as.Date(payload$merged_at) + difftime(Sys.Date(), as.Date(max(payload$merged_at, na.rm = TRUE)))
-payload$closed_at <- as.Date(payload$closed_at) + difftime(Sys.Date(), as.Date(max(payload$closed_at, na.rm = TRUE)))
