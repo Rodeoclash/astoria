@@ -170,7 +170,7 @@ function(req) {
   store <- payload %>%
     select(created_at, merged_at, closed_at) %>% 
     mutate(
-      # created_at = lubridate::ymd_hms(created_at),
+      created_at = lubridate::ymd_hms(created_at),
       condition_date = as.Date(ifelse(is.na(merged_at), Sys.Date(), merged_at), origin = '1970-01-01'),
       age_days = round(difftime(
         condition_date,
