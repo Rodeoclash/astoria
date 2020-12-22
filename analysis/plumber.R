@@ -155,22 +155,29 @@ function(req) {
   payload <- req$body %>% as.data.table()
   store <- payload %>%
     select(created_at, merged_at, closed_at) %>% 
-    filter(is.na(closed_at) & is.na(merged_at)) %>%
     mutate(
       # created_at = lubridate::ymd_hms(created_at),
-      age_days = round(difftime(Sys.Date(), created_at, units = 'days'), 0)) %>%
-
+      condition_date = as.Date(ifelse(is.na(merged_at), Sys.Date(), merged_at), origin = '1970-01-01'),
+      age_days = round(difftime(
+        condition_date,
+        created_at, units = 'days'), 0)) %>%
     summarise(
-      total = n(),
-      avg_days_currently_open = as.numeric(mean(age_days, na.rm = TRUE))
-    ) 
+      total = sum(is.na(closed_at) & is.na(merged_at)),
+      avg_days_currently_open = as.numeric(mean(age_days[is.na(closed_at) & is.na(merged_at)], na.rm = TRUE)),
+      annual_avg_days = as.numeric(mean(age_days[!is.na(merged_at)], na.rm = TRUE))
+    ) %>% 
+    mutate(
+      diff = avg_days_currently_open - annual_avg_days,
+      change = diff / annual_avg_days)
   out <- tibble(
     name = 'total_PRs_open',
     value = as.character(store$total),
-    description = "Average Age in Days for Open PRs",
+    description = "Total Open PRs",
     change_direction = "NULL",
-    byline = paste0('Average Days Open PRs ',
-                    round(store$avg_days_currently_open, 1))
-  )
+    byline = paste0('Current Average Days for Open PRs ',
+                    round(store$avg_days_currently_open, 1), 
+                    ' Compared to Annual Average of ',
+                    round(store$annual_avg_days, 1),
+                    ' (', round(100*store$change,1), '%)'))
   return(out)
 }
