@@ -157,5 +157,5 @@
 
     - name: Remove uploaded analysis image
       file:
-        path: "{{deploy_image_file_remote_server}}"
+        path: "{{deploy_image_file_remote_analysis}}"
         state: absent

@@ -110,9 +110,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
 
     github_pull_requests =
       GithubPullRequest
-      |> GithubPullRequest.where_repository_id(github_repository.id)
-      |> GithubPullRequest.where_created_after(start)
-      |> GithubPullRequest.where_created_before(finish)
+      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
       |> GithubPullRequest.where_merged()
       |> select([github_pull_request], %{
         merged_at: fragment("?->>'merged_at'", github_pull_request.data)
@@ -139,9 +137,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       ) do
     github_pull_requests =
       GithubPullRequest
-      |> GithubPullRequest.where_repository_id(github_repository.id)
-      |> GithubPullRequest.where_created_after(start)
-      |> GithubPullRequest.where_created_before(finish)
+      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
       |> GithubPullRequest.where_merged()
       |> select([github_pull_request], %{
         merged_at: fragment("?->>'merged_at'", github_pull_request.data)
@@ -152,6 +148,75 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       {:ok, nil}
     else
       GithubPullRequests.Analysis.last30_total(github_pull_requests)
+    end
+  end
+
+  def analysis_merged_age(
+        github_repository,
+        %{period: _period, start: start, finish: finish},
+        _resolution
+      ) do
+    github_pull_requests =
+      GithubPullRequest
+      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
+      |> GithubPullRequest.where_merged()
+      |> select([github_pull_request], %{
+        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
+        created_at: fragment("?->>'created_at'", github_pull_request.data),
+        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
+      })
+      |> Repo.all()
+
+    if github_pull_requests == [] do
+      {:ok, nil}
+    else
+      GithubPullRequests.Analysis.merged_age(github_pull_requests)
+    end
+  end
+
+  def analysis_closed_age(
+        github_repository,
+        %{period: _period, start: start, finish: finish},
+        _resolution
+      ) do
+    github_pull_requests =
+      GithubPullRequest
+      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
+      |> GithubPullRequest.where_merged()
+      |> select([github_pull_request], %{
+        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
+        created_at: fragment("?->>'created_at'", github_pull_request.data),
+        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
+      })
+      |> Repo.all()
+
+    if github_pull_requests == [] do
+      {:ok, nil}
+    else
+      GithubPullRequests.Analysis.closed_age(github_pull_requests)
+    end
+  end
+
+  def analysis_opened_age(
+        github_repository,
+        %{period: _period, start: start, finish: finish},
+        _resolution
+      ) do
+    github_pull_requests =
+      GithubPullRequest
+      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
+      |> GithubPullRequest.where_merged()
+      |> select([github_pull_request], %{
+        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
+        created_at: fragment("?->>'created_at'", github_pull_request.data),
+        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
+      })
+      |> Repo.all()
+
+    if github_pull_requests == [] do
+      {:ok, nil}
+    else
+      GithubPullRequests.Analysis.opened_age(github_pull_requests)
     end
   end
 end

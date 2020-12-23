@@ -49,7 +49,9 @@ export const PlotHero = function ({ plotHero }) {
         {plotHero.value} {icon}
       </span>
       {plotHero.byline ? <p>{plotHero.byline}</p> : null}
-      <p>{plotHero.description}</p>
+      <p>
+        <em>{plotHero.description}</em>
+      </p>
     </div>
   );
 };

@@ -3,12 +3,15 @@ import { css } from "@emotion/core";
 import { PERIODS, defaultPeriod } from "dashboard/services/periods.js";
 
 import CurrentUserGithubInstallations from "dashboard/components/CurrentUser/CurrentUserGithubInstallations.jsx";
+import GithubRepositoryPlotsAnalysisClosedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisClosedAgeLoader.jsx";
 import GithubRepositoryPlotsAnalysisLast30TotalLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisLast30TotalLoader.jsx";
+import GithubRepositoryPlotsAnalysisMergedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMergedAgeLoader.jsx";
 import GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader.jsx";
+import GithubRepositoryPlotsAnalysisOpenedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedAgeLoader.jsx";
 import GithubRepositoryPlotsAverageChangeInPrLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageChangeInPrLoader.jsx";
 import GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader.jsx";
-import GithubRepositoryPlotsMergedPrsPerPersonLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPersonLoader.jsx";
 import GithubRepositoryPlotsMergedPrsLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsLoader.jsx";
+import GithubRepositoryPlotsMergedPrsPerPersonLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPersonLoader.jsx";
 import PeriodSelector from "dashboard/components/Period/PeriodSelector.jsx";
 
 const rootStyles = css`
@@ -26,10 +29,32 @@ const mainStyles = css`
   padding: 1rem;
 `;
 
+const heroStyles = css`
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+  padding-bottom: 2rem;
+
+  & > * {
+    margin: 0 1rem;
+    width: 20rem;
+    padding: 1rem;
+    background: #eee;
+  }
+`;
+
 const chartStyles = css`
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: repeat(3, 50vh);
+
+  & > * {
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
 `;
 
 const DashboardPage = function ({ currentUser, match, router }) {
@@ -54,31 +79,47 @@ const DashboardPage = function ({ currentUser, match, router }) {
   );
 
   const renderedCharts = (
-    <div css={chartStyles}>
-      <GithubRepositoryPlotsAnalysisLast30TotalLoader
-        githubRepositoryId={selectedGithubRepositoryId}
-        period={selectedPeriod}
-      />
-      <GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader
-        githubRepositoryId={selectedGithubRepositoryId}
-        period={selectedPeriod}
-      />
-      <GithubRepositoryPlotsMergedPrsPerPersonLoader
-        githubRepositoryId={selectedGithubRepositoryId}
-        period={selectedPeriod}
-      />
-      <GithubRepositoryPlotsMergedPrsLoader
-        githubRepositoryId={selectedGithubRepositoryId}
-        period={selectedPeriod}
-      />
-      <GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader
-        githubRepositoryId={selectedGithubRepositoryId}
-        period={selectedPeriod}
-      />
-      <GithubRepositoryPlotsAverageChangeInPrLoader
-        githubRepositoryId={selectedGithubRepositoryId}
-        period={selectedPeriod}
-      />
+    <div>
+      <div css={heroStyles}>
+        <GithubRepositoryPlotsAnalysisLast30TotalLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+        <GithubRepositoryPlotsAnalysisMergedAgeLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+        <GithubRepositoryPlotsAnalysisClosedAgeLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+        <GithubRepositoryPlotsAnalysisOpenedAgeLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+      </div>
+      <div css={chartStyles}>
+        <GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+        <GithubRepositoryPlotsMergedPrsPerPersonLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+        <GithubRepositoryPlotsMergedPrsLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+        <GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+        <GithubRepositoryPlotsAverageChangeInPrLoader
+          githubRepositoryId={selectedGithubRepositoryId}
+          period={selectedPeriod}
+        />
+      </div>
     </div>
   );
 
