@@ -29,8 +29,18 @@ const mainStyles = css`
   padding: 1rem;
 `;
 
-const heroStyles = css`
+const headerStyles = css`
   align-items: center;
+  border-bottom: 1px solid #ccc;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  margin-top: 0;
+  padding-bottom: 1rem;
+`;
+
+const heroStyles = css`
+  align-items: stretch;
   border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: center;
@@ -129,7 +139,12 @@ const DashboardPage = function ({ currentUser, match, router }) {
         <CurrentUserGithubInstallations currentUser={currentUser} />
       </nav>
       <main css={mainStyles}>
-        <PeriodSelector onChangePeriod={handleChangePeriod} />
+        <header css={headerStyles}>
+          <h2>{currentUser.githubRepository.name}</h2>
+          <div>
+            Period: <PeriodSelector onChangePeriod={handleChangePeriod} />
+          </div>
+        </header>
         {selectedGithubRepositoryId === undefined
           ? renderedNoCharts
           : renderedCharts}
@@ -138,9 +153,18 @@ const DashboardPage = function ({ currentUser, match, router }) {
   );
 };
 
+export const prepareVariables = (params, { location }) => {
+  return {
+    githubRepositoryId: location.query.githubRepositoryId,
+  };
+};
+
 export const DashboardPageQuery = graphql`
-  query DashboardPage_Query {
+  query DashboardPage_Query($githubRepositoryId: ID!) {
     currentUser {
+      githubRepository(id: $githubRepositoryId) {
+        name
+      }
       ...CurrentUserGithubInstallations_currentUser
     }
   }

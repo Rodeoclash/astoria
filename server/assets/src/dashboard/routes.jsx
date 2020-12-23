@@ -5,6 +5,7 @@ import { makeRouteConfig, Route } from "found";
 import AppPage, { AppPageQuery } from "dashboard/pages/AppPage.jsx";
 import DashboardPage, {
   DashboardPageQuery,
+  prepareVariables as dashboardPagePrepareVariables,
 } from "dashboard/pages/DashboardPage.jsx";
 
 const routeConfig = makeRouteConfig(
@@ -13,6 +14,7 @@ const routeConfig = makeRouteConfig(
       Component={DashboardPage}
       path="dashboard"
       query={DashboardPageQuery}
+      prepareVariables={dashboardPagePrepareVariables}
     />
   </Route>
 );
