@@ -9,6 +9,8 @@
 5. User management (invites, roles)
 6. Audit log
 7. Handle push events for PRs
+8. Flash messages should be handled in JS
+9. Live updates / activity indicators for PRs
 
 ## Server
 
