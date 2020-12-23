@@ -9,10 +9,12 @@ defmodule Astoria.Analysis.ApiTest do
     body: "{\"data\":{\"viewer\":{\"name\":\"Samuel Richardson\"}}}"
   }
 
+  @result_body %{data: %{viewer: %{name: "Samuel Richardson"}}}
+
   @result %Api.Response{
-    body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
+    body: @result_body,
     poison: %HTTPoison.Response{
-      body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
+      body: @result_body,
       headers: [],
       request: nil,
       request_url: nil,

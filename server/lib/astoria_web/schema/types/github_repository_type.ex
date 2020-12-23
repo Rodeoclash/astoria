@@ -55,6 +55,27 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.analysis_last30_total/3)
     end
+
+    field :analysis_merged_age, :plot_hero do
+      arg(:period, non_null(:period))
+      arg(:start, non_null(:datetime))
+      arg(:finish, non_null(:datetime))
+      resolve(&Resolvers.GithubPullRequestResolver.analysis_merged_age/3)
+    end
+
+    field :analysis_closed_age, :plot_hero do
+      arg(:period, non_null(:period))
+      arg(:start, non_null(:datetime))
+      arg(:finish, non_null(:datetime))
+      resolve(&Resolvers.GithubPullRequestResolver.analysis_closed_age/3)
+    end
+
+    field :analysis_opened_age, :plot_hero do
+      arg(:period, non_null(:period))
+      arg(:start, non_null(:datetime))
+      arg(:finish, non_null(:datetime))
+      resolve(&Resolvers.GithubPullRequestResolver.analysis_opened_age/3)
+    end
   end
 
   connection(node_type: :github_repository)

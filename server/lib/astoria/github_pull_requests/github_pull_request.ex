@@ -52,4 +52,11 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
       fragment("?->>'merged_at' IS NOT NULL", github_pull_request.data)
     )
   end
+
+  def where_suitable_for_analysis(query \\ GithubPullRequest, github_repository_id, start, finish) do
+    query
+    |> where_repository_id(github_repository_id)
+    |> where_created_after(start)
+    |> where_created_before(finish)
+  end
 end

@@ -106,7 +106,7 @@ function(req) {
     )
   out <- tibble(
     name = 'merged_age',
-    value = as.character(round(store$avg_age_days_current[store$group == 'merged'],1)),
+    value = round(store$avg_age_days_current[store$group == 'merged'],1),
     description = "Average Age in Days for Merged PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'merged'] > 0,
                               'positive',
@@ -149,7 +149,7 @@ function(req) {
     )
   out <- tibble(
     name = 'closed_age',
-    value = as.character(round(store$avg_age_days_current[store$group == 'closed'],1)),
+    value = round(store$avg_age_days_current[store$group == 'closed'],1),
     description = "Average Age in Days for Unmerged Closed PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'closed'] > 0,
                               'positive',
@@ -164,7 +164,7 @@ function(req) {
 }
 
 #* Return average age of all PRs currently open
-#* @post /open_age
+#* @post /opened_age
 function(req) {
   payload <- req$body %>% as.data.table()
   store <- payload %>%
@@ -185,9 +185,9 @@ function(req) {
       change = diff / annual_avg_days)
   out <- tibble(
     name = 'total_PRs_open',
-    value = as.character(store$total),
+    value = store$total,
     description = "Total Open PRs",
-    change_direction = "NULL",
+    change_direction = NULL,
     byline = paste0('Current Average Days for Open PRs ',
                     round(store$avg_days_currently_open, 1),
                     ' Compared to Annual Average of ',
