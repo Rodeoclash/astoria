@@ -140,8 +140,7 @@ function(req) {
       group = ifelse(is.na(merged_at) & !is.na(closed_at),
                      'closed',
                      'merged'),
-      age_days = round(difftime(closed_at, created_at, units = 'days'), 0),
-      bool = ifelse(closed_at > (Sys.Date() - days(30)), T, F)) %>%
+      age_days = round(difftime(closed_at, created_at, units = 'days'), 0)) %>%
     filter(closed_at > Sys.Date() - years(1) &
              group == 'closed') %>%
     group_by(group) %>%
