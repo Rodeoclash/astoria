@@ -105,7 +105,7 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'Merged PR Age',
+    name = 'Merged PRs',
     value = as.character(round(store$avg_age_days_current[store$group == 'merged'],1)),
     description = "Average Age in Days for Merged PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'merged'] > 0,
@@ -154,7 +154,7 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'Closed PR Age',
+    name = 'Closed PRs',
     value = as.character(round(store$avg_age_days_current[store$group == 'closed'],1)),
     description = "Average Age in Days for Unmerged Closed PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'closed'] > 0,
@@ -192,7 +192,7 @@ function(req) {
       diff = ifelse(is.nan(avg_days_currently_open - annual_avg_days), '-' , avg_days_currently_open - annual_avg_days),
       change = ifelse(is.nan(avg_days_currently_open - annual_avg_days), '-', diff / annual_avg_days))
   out <- tibble(
-    name = 'Total PRs Open',
+    name = 'Open PRs',
     value = as.character(store$total),
     description = "Total Open PRs",
     change_direction = NULL,
