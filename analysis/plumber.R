@@ -205,5 +205,3 @@ function(req) {
                            paste0('(', round(100*store$change,1), '%)'))))
   return(out)
 }
-
-test$closed_at %>% summary
