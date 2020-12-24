@@ -110,16 +110,6 @@
         volumes: &volumes
           - /root/github_app_key.pem:/usr/src/app/priv/keys/github_app_key.pem
 
-    - name: Run seeds
-      docker_container:
-        name: astoria-seeds
-        image: "{{deploy_image_name_server}}"
-        restart_policy: no
-        state: started
-        command: bin/astoria eval "Astoria.Release.seed"
-        env: *env
-        volumes: *volumes
-
     - name: Create websites network
       docker_network:
         name: websites
