@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.AuthController do
-  alias Astoria.{Users, Repo, GithubInstallations}
+  alias Astoria.{Users, Repo, GithubInstallations, UserGithubInstallations, Roles}
   alias Ueberauth.Strategy.Helpers
   use AstoriaWeb, :controller
   plug Ueberauth
@@ -39,23 +39,26 @@ defmodule AstoriaWeb.AuthController do
     multi =
       if github_installation_id != nil do
         multi
-        |> Ecto.Multi.run(:github_installation, fn _repo, %{github_user: github_user} ->
+        |> Ecto.Multi.run(:user_github_installation, fn _repo, %{user: user} ->
           case Repo.get(GithubInstallations.GithubInstallation, github_installation_id) do
             nil ->
               raise "Github installation id provided but github installation could not be found in the database"
 
             github_installation ->
               # Check here to see if ownership already exists for the installation. If so, it means a user manually triggered the installation callback endpoint then authed.
-              if github_installation.github_user_id do
+              if Repo.get_by(UserGithubInstallations.UserGithubInstallation, %{
+                   github_installation_id: github_installation.id
+                 }) != nil do
                 raise "Went to assign ownership to installation but it already existed!"
               end
 
-              # An unowned installation was found, assign this user to it.
-              github_installation
-              |> GithubInstallations.GithubInstallation.changeset(%{
-                github_user_id: github_user.id
+              %UserGithubInstallations.UserGithubInstallation{}
+              |> UserGithubInstallations.UserGithubInstallation.changeset(%{
+                github_installation_id: github_installation.id,
+                user_id: user.id,
+                role_id: Roles.mapping(:administrator)
               })
-              |> Repo.update()
+              |> Repo.insert()
           end
         end)
       else
@@ -63,8 +66,9 @@ defmodule AstoriaWeb.AuthController do
       end
 
     case Repo.transaction(multi) do
-      {:ok, %{user: user, github_installation: github_installation}} ->
-        GithubInstallations.sync(github_installation)
+      {:ok, %{user: user, user_github_installation: user_github_installation}} ->
+        user_github_installation = Repo.preload(user_github_installation, :github_installation)
+        GithubInstallations.sync(user_github_installation.github_installation)
 
         conn
         |> put_session(:current_user_id, user.id)

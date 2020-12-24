@@ -1,5 +1,11 @@
 defmodule Astoria.GithubInstallations.GithubInstallation do
-  alias Astoria.{GithubInstallationAuthorizations, GithubRepositories, GithubUsers}
+  alias Astoria.{
+    GithubInstallationAuthorizations,
+    GithubRepositories,
+    UserGithubInstallations,
+    Users
+  }
+
   alias __MODULE__
   import Ecto.Changeset
   import Ecto.Query
@@ -12,14 +18,13 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
     field :rate_limit_remaining, :integer
     field :rate_limit_resets_at, :utc_datetime
 
-    belongs_to :github_user,
-               GithubUsers.GithubUser
-
     has_one :github_installation_authorization,
             GithubInstallationAuthorizations.GithubInstallationAuthorization
 
     has_many :github_repositories,
              GithubRepositories.GithubRepository
+
+    has_many :user_github_installations, UserGithubInstallations.UserGithubInstallation
 
     timestamps()
   end
@@ -31,8 +36,7 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
       :data,
       :github_id,
       :rate_limit_remaining,
-      :rate_limit_resets_at,
-      :github_user_id
+      :rate_limit_resets_at
     ])
     |> validate_required([:github_id])
   end
@@ -42,12 +46,18 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
     |> join(
       :left,
       [github_installation],
-      github_user in GithubUsers.GithubUser,
-      on: github_user.id == github_installation.github_user_id
+      user_github_installation in UserGithubInstallations.UserGithubInstallation,
+      on: user_github_installation.github_installation_id == github_installation.id
+    )
+    |> join(
+      :left,
+      [github_installation, user_github_installation],
+      user in Users.User,
+      on: user_github_installation.user_id == user.id
     )
     |> where(
-      [github_installation, github_user],
-      github_user.user_id == ^user_id
+      [github_installation, user_github_installation, user],
+      user.id == ^user_id
     )
   end
 end

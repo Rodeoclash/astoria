@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.AuthControllerTest do
-  alias Astoria.{Repo}
+  alias Astoria.{Repo, UserGithubInstallations}
   import Astoria.Factory
   use AstoriaWeb.ConnCase
   use Oban.Testing, repo: Astoria.Repo
@@ -51,8 +51,6 @@ defmodule AstoriaWeb.AuthControllerTest do
       assert get_session(conn, :current_user_id) == user.id
     end
 
-    # TODO: Test existing user
-
     test "after post installation flow - installation id given but not found", %{conn: conn} do
       assert_raise RuntimeError, fn ->
         conn
@@ -64,14 +62,16 @@ defmodule AstoriaWeb.AuthControllerTest do
       end
     end
 
-    test "after post installation flow - github_user_id exists on provided installation", %{
+    test "after post installation flow - user already belongs to provided installation", %{
       conn: conn
     } do
-      github_installation = insert(:github_installation)
+      user_github_installation = insert(:user_github_installation)
 
       assert_raise RuntimeError, fn ->
         conn
-        |> Plug.Test.init_test_session(%{github_installation_id: github_installation.id})
+        |> Plug.Test.init_test_session(%{
+          github_installation_id: user_github_installation.github_installation.id
+        })
         |> bypass_through(AstoriaWeb.Router, [:browser])
         |> get(Routes.auth_path(conn, :callback, :github))
         |> assign(:ueberauth_auth, @auth)
@@ -80,10 +80,7 @@ defmodule AstoriaWeb.AuthControllerTest do
     end
 
     test "after post installation flow", %{conn: conn} do
-      github_installation =
-        insert(:github_installation, %{
-          github_user: nil
-        })
+      github_installation = insert(:github_installation)
 
       conn =
         conn
@@ -93,13 +90,15 @@ defmodule AstoriaWeb.AuthControllerTest do
         |> assign(:ueberauth_auth, @auth)
         |> AstoriaWeb.AuthController.callback(%{})
 
-      github_installation = Repo.reload(github_installation)
-
       assert get_flash(conn, :info) ==
                "Hello John Doe, your app has been installed and you have been logged in"
 
       assert redirected_to(conn) == "/dashboard"
-      assert github_installation.github_user_id
+
+      assert Repo.get_by(UserGithubInstallations.UserGithubInstallation, %{
+               github_installation_id: github_installation.id
+             })
+
       assert get_session(conn, :current_user_id)
 
       assert_enqueued(worker: Astoria.Jobs.SyncGithubInstallation)
