@@ -12,7 +12,8 @@ type CurrentUserGithubInstallations_currentUser$ref = any;
 export type DashboardPage_QueryVariables = {||};
 export type DashboardPage_QueryResponse = {|
   +currentUser: ?{|
-    +$fragmentRefs: CurrentUserGithubInstallations_currentUser$ref
+    +id: string,
+    +$fragmentRefs: CurrentUserGithubInstallations_currentUser$ref,
   |}
 |};
 export type DashboardPage_Query = {|
@@ -25,8 +26,8 @@ export type DashboardPage_Query = {|
 /*
 query DashboardPage_Query {
   currentUser {
-    ...CurrentUserGithubInstallations_currentUser
     id
+    ...CurrentUserGithubInstallations_currentUser
   }
 }
 
@@ -64,20 +65,20 @@ fragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {
 */
 
 const node/*: ConcreteRequest*/ = (function(){
-var v0 = [
-  {
-    "kind": "Literal",
-    "name": "first",
-    "value": 100
-  }
-],
-v1 = {
+var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
+v1 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 100
+  }
+],
 v2 = {
   "alias": null,
   "args": null,
@@ -100,6 +101,7 @@ return {
         "name": "currentUser",
         "plural": false,
         "selections": [
+          (v0/*: any*/),
           {
             "args": null,
             "kind": "FragmentSpread",
@@ -126,9 +128,10 @@ return {
         "name": "currentUser",
         "plural": false,
         "selections": [
+          (v0/*: any*/),
           {
             "alias": null,
-            "args": (v0/*: any*/),
+            "args": (v1/*: any*/),
             "concreteType": "GithubInstallationConnection",
             "kind": "LinkedField",
             "name": "githubInstallations",
@@ -152,7 +155,7 @@ return {
                     "selections": [
                       {
                         "alias": null,
-                        "args": (v0/*: any*/),
+                        "args": (v1/*: any*/),
                         "concreteType": "GithubRepositoryConnection",
                         "kind": "LinkedField",
                         "name": "githubRepositories",
@@ -174,7 +177,7 @@ return {
                                 "name": "node",
                                 "plural": false,
                                 "selections": [
-                                  (v1/*: any*/),
+                                  (v0/*: any*/),
                                   (v2/*: any*/)
                                 ],
                                 "storageKey": null
@@ -186,7 +189,7 @@ return {
                         "storageKey": "githubRepositories(first:100)"
                       },
                       (v2/*: any*/),
-                      (v1/*: any*/)
+                      (v0/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -195,24 +198,23 @@ return {
               }
             ],
             "storageKey": "githubInstallations(first:100)"
-          },
-          (v1/*: any*/)
+          }
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "bce2ee2b052d6ba0ea441ecdf6934bcc",
+    "cacheID": "6388b36566dbeb0f3036e8a080d22194",
     "id": null,
     "metadata": {},
     "name": "DashboardPage_Query",
     "operationKind": "query",
-    "text": "query DashboardPage_Query {\n  currentUser {\n    ...CurrentUserGithubInstallations_currentUser\n    id\n  }\n}\n\nfragment CurrentUserGithubInstallations_currentUser on CurrentUser {\n  githubInstallations(first: 100) {\n    edges {\n      node {\n        ...GithubInstallationNavigationItem_githubInstallation\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationGithubRepositories_githubInstallation on GithubInstallation {\n  githubRepositories(first: 100) {\n    edges {\n      node {\n        ...GithubRepositoryNavigationItem_githubRepository\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationNavigationItem_githubInstallation on GithubInstallation {\n  ...GithubInstallationGithubRepositories_githubInstallation\n  name\n}\n\nfragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {\n  id\n  name\n}\n"
+    "text": "query DashboardPage_Query {\n  currentUser {\n    id\n    ...CurrentUserGithubInstallations_currentUser\n  }\n}\n\nfragment CurrentUserGithubInstallations_currentUser on CurrentUser {\n  githubInstallations(first: 100) {\n    edges {\n      node {\n        ...GithubInstallationNavigationItem_githubInstallation\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationGithubRepositories_githubInstallation on GithubInstallation {\n  githubRepositories(first: 100) {\n    edges {\n      node {\n        ...GithubRepositoryNavigationItem_githubRepository\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationNavigationItem_githubInstallation on GithubInstallation {\n  ...GithubInstallationGithubRepositories_githubInstallation\n  name\n}\n\nfragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {\n  id\n  name\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '72d605ac9529d278f68ccc74f9267a14';
+(node/*: any*/).hash = '03e1cfc40c9c7caedf3edb014c4d8ecb';
 
 module.exports = node;

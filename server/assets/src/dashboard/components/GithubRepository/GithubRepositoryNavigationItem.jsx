@@ -9,10 +9,9 @@ export const GithubRepositoryNavigationItem = function ({ githubRepository }) {
   const { match } = useRouter();
 
   const to = {
-    pathname: "/dashboard",
+    pathname: `/dashboard/githubRepositories/${githubRepository.id}`,
     query: {
       ...match.location.query,
-      githubRepositoryId: githubRepository.id,
     },
   };
 
