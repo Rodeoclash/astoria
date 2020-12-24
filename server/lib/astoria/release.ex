@@ -17,7 +17,11 @@ defmodule Astoria.Release do
   def seed do
     load_app()
 
-    Astoria.Seed.perform()
+    for repo <- repos() do
+      {:ok, _, _} = Ecto.Migrator.with_repo(repo, fn ->
+        Astoria.Seed.perform()
+      end)
+    end
   end
 
   defp repos do
