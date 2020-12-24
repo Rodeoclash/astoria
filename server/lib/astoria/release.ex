@@ -14,6 +14,12 @@ defmodule Astoria.Release do
     {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
   end
 
+  def seed do
+    load_app()
+
+    Astoria.Seed.perform()
+  end
+
   defp repos do
     Application.fetch_env!(@app, :ecto_repos)
   end

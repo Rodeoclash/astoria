@@ -12,6 +12,14 @@ defmodule Astoria.Factory do
     }
   end
 
+  def user_github_installation_factory do
+    %Astoria.UserGithubInstallations.UserGithubInstallation{
+      github_installation: build(:github_installation),
+      role_id: 1,
+      user: build(:user)
+    }
+  end
+
   def github_oauth_authorization_factory do
     %Astoria.GithubOauthAuthorizations.GithubOauthAuthorization{
       expires: true,
@@ -36,8 +44,7 @@ defmodule Astoria.Factory do
   def github_installation_factory do
     %Astoria.GithubInstallations.GithubInstallation{
       data: %{},
-      github_id: github_id(),
-      github_user: build(:github_user)
+      github_id: github_id()
     }
   end
 
