@@ -140,7 +140,7 @@ const DashboardPage = function ({ currentUser, match, router }) {
       </nav>
       <main css={mainStyles}>
         <header css={headerStyles}>
-          <h2>{currentUser.githubRepository.name}</h2>
+          {/*<h2>{currentUser.githubRepository.name}</h2>*/}
           <div>
             Period: <PeriodSelector onChangePeriod={handleChangePeriod} />
           </div>
@@ -160,11 +160,8 @@ export const prepareVariables = (params, { location }) => {
 };
 
 export const DashboardPageQuery = graphql`
-  query DashboardPage_Query($githubRepositoryId: ID!) {
+  query DashboardPage_Query {
     currentUser {
-      githubRepository(id: $githubRepositoryId) {
-        name
-      }
       ...CurrentUserGithubInstallations_currentUser
     }
   }
