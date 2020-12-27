@@ -63,7 +63,7 @@ function(req) {
       change = (total - lag(total)) / lag(total)
     )
   out <- tibble(
-    name = 'last30days',
+    name = '30 Day PRs',
     value = round(store$total[store$group == 'current'],1),
     description = "Last 30 Days Total Merged PRs",
     change_direction = ifelse(store$change[store$group == 'current'] > 0,
@@ -105,16 +105,22 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'merged_age',
-    value = round(store$avg_age_days_current[store$group == 'merged'],1),
+    name = 'Merged PRs',
+    value = as.character(round(store$avg_age_days_current[store$group == 'merged'],1)),
     description = "Average Age in Days for Merged PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'merged'] > 0,
                               'positive',
                               'negative'),
+    sentiment = ifelse(change_direction == 'negative',
+                       'bad', 'good'),
     byline = paste0('Change of ',
-                    round(100*store$change[store$group == 'merged'],1),
-                    '% compared to annual average of ',
-                    round(store$avg_age_days_annual[store$group == 'merged'],1),
+                    ifelse(is.nan(store$change[store$group == 'merged']),
+                           '0%', 
+                           paste0(round(100*store$change[store$group == 'merged'],1), '%')),
+                    ' compared to annual average of ',
+                    ifelse(is.nan(store$avg_age_days_annual[store$group == 'merged']),
+                           '(-)',
+                           round(store$avg_age_days_annual[store$group == 'merged'],1)),
                     ' days')
   )
   return(out)
@@ -141,19 +147,21 @@ function(req) {
     summarise(
       total = n(),
       avg_age_days_annual = as.numeric(mean(age_days, na.rm = TRUE)),
-      avg_age_days_current = as.numeric(mean(age_days[closed_at > Sys.Date() - days(30)], na.rm = TRUE))
+      avg_age_days_current = as.numeric(mean(as.numeric(age_days[closed_at > (Sys.Date() - days(30))]), na.rm = TRUE))
     ) %>%
     mutate(
       diff = avg_age_days_current - avg_age_days_annual,
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'closed_age',
-    value = round(store$avg_age_days_current[store$group == 'closed'],1),
+    name = 'Closed PRs',
+    value = as.character(round(store$avg_age_days_current[store$group == 'closed'],1)),
     description = "Average Age in Days for Unmerged Closed PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'closed'] > 0,
                               'positive',
                               'negative'),
+    sentiment = ifelse(change_direction == 'positive',
+                       'bad', 'good'),
     byline = paste0('Change of ',
                     round(100*store$change[store$group == 'closed'],1),
                     '% compared to annual average of ',
@@ -181,17 +189,19 @@ function(req) {
       annual_avg_days = as.numeric(mean(age_days[!is.na(merged_at)], na.rm = TRUE))
     ) %>%
     mutate(
-      diff = avg_days_currently_open - annual_avg_days,
-      change = diff / annual_avg_days)
+      diff = ifelse(is.nan(avg_days_currently_open - annual_avg_days), '-' , avg_days_currently_open - annual_avg_days),
+      change = ifelse(is.nan(avg_days_currently_open - annual_avg_days), '-', diff / annual_avg_days))
   out <- tibble(
-    name = 'total_PRs_open',
-    value = store$total,
+    name = 'Open PRs',
+    value = as.character(store$total),
     description = "Total Open PRs",
     change_direction = NULL,
     byline = paste0('Current Average Days for Open PRs ',
-                    round(store$avg_days_currently_open, 1),
+                    ifelse(is.nan(store$avg_days_currently_open), '0', round(store$avg_days_currently_open, 1)),
                     ' Compared to Annual Average of ',
-                    round(store$annual_avg_days, 1),
-                    ' (', round(100*store$change,1), '%)'))
+                    ifelse(is.nan(store$annual_avg_days), '0', round(store$annual_avg_days, 1)),
+                    ' ', 
+                    ifelse(!is.numeric(store$change), paste0('(0%)'),
+                           paste0('(', round(100*store$change,1), '%)'))))
   return(out)
 }
