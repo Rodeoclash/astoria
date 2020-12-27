@@ -20,19 +20,6 @@ defmodule AstoriaWeb.Router do
     plug AstoriaWeb.Plugs.SetGraphQLContextPlug
   end
 
-  scope "/", AstoriaWeb do
-    pipe_through :browser
-
-    get "/", HomeController, :show
-
-    get "/dashboard", DashboardController, :show
-    get "/dashboard*path", DashboardController, :show
-
-    scope "/admin", Admin, as: :admin do
-      get "/current_user", CurrentUserController, :show
-    end
-  end
-
   scope "/api", AstoriaWeb, as: :api do
     pipe_through :api
 
@@ -64,5 +51,18 @@ defmodule AstoriaWeb.Router do
       schema: AstoriaWeb.Schema,
       interface: :playground,
       default_url: "/graphql"
+  end
+
+  scope "/", AstoriaWeb do
+    pipe_through :browser
+
+    get "/", HomeController, :show
+
+    scope "/admin", Admin, as: :admin do
+      get "/current_user", CurrentUserController, :show
+    end
+
+    # must be last
+    get "/*path", SpaController, :show
   end
 end

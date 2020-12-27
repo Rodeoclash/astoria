@@ -1,11 +1,11 @@
-defmodule Astoria.Jobs.SyncGithubPullRequestTest do
-  alias Astoria.{Jobs.SyncGithubPullRequest, Repo, Github, Utility, Fixtures}
+defmodule Astoria.Jobs.GithubSync.PullRequestTest do
+  alias Astoria.{Jobs.GithubSync.PullRequest, Repo, Github, Utility, Fixtures}
   import Astoria.Factory
   import Mox
   use Astoria.DataCase
   use Oban.Testing, repo: Astoria.Repo
 
-  doctest SyncGithubPullRequest
+  doctest PullRequest
 
   test "perform/1" do
     github_repository =
@@ -34,6 +34,6 @@ defmodule Astoria.Jobs.SyncGithubPullRequestTest do
       {:ok, Fixtures.Github.Api.V3.Repos.Pulls.read_single()}
     end)
 
-    assert :ok == SyncGithubPullRequest.perform(%Oban.Job{args: %{"encoded" => encoded}})
+    assert :ok == PullRequest.perform(%Oban.Job{args: %{"encoded" => encoded}})
   end
 end

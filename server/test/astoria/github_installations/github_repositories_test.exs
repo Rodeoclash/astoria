@@ -20,7 +20,7 @@ defmodule Astoria.GithubInstallations.GithubRepositoriesTest do
     GithubRepositories.sync(github_installation)
 
     assert_enqueued(
-      worker: Astoria.Jobs.SyncGithubInstallationRepositories,
+      worker: Astoria.Jobs.GithubSync.InstallationRepositories,
       args: %{
         "encoded" =>
           "g3QAAAACZAAWZ2l0aHViX2luc3RhbGxhdGlvbl9pZGEBZAAHcmVxdWVzdHQAAAAFZAAKX19zdHJ1Y3RfX2QAJEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuVjMuUmVxdWVzdGQABmNsaWVudHQAAAADZAAKX19zdHJ1Y3RfX2QAIEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuQ2xpZW50ZAAFdG9rZW5tAAAAK3YxLjMyOTkwYTAwZmYyYTQ2NGRmY2NkNjZiZTgxZGU3YzQxM2UzYzYwZTFkAAR0eXBlbQAAAAV0b2tlbmQABm1ldGhvZGQAA2dldGQAB3BheWxvYWR0AAAAAGQAA3VybG0AAAAwaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9pbnN0YWxsYXRpb24vcmVwb3NpdG9yaWVz"

@@ -17,7 +17,7 @@ defmodule Astoria.GithubInstallations do
       |> Utility.serialise()
 
     %{encoded: encoded}
-    |> Jobs.SyncGithubInstallations.new()
+    |> Jobs.GithubSync.Installations.new()
     |> Oban.insert()
   end
 
@@ -37,7 +37,7 @@ defmodule Astoria.GithubInstallations do
       |> Utility.serialise()
 
     %{encoded: encoded}
-    |> Jobs.SyncGithubInstallation.new()
+    |> Jobs.GithubSync.Installation.new()
     |> Oban.insert()
   end
 

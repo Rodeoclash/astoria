@@ -28,7 +28,7 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
           |> Utility.serialise()
 
         %{encoded: encoded}
-        |> Jobs.SyncGithubRepositoryPullRequests.new()
+        |> Jobs.GithubSync.RepositoryPullRequests.new()
         |> Oban.insert()
     end
   end
@@ -54,7 +54,7 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
           |> Utility.serialise()
 
         %{encoded: encoded}
-        |> Jobs.SyncGithubPullRequest.new()
+        |> Jobs.GithubSync.PullRequest.new()
         |> Oban.insert()
     end
   end

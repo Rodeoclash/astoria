@@ -1,11 +1,11 @@
-defmodule Astoria.Jobs.SyncGithubRepositoryPullRequestsTest do
-  alias Astoria.{Jobs.SyncGithubRepositoryPullRequests, Repo, Github, Utility, Fixtures}
+defmodule Astoria.Jobs.GithubSync.RepositoryPullRequestsTest do
+  alias Astoria.{Jobs.GithubSync.RepositoryPullRequests, Repo, Github, Utility, Fixtures}
   import Astoria.Factory
   import Mox
   use Astoria.DataCase
   use Oban.Testing, repo: Astoria.Repo
 
-  doctest SyncGithubRepositoryPullRequests
+  doctest RepositoryPullRequests
 
   test "perform/1" do
     github_repository =
@@ -36,10 +36,10 @@ defmodule Astoria.Jobs.SyncGithubRepositoryPullRequestsTest do
     end)
 
     assert :ok ==
-             SyncGithubRepositoryPullRequests.perform(%Oban.Job{args: %{"encoded" => encoded}})
+             RepositoryPullRequests.perform(%Oban.Job{args: %{"encoded" => encoded}})
 
     assert_enqueued(
-      worker: Astoria.Jobs.SyncGithubRepositoryPullRequests,
+      worker: Astoria.Jobs.GithubSync.RepositoryPullRequests,
       args: %{
         "encoded" =>
           "g3QAAAACZAAUZ2l0aHViX3JlcG9zaXRvcnlfaWRhAWQAB3JlcXVlc3R0AAAABWQACl9fc3RydWN0X19kACRFbGl4aXIuQXN0b3JpYS5HaXRodWIuQXBpLlYzLlJlcXVlc3RkAAZjbGllbnR0AAAAA2QACl9fc3RydWN0X19kACBFbGl4aXIuQXN0b3JpYS5HaXRodWIuQXBpLkNsaWVudGQABXRva2VubQAAAAQxMjM0ZAAEdHlwZW0AAAAFdG9rZW5kAAZtZXRob2RkAANnZXRkAAdwYXlsb2FkdAAAAABkAAN1cmxtAAAARGh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vc2VhcmNoL2NvZGU/cT1hZGRDbGFzcyt1c2VyJTNBbW96aWxsYSZwYWdlPTE1"

@@ -83,6 +83,6 @@ defmodule AstoriaWeb.AuthController do
         |> put_flash(:info, "Hello #{user.name}, you have been logged in")
     end
     |> put_session(:github_installation_id, nil)
-    |> redirect(to: Routes.dashboard_path(conn, :show))
+    |> redirect(to: "/dashboard")
   end
 end
