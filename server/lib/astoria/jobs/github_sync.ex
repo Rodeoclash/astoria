@@ -1,4 +1,4 @@
-defmodule Astoria.Jobs.SyncGithub do
+defmodule Astoria.Jobs.GithubSync do
   alias Astoria.{Repo, GithubInstallations}
 
   def update_github_installation_rate_limits(github_installation, response) do

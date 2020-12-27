@@ -15,7 +15,7 @@ defmodule Astoria.GithubInstallations.GithubRepositories do
           |> Utility.serialise()
 
         %{encoded: encoded}
-        |> Jobs.SyncGithubInstallationRepositories.new()
+        |> Jobs.GithubSync.InstallationRepositories.new()
         |> Oban.insert()
     end
   end

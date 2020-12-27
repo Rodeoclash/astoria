@@ -1,4 +1,4 @@
-defmodule Astoria.Jobs.SyncGithubInstallation do
+defmodule Astoria.Jobs.GithubSync.Installation do
   alias Astoria.{Github, GithubInstallations, Utility}
   use Oban.Worker, queue: :sync_github
 

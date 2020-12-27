@@ -11,7 +11,7 @@ defmodule Astoria.GithubInstallationsTest do
 
   test "sync/0" do
     GithubInstallations.sync()
-    assert_enqueued(worker: Astoria.Jobs.SyncGithubInstallations)
+    assert_enqueued(worker: Astoria.Jobs.GithubSync.Installations)
   end
 
   test "sync/1" do
@@ -19,7 +19,7 @@ defmodule Astoria.GithubInstallationsTest do
 
     GithubInstallations.sync(github_installation)
 
-    assert_enqueued(worker: Astoria.Jobs.SyncGithubInstallation)
+    assert_enqueued(worker: Astoria.Jobs.GithubSync.Installation)
   end
 
   test "count/0" do

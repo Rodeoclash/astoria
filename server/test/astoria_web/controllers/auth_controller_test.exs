@@ -101,7 +101,7 @@ defmodule AstoriaWeb.AuthControllerTest do
 
       assert get_session(conn, :current_user_id)
 
-      assert_enqueued(worker: Astoria.Jobs.SyncGithubInstallation)
+      assert_enqueued(worker: Astoria.Jobs.GithubSync.Installation)
     end
   end
 end

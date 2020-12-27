@@ -1,11 +1,11 @@
-defmodule Astoria.Jobs.SyncGithubInstallationTest do
-  alias Astoria.{Jobs.SyncGithubInstallation, Repo, Github, Utility, Fixtures}
+defmodule Astoria.Jobs.GithubSync.InstallationTest do
+  alias Astoria.{Jobs.GithubSync.Installation, Repo, Github, Utility, Fixtures}
   import Astoria.Factory
   import Mox
   use Astoria.DataCase
   use Oban.Testing, repo: Astoria.Repo
 
-  doctest SyncGithubInstallation
+  doctest Installation
 
   test "perform/1" do
     github_installation = insert(:github_installation)
@@ -29,6 +29,6 @@ defmodule Astoria.Jobs.SyncGithubInstallationTest do
       {:ok, Fixtures.Github.Api.V3.App.Installations.read_single()}
     end)
 
-    assert :ok == SyncGithubInstallation.perform(%Oban.Job{args: %{"encoded" => encoded}})
+    assert :ok == Installation.perform(%Oban.Job{args: %{"encoded" => encoded}})
   end
 end

@@ -23,7 +23,7 @@ defmodule Astoria.GithubRepositories.GithubPullRequestsTest do
     GithubPullRequests.sync(github_repository)
 
     assert_enqueued(
-      worker: Astoria.Jobs.SyncGithubRepositoryPullRequests,
+      worker: Astoria.Jobs.GithubSync.RepositoryPullRequests,
       args: %{
         "encoded" =>
           "g3QAAAACZAAUZ2l0aHViX3JlcG9zaXRvcnlfaWRhAWQAB3JlcXVlc3R0AAAABWQACl9fc3RydWN0X19kACRFbGl4aXIuQXN0b3JpYS5HaXRodWIuQXBpLlYzLlJlcXVlc3RkAAZjbGllbnR0AAAAA2QACl9fc3RydWN0X19kACBFbGl4aXIuQXN0b3JpYS5HaXRodWIuQXBpLkNsaWVudGQABXRva2VubQAAACt2MS4zMjk5MGEwMGZmMmE0NjRkZmNjZDY2YmU4MWRlN2M0MTNlM2M2MGUxZAAEdHlwZW0AAAAFdG9rZW5kAAZtZXRob2RkAANnZXRkAAdwYXlsb2FkdAAAAABkAAN1cmxtAAAALWh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vcmVwb3MvL3B1bGxzP3N0YXRlPWFsbA=="
@@ -45,7 +45,7 @@ defmodule Astoria.GithubRepositories.GithubPullRequestsTest do
     GithubPullRequests.sync(github_repository, 1)
 
     assert_enqueued(
-      worker: Astoria.Jobs.SyncGithubPullRequest,
+      worker: Astoria.Jobs.GithubSync.PullRequest,
       args: %{
         "encoded" =>
           "g3QAAAACZAAUZ2l0aHViX3JlcG9zaXRvcnlfaWRhAWQAB3JlcXVlc3R0AAAABWQACl9fc3RydWN0X19kACRFbGl4aXIuQXN0b3JpYS5HaXRodWIuQXBpLlYzLlJlcXVlc3RkAAZjbGllbnR0AAAAA2QACl9fc3RydWN0X19kACBFbGl4aXIuQXN0b3JpYS5HaXRodWIuQXBpLkNsaWVudGQABXRva2VubQAAACt2MS4zMjk5MGEwMGZmMmE0NjRkZmNjZDY2YmU4MWRlN2M0MTNlM2M2MGUxZAAEdHlwZW0AAAAFdG9rZW5kAAZtZXRob2RkAANnZXRkAAdwYXlsb2FkdAAAAABkAAN1cmxtAAAAJmh0dHBzOi8vYXBpLmdpdGh1Yi5jb20vcmVwb3MvL3B1bGxzLzE/"

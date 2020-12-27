@@ -26,7 +26,7 @@ defmodule AstoriaWeb.Router do
     get "/", HomeController, :show
 
     get "/dashboard", DashboardController, :show
-    get "/dashboard*path", DashboardController, :show
+    #get "/dashboard*path", DashboardController, :show
 
     scope "/admin", Admin, as: :admin do
       get "/current_user", CurrentUserController, :show
