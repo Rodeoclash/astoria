@@ -4,5 +4,7 @@
   <%= link "Login", to: Routes.auth_path(@conn, :request, "github") %>
 <% else %>
   Logged in
-  <%= link "Go to dashboard", to: Routes.dashboard_path(@conn, :show) %>
+  <a href="/dashboard">
+    Go to dashboard
+  </a>
 <% end %>
