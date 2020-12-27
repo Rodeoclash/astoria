@@ -8,9 +8,12 @@ defmodule Astoria.Jobs.GithubSync.PullRequestTest do
   doctest PullRequest
 
   test "perform/1" do
+    github_installation_authorization = insert(:github_installation_authorization)
+
     github_repository =
       insert(:github_repository, %{
-        id: 1
+        id: 1,
+        github_installation: github_installation_authorization.github_installation
       })
 
     client = Github.Api.Client.new("1234", "token")

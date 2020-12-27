@@ -1,6 +1,13 @@
 defmodule Astoria.Jobs.GithubSync.RepositoryPullRequests do
-  alias Astoria.{Github, GithubRepositories, Repo, Jobs, Utility}
-  import Jobs.GithubSync
+  alias Astoria.{
+    Github,
+    GithubRepositories,
+    GithubInstallationAuthorizations,
+    Repo,
+    Jobs,
+    Utility
+  }
+
   use Oban.Worker, queue: :sync_github
 
   # def perform(request, github_repository_id) do
@@ -9,13 +16,16 @@ defmodule Astoria.Jobs.GithubSync.RepositoryPullRequests do
 
     github_repository =
       Repo.get(GithubRepositories.GithubRepository, github_repository_id)
-      |> Repo.preload(:github_installation)
+      |> Repo.preload(:github_installation_authorization)
 
-    github_installation = github_repository.github_installation
+    github_installation_authorization = github_repository.github_installation_authorization
 
     case Github.Api.V3.Request.perform(request) do
       {:ok, response} ->
-        update_github_installation_rate_limits(github_installation, response)
+        GithubInstallationAuthorizations.update_rate_limits(
+          github_installation_authorization,
+          response
+        )
 
         Enum.map(response.poison_response.body, fn pull_request ->
           GithubRepositories.GithubPullRequests.sync(github_repository, pull_request["number"])

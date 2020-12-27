@@ -13,6 +13,10 @@ defmodule Astoria.Jobs.GithubSync.InstallationRepositoriesTest do
         id: 1
       })
 
+    insert(:github_installation_authorization, %{
+      github_installation: github_installation
+    })
+
     client = Github.Api.Client.new("1234", "token")
     request = Github.Api.V3.Installation.Repositories.read(client)
 

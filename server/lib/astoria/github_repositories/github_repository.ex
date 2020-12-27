@@ -15,6 +15,9 @@ defmodule Astoria.GithubRepositories.GithubRepository do
     has_many :github_pull_requests,
              GithubPullRequests.GithubPullRequest
 
+    has_one :github_installation_authorization,
+      through: [:github_installation, :github_installation_authorization]
+
     timestamps()
   end
 

@@ -1,6 +1,5 @@
 defmodule Astoria.Jobs.GithubSync.PullRequest do
-  alias Astoria.{Github, GithubRepositories, Repo, Jobs, Utility}
-  import Jobs.GithubSync
+  alias Astoria.{Github, GithubRepositories, GithubInstallationAuthorizations, Repo, Utility}
   use Oban.Worker, queue: :sync_github
 
   def perform(%Oban.Job{args: %{"encoded" => encoded}}) do
@@ -9,13 +8,15 @@ defmodule Astoria.Jobs.GithubSync.PullRequest do
     github_repository =
       Repo.get(GithubRepositories.GithubRepository, github_repository_id)
       |> Repo.preload(:github_installation)
+      |> Repo.preload(:github_installation_authorization)
 
-    github_installation = github_repository.github_installation
+    github_installation_authorization =
+      github_repository.github_installation.github_installation_authorization
 
     case Github.Api.V3.Request.perform(request) do
       {:ok, response} ->
-        update_github_installation_rate_limits(
-          github_installation,
+        GithubInstallationAuthorizations.update_rate_limits(
+          github_installation_authorization,
           response
         )
 
