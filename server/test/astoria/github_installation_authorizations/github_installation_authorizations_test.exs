@@ -120,7 +120,7 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
         })
 
       assert GithubInstallationAuthorizations.scheduled_at(github_installation_authorization) ==
-               ~U[2018-11-15 10:00:00Z]
+               ~U[2018-11-15 10:00:05Z]
     end
 
     test "when rate limit not exceeded" do

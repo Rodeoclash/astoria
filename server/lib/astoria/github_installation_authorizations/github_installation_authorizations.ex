@@ -51,7 +51,7 @@ defmodule Astoria.GithubInstallationAuthorizations do
           DateTime
   def scheduled_at(github_installation_authorization) do
     if rate_limit_exceeded?(github_installation_authorization) do
-      github_installation_authorization.rate_limit_resets_at
+      DateTime.add(github_installation_authorization.rate_limit_resets_at, 5)
     else
       DateTime.utc_now()
     end
