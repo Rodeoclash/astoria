@@ -1,5 +1,5 @@
 defmodule Astoria.GithubInstallationAuthorizationsTest do
-  alias Astoria.{GithubInstallationAuthorizations, Github}
+  alias Astoria.{GithubInstallationAuthorizations}
   import Astoria.Factory
   use Astoria.DataCase
 
@@ -25,80 +25,22 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
     test "with values present" do
       github_installation_authorization = insert(:github_installation_authorization)
 
-      response = %Github.Api.V3.Response{
-        poison_response: %HTTPoison.Response{
-          body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
-          headers: [],
-          request: nil,
-          request_url: nil,
-          status_code: nil
-        },
-        rate_limit_remaining: 5398,
-        rate_limit_resets_at: ~U[2020-10-27 12:21:41Z],
-        has_rate_limit?: true,
-        has_next_url?: false,
-        next_url: nil,
-        successful?: false
-      }
-
       assert github_installation_authorization.rate_limit_remaining == 7000
       assert github_installation_authorization.rate_limit_resets_at == ~U[3018-11-15 10:00:00Z]
 
       assert {:ok, github_installation_authorization} =
                GithubInstallationAuthorizations.update_rate_limits(
                  github_installation_authorization,
-                 response
+                 5398,
+                 ~U[2020-10-27 12:21:41Z]
                )
 
       assert github_installation_authorization.rate_limit_remaining == 5398
       assert github_installation_authorization.rate_limit_resets_at == ~U[2020-10-27 12:21:41Z]
     end
-
-    test "with value missing" do
-      github_installation_authorization = insert(:github_installation_authorization)
-
-      response = %Github.Api.V3.Response{
-        poison_response: %HTTPoison.Response{
-          body: %{"data" => %{"viewer" => %{"name" => "Samuel Richardson"}}},
-          headers: [],
-          request: nil,
-          request_url: nil,
-          status_code: nil
-        },
-        rate_limit_remaining: nil,
-        rate_limit_resets_at: nil,
-        has_rate_limit?: false,
-        has_next_url?: false,
-        next_url: nil,
-        successful?: false
-      }
-
-      assert github_installation_authorization.rate_limit_remaining == 7000
-      assert github_installation_authorization.rate_limit_resets_at == ~U[3018-11-15 10:00:00Z]
-
-      assert {:ok, github_installation_authorization} =
-               GithubInstallationAuthorizations.update_rate_limits(
-                 github_installation_authorization,
-                 response
-               )
-
-      assert github_installation_authorization.rate_limit_remaining == 7000
-      assert github_installation_authorization.rate_limit_resets_at == ~U[3018-11-15 10:00:00Z]
-    end
   end
 
-  describe "rate_limit_exceeded?" do
-    test "when rate limit exceeded" do
-      github_installation_authorization =
-        insert(:github_installation_authorization, %{
-          rate_limit_remaining: 500
-        })
-
-      assert GithubInstallationAuthorizations.rate_limit_exceeded?(
-               github_installation_authorization
-             ) == true
-    end
-
+  describe "rate_limit_exceeded?/1" do
     test "when rate limit not exceeded" do
       github_installation_authorization =
         insert(:github_installation_authorization, %{
@@ -108,6 +50,17 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
       assert GithubInstallationAuthorizations.rate_limit_exceeded?(
                github_installation_authorization
              ) == false
+    end
+
+    test "when rate limit exceeded" do
+      github_installation_authorization =
+        insert(:github_installation_authorization, %{
+          rate_limit_remaining: 0
+        })
+
+      assert GithubInstallationAuthorizations.rate_limit_exceeded?(
+               github_installation_authorization
+             ) == true
     end
   end
 

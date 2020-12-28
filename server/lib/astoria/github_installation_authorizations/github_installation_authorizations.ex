@@ -19,20 +19,17 @@ defmodule Astoria.GithubInstallationAuthorizations do
   """
   def update_rate_limits(
         github_installation_authorization,
-        response
+        rate_limit_remaining,
+        rate_limit_resets_at
       ) do
-    if response.has_rate_limit? do
-      GithubInstallationAuthorizations.GithubInstallationAuthorization.changeset(
-        github_installation_authorization,
-        %{
-          rate_limit_remaining: response.rate_limit_remaining,
-          rate_limit_resets_at: response.rate_limit_resets_at
-        }
-      )
-      |> Repo.update()
-    else
-      {:ok, github_installation_authorization}
-    end
+    GithubInstallationAuthorizations.GithubInstallationAuthorization.changeset(
+      github_installation_authorization,
+      %{
+        rate_limit_remaining: rate_limit_remaining,
+        rate_limit_resets_at: rate_limit_resets_at
+      }
+    )
+    |> Repo.update()
   end
 
   @doc """

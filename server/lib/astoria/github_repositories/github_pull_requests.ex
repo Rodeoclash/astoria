@@ -1,12 +1,11 @@
 defmodule Astoria.GithubRepositories.GithubPullRequests do
   alias Astoria.{
-    GithubInstallations,
-    GithubRepositories,
-    GithubPullRequests,
     Github,
+    GithubInstallations,
+    GithubPullRequests,
+    GithubRepositories,
     Jobs,
-    Repo,
-    Utility
+    Repo
   }
 
   @doc """
@@ -19,24 +18,25 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
 
     case GithubInstallations.client(github_repository.github_installation) do
       {:ok, client} ->
+        github_installation_authorization =
+          github_repository.github_installation.github_installation_authorization
+
         request =
           Github.Api.V3.Repos.Pulls.read_list(client, github_repository.data["full_name"], %{
             state: "all"
           })
 
-        encoded =
-          %{
-            callback: &sync_callback_repository_pull_requests/2,
-            github_installation_authorization_id:
-              github_repository.github_installation.github_installation_authorization.id,
-            github_repository_id: github_repository.id,
-            request: request
-          }
-          |> Utility.serialise()
+        payload = %{
+          callback: &sync_callback_repository_pull_requests/2,
+          github_installation_authorization_id: github_installation_authorization.id,
+          github_repository_id: github_repository.id,
+          request: request
+        }
 
-        %{encoded: encoded}
-        |> Jobs.GithubSync.InstallationAuthorizedRequest.new()
-        |> Oban.insert()
+        Jobs.GithubSync.InstallationAuthorizedRequest.enqueue(
+          github_installation_authorization,
+          payload
+        )
     end
   end
 
@@ -64,6 +64,9 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
 
     case GithubInstallations.client(github_repository.github_installation) do
       {:ok, client} ->
+        github_installation_authorization =
+          github_repository.github_installation.github_installation_authorization
+
         request =
           Github.Api.V3.Repos.Pulls.read_single(
             client,
@@ -71,19 +74,18 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
             github_pull_request_id
           )
 
-        encoded =
-          %{
-            callback: &sync_callback_pull_request_detail/2,
-            github_installation_authorization_id:
-              github_repository.github_installation.github_installation_authorization.id,
-            github_repository_id: github_repository.id,
-            request: request
-          }
-          |> Utility.serialise()
+        payload = %{
+          callback: &sync_callback_pull_request_detail/2,
+          github_installation_authorization_id:
+            github_repository.github_installation.github_installation_authorization.id,
+          github_repository_id: github_repository.id,
+          request: request
+        }
 
-        %{encoded: encoded}
-        |> Jobs.GithubSync.InstallationAuthorizedRequest.new()
-        |> Oban.insert()
+        Jobs.GithubSync.InstallationAuthorizedRequest.enqueue(
+          github_installation_authorization,
+          payload
+        )
     end
   end
 

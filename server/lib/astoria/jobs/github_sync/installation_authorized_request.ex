@@ -10,6 +10,17 @@ defmodule Astoria.Jobs.GithubSync.InstallationAuthorizedRequest do
 
   use Oban.Worker, queue: :sync_github
 
+  def enqueue(github_installation_authorization, payload) do
+    encoded = Utility.serialise(payload)
+
+    scheduled_at =
+      GithubInstallationAuthorizations.scheduled_at(github_installation_authorization)
+
+    %{encoded: encoded}
+    |> InstallationAuthorizedRequest.new(scheduled_at: scheduled_at)
+    |> Oban.insert()
+  end
+
   def perform(%Oban.Job{args: %{"encoded" => encoded}}) do
     params =
       %{
@@ -18,47 +29,39 @@ defmodule Astoria.Jobs.GithubSync.InstallationAuthorizedRequest do
         request: request
       } = Utility.deserialise(encoded)
 
-    github_installation_authorization =
-      Repo.get(
-        GithubInstallationAuthorizations.GithubInstallationAuthorization,
-        github_installation_authorization_id
-      )
+    case Github.Api.V3.Request.perform(request) do
+      {:ok, response} ->
+        github_installation_authorization =
+          Repo.get(
+            GithubInstallationAuthorizations.GithubInstallationAuthorization,
+            github_installation_authorization_id
+          )
 
-    if GithubInstallationAuthorizations.rate_limit_exceeded?(github_installation_authorization) do
-      scheduled_at =
-        GithubInstallationAuthorizations.scheduled_at(github_installation_authorization)
-
-      %{"encoded" => encoded}
-      |> InstallationAuthorizedRequest.new(scheduled_at: scheduled_at)
-      |> Oban.insert()
-
-      {:ok, :rate_limit_delayed}
-    else
-      case Github.Api.V3.Request.perform(request) do
-        {:ok, response} ->
+        if response.has_rate_limit? do
           {:ok, github_installation_authorization} =
             GithubInstallationAuthorizations.update_rate_limits(
               github_installation_authorization,
-              response
+              response.rate_limit_remaining,
+              response.rate_limit_resets_at
             )
+        end
 
-          callback.(params, response)
+        callback.(params, response)
 
-          if response.has_next_url? == true do
-            scheduled_at =
-              GithubInstallationAuthorizations.scheduled_at(github_installation_authorization)
+        if response.has_next_url? == true do
+          scheduled_at =
+            GithubInstallationAuthorizations.scheduled_at(github_installation_authorization)
 
-            encoded =
-              Map.merge(params, %{request: %{request | url: response.next_url}})
-              |> Utility.serialise()
+          encoded =
+            Map.merge(params, %{request: %{request | url: response.next_url}})
+            |> Utility.serialise()
 
-            %{"encoded" => encoded}
-            |> InstallationAuthorizedRequest.new(scheduled_at: scheduled_at)
-            |> Oban.insert()
-          end
-      end
-
-      {:ok, :job_performed}
+          %{"encoded" => encoded}
+          |> InstallationAuthorizedRequest.new(scheduled_at: scheduled_at)
+          |> Oban.insert()
+        end
     end
+
+    {:ok, :job_performed}
   end
 end

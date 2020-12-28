@@ -1,5 +1,11 @@
 defmodule Astoria.GithubInstallations.GithubRepositories do
-  alias Astoria.{GithubInstallations, GithubRepositories, Github, Jobs, Utility, Repo}
+  alias Astoria.{
+    Github,
+    GithubInstallations,
+    GithubRepositories,
+    Jobs,
+    Repo
+  }
 
   @doc """
   Trigger a sync of all repositories for this installation
@@ -11,21 +17,21 @@ defmodule Astoria.GithubInstallations.GithubRepositories do
         github_installation =
           Repo.preload(github_installation, :github_installation_authorization)
 
+        github_installation_authorization = github_installation.github_installation_authorization
+
         request = Github.Api.V3.Installation.Repositories.read(client)
 
-        encoded =
-          %{
-            callback: &sync_callback/2,
-            github_installation_authorization_id:
-              github_installation.github_installation_authorization.id,
-            github_installation_id: github_installation.id,
-            request: request
-          }
-          |> Utility.serialise()
+        payload = %{
+          callback: &sync_callback/2,
+          github_installation_authorization_id: github_installation_authorization.id,
+          github_installation_id: github_installation.id,
+          request: request
+        }
 
-        %{encoded: encoded}
-        |> Jobs.GithubSync.InstallationAuthorizedRequest.new()
-        |> Oban.insert()
+        Jobs.GithubSync.InstallationAuthorizedRequest.enqueue(
+          github_installation_authorization,
+          payload
+        )
     end
   end
 
