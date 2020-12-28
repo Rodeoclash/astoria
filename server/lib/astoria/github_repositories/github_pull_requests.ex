@@ -14,7 +14,8 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   """
   @spec sync(%GithubRepositories.GithubRepository{}) :: :ok
   def sync(github_repository) do
-    github_repository = Repo.preload(github_repository, :github_installation)
+    github_repository =
+      Repo.preload(github_repository, github_installation: :github_installation_authorization)
 
     case GithubInstallations.client(github_repository.github_installation) do
       {:ok, client} ->
@@ -24,13 +25,33 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
           })
 
         encoded =
-          %{request: request, github_repository_id: github_repository.id}
+          %{
+            callback: &sync_callback_repository_pull_requests/2,
+            github_installation_authorization_id:
+              github_repository.github_installation.github_installation_authorization.id,
+            github_repository_id: github_repository.id,
+            request: request
+          }
           |> Utility.serialise()
 
         %{encoded: encoded}
-        |> Jobs.GithubSync.RepositoryPullRequests.new()
+        |> Jobs.GithubSync.InstallationAuthorizedRequest.new()
         |> Oban.insert()
     end
+  end
+
+  @doc """
+  Launches a sync to fetch details for each pull request that was found
+  """
+  def sync_callback_repository_pull_requests(
+        %{github_repository_id: github_repository_id},
+        response
+      ) do
+    github_repository = Repo.get(GithubRepositories.GithubRepository, github_repository_id)
+
+    Enum.map(response.poison_response.body, fn pull_request ->
+      GithubRepositories.GithubPullRequests.sync(github_repository, pull_request["number"])
+    end)
   end
 
   @doc """
@@ -38,7 +59,8 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   """
   @spec sync(%GithubRepositories.GithubRepository{}, Integer.t()) :: :ok
   def sync(github_repository, github_pull_request_id) do
-    github_repository = Repo.preload(github_repository, :github_installation)
+    github_repository =
+      Repo.preload(github_repository, github_installation: :github_installation_authorization)
 
     case GithubInstallations.client(github_repository.github_installation) do
       {:ok, client} ->
@@ -50,13 +72,31 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
           )
 
         encoded =
-          %{request: request, github_repository_id: github_repository.id}
+          %{
+            callback: &sync_callback_pull_request_detail/2,
+            github_installation_authorization_id:
+              github_repository.github_installation.github_installation_authorization.id,
+            github_repository_id: github_repository.id,
+            request: request
+          }
           |> Utility.serialise()
 
         %{encoded: encoded}
-        |> Jobs.GithubSync.PullRequest.new()
+        |> Jobs.GithubSync.InstallationAuthorizedRequest.new()
         |> Oban.insert()
     end
+  end
+
+  @doc """
+  Update the pull request with its full details
+  """
+  def sync_callback_pull_request_detail(%{github_repository_id: github_repository_id}, response) do
+    github_repository = Repo.get(GithubRepositories.GithubRepository, github_repository_id)
+
+    GithubRepositories.GithubPullRequests.upsert(
+      github_repository,
+      response.poison_response.body
+    )
   end
 
   @doc """

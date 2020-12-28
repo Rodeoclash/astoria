@@ -11,6 +11,9 @@ defmodule Astoria.GithubPullRequests.GithubPullRequest do
     field :github_id, :integer
     field :pub_id, :binary_id, read_after_writes: true
 
+    has_one :github_installation_authorization,
+      through: [:github_repository, :github_installation, :github_installation_authorization]
+
     timestamps()
   end
 

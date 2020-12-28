@@ -15,8 +15,6 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
     field :data, :map
     field :github_id, :integer
     field :pub_id, :binary_id, read_after_writes: true
-    field :rate_limit_remaining, :integer
-    field :rate_limit_resets_at, :utc_datetime
 
     has_one :github_installation_authorization,
             GithubInstallationAuthorizations.GithubInstallationAuthorization
@@ -34,9 +32,7 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
     organisation
     |> cast(attrs, [
       :data,
-      :github_id,
-      :rate_limit_remaining,
-      :rate_limit_resets_at
+      :github_id
     ])
     |> validate_required([:github_id])
   end

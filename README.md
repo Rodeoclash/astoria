@@ -2,15 +2,14 @@
 
 ## TODO
 
-1. Add/Remove webhooks need to be implemented
-2. Suspend needs to be implemented
-3. Need to pass period to R code
-4. See if we can make all Github requests one job with callback functions.
-5. User management (invites, roles)
-6. Audit log
-7. Handle push events for PRs
-8. Flash messages should be handled in JS
-9. Live updates / activity indicators for PRs
+- Add/Remove webhooks need to be implemented
+- Suspend needs to be implemented
+- Need to pass period to R code
+- User management (invites, roles)
+- Audit log
+- Handle push events for PRs
+- Flash messages should be handled in JS
+- Live updates / activity indicators for PRs
 
 ## Server
 

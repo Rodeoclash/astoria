@@ -1,30 +1,34 @@
 defmodule Astoria.GithubInstallations.GithubRepositoriesTest do
-  alias Astoria.{GithubInstallations.GithubRepositories, Fixtures}
+  alias Astoria.{GithubInstallations.GithubRepositories}
   import Astoria.Factory
-  import Mox
   use Astoria.DataCase
   use Oban.Testing, repo: Astoria.Repo
 
   doctest GithubRepositories
 
-  setup :verify_on_exit!
-
   test "sync/1" do
     github_installation = insert(:github_installation, %{id: 1})
 
-    HTTPoisonMock
-    |> expect(:post, fn _path, _payload, _headers ->
-      {:ok, Fixtures.Github.Api.V3.App.Installations.AccessTokens.create()}
-    end)
+    insert(
+      :github_installation_authorization,
+      %{github_installation: github_installation}
+    )
 
     GithubRepositories.sync(github_installation)
 
-    assert_enqueued(
-      worker: Astoria.Jobs.GithubSync.InstallationRepositories,
-      args: %{
-        "encoded" =>
-          "g3QAAAACZAAWZ2l0aHViX2luc3RhbGxhdGlvbl9pZGEBZAAHcmVxdWVzdHQAAAAFZAAKX19zdHJ1Y3RfX2QAJEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuVjMuUmVxdWVzdGQABmNsaWVudHQAAAADZAAKX19zdHJ1Y3RfX2QAIEVsaXhpci5Bc3RvcmlhLkdpdGh1Yi5BcGkuQ2xpZW50ZAAFdG9rZW5tAAAAK3YxLjMyOTkwYTAwZmYyYTQ2NGRmY2NkNjZiZTgxZGU3YzQxM2UzYzYwZTFkAAR0eXBlbQAAAAV0b2tlbmQABm1ldGhvZGQAA2dldGQAB3BheWxvYWR0AAAAAGQAA3VybG0AAAAwaHR0cHM6Ly9hcGkuZ2l0aHViLmNvbS9pbnN0YWxsYXRpb24vcmVwb3NpdG9yaWVz"
-      }
-    )
+    assert_enqueued(worker: Astoria.Jobs.GithubSync.InstallationAuthorizedRequest)
+  end
+
+  test "upsert/1" do
+    github_installation = insert(:github_installation)
+
+    assert {:ok, github_repository} =
+             GithubRepositories.upsert(github_installation, %{
+               "id" => 1
+             })
+
+    assert github_repository.data == %{"id" => 1}
+    assert github_repository.github_id == 1
+    assert github_repository.github_installation_id == github_installation.id
   end
 end

@@ -1,6 +1,5 @@
 defmodule Astoria.GithubRepositories.GithubRepositoryTest do
   alias Astoria.{GithubRepositories.GithubRepository, Repo}
-
   import Astoria.Factory
   use Astoria.DataCase
 
@@ -8,12 +7,11 @@ defmodule Astoria.GithubRepositories.GithubRepositoryTest do
 
   test "count/0" do
     insert(:github_repository)
-    insert(:github_repository)
 
     result =
       GithubRepository.count()
       |> Repo.one()
 
-    assert result == 2
+    assert result == 1
   end
 end

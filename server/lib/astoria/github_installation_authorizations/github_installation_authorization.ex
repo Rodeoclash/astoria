@@ -1,12 +1,14 @@
 defmodule Astoria.GithubInstallationAuthorizations.GithubInstallationAuthorization do
   alias Astoria.{GithubInstallations}
-  use Ecto.Schema
   import Ecto.Changeset
+  use Ecto.Schema
 
   schema "github_installation_authorizations" do
     belongs_to :github_installation, GithubInstallations.GithubInstallation
     field :data, :map
     field :expires_at, :utc_datetime
+    field :rate_limit_remaining, :integer
+    field :rate_limit_resets_at, :utc_datetime
     field :token, :string
     timestamps()
   end
@@ -18,6 +20,8 @@ defmodule Astoria.GithubInstallationAuthorizations.GithubInstallationAuthorizati
       :data,
       :expires_at,
       :github_installation_id,
+      :rate_limit_remaining,
+      :rate_limit_resets_at,
       :token
     ])
     |> validate_required([

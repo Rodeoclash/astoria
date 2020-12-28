@@ -51,8 +51,10 @@ defmodule Astoria.Factory do
   def github_installation_authorization_factory do
     %Astoria.GithubInstallationAuthorizations.GithubInstallationAuthorization{
       data: %{},
-      expires_at: NaiveDateTime.add(NaiveDateTime.utc_now(), 3600),
+      expires_at: ~N[3018-11-15 10:00:00],
       github_installation: build(:github_installation),
+      rate_limit_remaining: 7000,
+      rate_limit_resets_at: ~U[3018-11-15 10:00:00Z],
       token: "abc"
     }
   end

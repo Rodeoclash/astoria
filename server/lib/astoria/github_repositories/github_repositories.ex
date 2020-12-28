@@ -11,23 +11,6 @@ defmodule Astoria.GithubRepositories do
   end
 
   @doc """
-  Insert data about the repository. Will update if matches github_id
-  """
-  @spec upsert(%GithubInstallations.GithubInstallation{}, map()) :: :ok
-  def upsert(github_installation, data) do
-    %GithubRepositories.GithubRepository{}
-    |> GithubRepositories.GithubRepository.changeset(%{
-      data: data,
-      github_id: data["id"],
-      github_installation_id: github_installation.id
-    })
-    |> Repo.insert(
-      on_conflict: {:replace_all_except, [:id, :pub_id]},
-      conflict_target: :github_id
-    )
-  end
-
-  @doc """
   The list of contributors to this repo
   """
   @spec logins(%GithubInstallations.GithubInstallation{}) :: :ok
