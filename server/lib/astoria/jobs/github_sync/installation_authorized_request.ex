@@ -2,6 +2,7 @@ defmodule Astoria.Jobs.GithubSync.InstallationAuthorizedRequest do
   alias Astoria.{
     Github,
     GithubInstallationAuthorizations,
+    GithubInstallations,
     Repo,
     Utility
   }
@@ -10,11 +11,14 @@ defmodule Astoria.Jobs.GithubSync.InstallationAuthorizedRequest do
 
   use Oban.Worker, queue: :sync_github
 
-  def enqueue(github_installation_authorization, payload) do
-    encoded = Utility.serialise(payload)
+  def enqueue(github_installation, payload) do
+    {:ok, github_installation_authorization} =
+      GithubInstallations.GithubInstallationAuthorizations.get(github_installation)
 
     scheduled_at =
       GithubInstallationAuthorizations.scheduled_at(github_installation_authorization)
+
+    encoded = Utility.serialise(payload)
 
     %{encoded: encoded}
     |> InstallationAuthorizedRequest.new(scheduled_at: scheduled_at)
@@ -25,43 +29,47 @@ defmodule Astoria.Jobs.GithubSync.InstallationAuthorizedRequest do
     params =
       %{
         callback: callback,
-        github_installation_authorization_id: github_installation_authorization_id,
+        github_installation_id: github_installation_id,
         request: request
       } = Utility.deserialise(encoded)
 
-    case Github.Api.V3.Request.perform(request) do
-      {:ok, response} ->
-        github_installation_authorization =
-          Repo.get(
-            GithubInstallationAuthorizations.GithubInstallationAuthorization,
-            github_installation_authorization_id
-          )
+    github_installation =
+      Repo.get(
+        GithubInstallations.GithubInstallation,
+        github_installation_id
+      )
 
-        if response.has_rate_limit? do
-          {:ok, github_installation_authorization} =
+    {:ok, github_installation_authorization} =
+      GithubInstallations.GithubInstallationAuthorizations.get(github_installation)
+
+    if GithubInstallationAuthorizations.rate_limit_exceeded?(github_installation_authorization) do
+      enqueue(github_installation, params)
+      {:ok, :rate_expiry_requeue}
+    else
+      # As we don't know how long the request has been in the queue use the auth we fetched earlier as it would have been refresh if needed
+      client = Github.Api.Client.new(github_installation_authorization.token, "token")
+      request = %{request | client: client}
+
+      case Github.Api.V3.Request.perform(request) do
+        {:ok, response} ->
+          if response.has_rate_limit? do
             GithubInstallationAuthorizations.update_rate_limits(
               github_installation_authorization,
               response.rate_limit_remaining,
               response.rate_limit_resets_at
             )
-        end
+          end
 
-        callback.(params, response)
+          callback.(params, response)
 
-        if response.has_next_url? == true do
-          scheduled_at =
-            GithubInstallationAuthorizations.scheduled_at(github_installation_authorization)
+          if response.has_next_url? == true do
+            payload = Map.merge(params, %{request: %{request | url: response.next_url}})
 
-          encoded =
-            Map.merge(params, %{request: %{request | url: response.next_url}})
-            |> Utility.serialise()
+            enqueue(github_installation, payload)
+          end
+      end
 
-          %{"encoded" => encoded}
-          |> InstallationAuthorizedRequest.new(scheduled_at: scheduled_at)
-          |> Oban.insert()
-        end
+      {:ok, :job_performed}
     end
-
-    {:ok, :job_performed}
   end
 end

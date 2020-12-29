@@ -13,14 +13,12 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   """
   @spec sync(%GithubRepositories.GithubRepository{}) :: :ok
   def sync(github_repository) do
-    github_repository =
-      Repo.preload(github_repository, github_installation: :github_installation_authorization)
+    github_repository = Repo.preload(github_repository, :github_installation)
 
-    case GithubInstallations.client(github_repository.github_installation) do
+    github_installation = github_repository.github_installation
+
+    case GithubInstallations.client(github_installation) do
       {:ok, client} ->
-        github_installation_authorization =
-          github_repository.github_installation.github_installation_authorization
-
         request =
           Github.Api.V3.Repos.Pulls.read_list(client, github_repository.data["full_name"], %{
             state: "all"
@@ -28,13 +26,13 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
 
         payload = %{
           callback: &sync_callback_repository_pull_requests/2,
-          github_installation_authorization_id: github_installation_authorization.id,
+          github_installation_id: github_installation.id,
           github_repository_id: github_repository.id,
           request: request
         }
 
         Jobs.GithubSync.InstallationAuthorizedRequest.enqueue(
-          github_installation_authorization,
+          github_installation,
           payload
         )
     end
@@ -59,14 +57,12 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   """
   @spec sync(%GithubRepositories.GithubRepository{}, Integer.t()) :: :ok
   def sync(github_repository, github_pull_request_id) do
-    github_repository =
-      Repo.preload(github_repository, github_installation: :github_installation_authorization)
+    github_repository = Repo.preload(github_repository, :github_installation)
 
-    case GithubInstallations.client(github_repository.github_installation) do
+    github_installation = github_repository.github_installation
+
+    case GithubInstallations.client(github_installation) do
       {:ok, client} ->
-        github_installation_authorization =
-          github_repository.github_installation.github_installation_authorization
-
         request =
           Github.Api.V3.Repos.Pulls.read_single(
             client,
@@ -76,14 +72,13 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
 
         payload = %{
           callback: &sync_callback_pull_request_detail/2,
-          github_installation_authorization_id:
-            github_repository.github_installation.github_installation_authorization.id,
+          github_installation_id: github_installation.id,
           github_repository_id: github_repository.id,
           request: request
         }
 
         Jobs.GithubSync.InstallationAuthorizedRequest.enqueue(
-          github_installation_authorization,
+          github_installation,
           payload
         )
     end
