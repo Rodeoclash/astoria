@@ -5,7 +5,7 @@ defmodule Astoria.Github.Api.Client do
   defstruct [:token, :type]
 
   @doc ~S"""
-  Exchanges a Github code for access and refresh tokens
+  Builds a client token suitable for Github access
 
   ## Examples
 

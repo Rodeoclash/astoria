@@ -27,6 +27,7 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
 
       assert github_installation_authorization.rate_limit_remaining == 7000
       assert github_installation_authorization.rate_limit_resets_at == ~U[3018-11-15 10:00:00Z]
+      refute github_installation_authorization.rate_limit_last_updated_at
 
       assert {:ok, github_installation_authorization} =
                GithubInstallationAuthorizations.update_rate_limits(
@@ -37,13 +38,38 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
 
       assert github_installation_authorization.rate_limit_remaining == 5398
       assert github_installation_authorization.rate_limit_resets_at == ~U[2020-10-27 12:21:41Z]
+      assert github_installation_authorization.rate_limit_last_updated_at
     end
   end
 
   describe "rate_limit_exceeded?/1" do
-    test "when rate limit not exceeded" do
+    test "when rate limit remaining nil" do
       github_installation_authorization =
         insert(:github_installation_authorization, %{
+          rate_limit_remaining: nil
+        })
+
+      assert GithubInstallationAuthorizations.rate_limit_exceeded?(
+               github_installation_authorization
+             ) == false
+    end
+
+    test "when rate limit last updated at nil" do
+      github_installation_authorization =
+        insert(:github_installation_authorization, %{
+          rate_limit_remaining: 1,
+          rate_limit_last_updated_at: nil
+        })
+
+      assert GithubInstallationAuthorizations.rate_limit_exceeded?(
+               github_installation_authorization
+             ) == false
+    end
+
+    test "when rate limit not exceeded with old update" do
+      github_installation_authorization =
+        insert(:github_installation_authorization, %{
+          rate_limit_last_updated_at: ~U[2020-10-27 12:21:41Z],
           rate_limit_remaining: 7500
         })
 
@@ -52,9 +78,22 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
              ) == false
     end
 
-    test "when rate limit exceeded" do
+    test "when rate limit exceeded and but no recent update" do
       github_installation_authorization =
         insert(:github_installation_authorization, %{
+          rate_limit_last_updated_at: ~U[2020-10-27 12:21:41Z],
+          rate_limit_remaining: 0
+        })
+
+      assert GithubInstallationAuthorizations.rate_limit_exceeded?(
+               github_installation_authorization
+             ) == false
+    end
+
+    test "when rate limit exceeded and recently updated" do
+      github_installation_authorization =
+        insert(:github_installation_authorization, %{
+          rate_limit_last_updated_at: DateTime.utc_now(),
           rate_limit_remaining: 0
         })
 
@@ -68,6 +107,7 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
     test "when rate limit exceeded" do
       github_installation_authorization =
         insert(:github_installation_authorization, %{
+          rate_limit_last_updated_at: DateTime.utc_now(),
           rate_limit_remaining: 500,
           rate_limit_resets_at: ~U[2018-11-15 10:00:00Z]
         })
@@ -77,10 +117,7 @@ defmodule Astoria.GithubInstallationAuthorizationsTest do
     end
 
     test "when rate limit not exceeded" do
-      github_installation_authorization =
-        insert(:github_installation_authorization, %{
-          rate_limit_remaining: 7500
-        })
+      github_installation_authorization = insert(:github_installation_authorization)
 
       result = GithubInstallationAuthorizations.scheduled_at(github_installation_authorization)
       now = DateTime.utc_now()
