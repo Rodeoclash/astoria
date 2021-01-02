@@ -9,7 +9,6 @@
 - Audit log
 - Handle push events for PRs
 - Flash messages should be handled in JS
-- Live updates / activity indicators for PRs
 
 ## Server
 

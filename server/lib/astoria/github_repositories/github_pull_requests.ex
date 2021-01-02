@@ -11,8 +11,9 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   @doc """
   Trigger a sync of all repositories for this installation
   """
-  @spec sync(%GithubRepositories.GithubRepository{}) :: :ok
-  def sync(github_repository) do
+  @spec enqueue_github_repository_pull_requests_sync(%GithubRepositories.GithubRepository{}) ::
+          %Oban.Job{}
+  def enqueue_github_repository_pull_requests_sync(github_repository) do
     github_repository = Repo.preload(github_repository, :github_installation)
 
     github_installation = github_repository.github_installation
@@ -25,7 +26,7 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
           })
 
         payload = %{
-          callback: &sync_callback_repository_pull_requests/2,
+          callback: &handle_github_repository_pull_requests_response/2,
           github_installation_id: github_installation.id,
           github_repository_id: github_repository.id,
           request: request
@@ -41,22 +42,30 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   @doc """
   Launches a sync to fetch details for each pull request that was found
   """
-  def sync_callback_repository_pull_requests(
+  def handle_github_repository_pull_requests_response(
         %{github_repository_id: github_repository_id},
         response
       ) do
-    github_repository = Repo.get(GithubRepositories.GithubRepository, github_repository_id)
+    {:ok, github_repository} =
+      Repo.get(GithubRepositories.GithubRepository, github_repository_id)
+      |> GithubRepositories.indicate_activity()
 
     Enum.map(response.poison_response.body, fn pull_request ->
-      GithubRepositories.GithubPullRequests.sync(github_repository, pull_request["number"])
+      GithubRepositories.GithubPullRequests.enqueue_github_repository_pull_request_sync(
+        github_repository,
+        pull_request["number"]
+      )
     end)
   end
 
   @doc """
   Trigger a sync of a single pull request
   """
-  @spec sync(%GithubRepositories.GithubRepository{}, Integer.t()) :: :ok
-  def sync(github_repository, github_pull_request_id) do
+  @spec enqueue_github_repository_pull_request_sync(
+          %GithubRepositories.GithubRepository{},
+          Integer.t()
+        ) :: :ok
+  def enqueue_github_repository_pull_request_sync(github_repository, github_pull_request_id) do
     github_repository = Repo.preload(github_repository, :github_installation)
 
     github_installation = github_repository.github_installation
@@ -71,7 +80,7 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
           )
 
         payload = %{
-          callback: &sync_callback_pull_request_detail/2,
+          callback: &handle_github_repository_pull_request_response/2,
           github_installation_id: github_installation.id,
           github_repository_id: github_repository.id,
           request: request
@@ -87,8 +96,13 @@ defmodule Astoria.GithubRepositories.GithubPullRequests do
   @doc """
   Update the pull request with its full details
   """
-  def sync_callback_pull_request_detail(%{github_repository_id: github_repository_id}, response) do
-    github_repository = Repo.get(GithubRepositories.GithubRepository, github_repository_id)
+  def handle_github_repository_pull_request_response(
+        %{github_repository_id: github_repository_id},
+        response
+      ) do
+    {:ok, github_repository} =
+      Repo.get(GithubRepositories.GithubRepository, github_repository_id)
+      |> GithubRepositories.indicate_activity()
 
     GithubRepositories.GithubPullRequests.upsert(
       github_repository,

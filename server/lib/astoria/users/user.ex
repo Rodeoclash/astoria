@@ -9,7 +9,7 @@ defmodule Astoria.Users.User do
     field :pub_id, :binary_id, read_after_writes: true
 
     has_many :user_github_installations, UserGithubInstallations.UserGithubInstallation
-    has_many :github_installations, through: [:user_github_installations, :github_installations]
+    has_many :github_installations, through: [:user_github_installations, :github_installation]
 
     has_one :github_user, GithubUsers.GithubUser
 

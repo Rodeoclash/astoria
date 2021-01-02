@@ -1,6 +1,7 @@
 defmodule AstoriaWeb.Endpoint do
-  use Sentry.PlugCapture
+  use Absinthe.Phoenix.Endpoint
   use Phoenix.Endpoint, otp_app: :astoria
+  use Sentry.PlugCapture
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.

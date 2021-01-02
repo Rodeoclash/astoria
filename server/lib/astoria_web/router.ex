@@ -49,6 +49,7 @@ defmodule AstoriaWeb.Router do
   if Mix.env() in [:dev, :test] do
     forward "/graphiql", Absinthe.Plug.GraphiQL,
       schema: AstoriaWeb.Schema,
+      socket: AstoriaWeb.UserSocket,
       interface: :playground,
       default_url: "/graphql"
   end

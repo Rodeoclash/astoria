@@ -24,6 +24,8 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
 
     has_many :user_github_installations, UserGithubInstallations.UserGithubInstallation
 
+    has_many :users, through: [:user_github_installations, :user]
+
     timestamps()
   end
 

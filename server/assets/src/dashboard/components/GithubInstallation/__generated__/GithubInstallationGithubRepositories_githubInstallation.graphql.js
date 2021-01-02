@@ -13,6 +13,7 @@ import type { FragmentReference } from "relay-runtime";
 declare export opaque type GithubInstallationGithubRepositories_githubInstallation$ref: FragmentReference;
 declare export opaque type GithubInstallationGithubRepositories_githubInstallation$fragmentType: GithubInstallationGithubRepositories_githubInstallation$ref;
 export type GithubInstallationGithubRepositories_githubInstallation = {|
+  +id: string,
   +githubRepositories: ?{|
     +edges: ?$ReadOnlyArray<?{|
       +node: ?{|
@@ -32,12 +33,21 @@ export type GithubInstallationGithubRepositories_githubInstallation$key = {
 */
 
 
-const node/*: ReaderFragment*/ = {
+const node/*: ReaderFragment*/ = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [],
   "kind": "Fragment",
   "metadata": null,
   "name": "GithubInstallationGithubRepositories_githubInstallation",
   "selections": [
+    (v0/*: any*/),
     {
       "alias": null,
       "args": [
@@ -68,13 +78,7 @@ const node/*: ReaderFragment*/ = {
               "name": "node",
               "plural": false,
               "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "id",
-                  "storageKey": null
-                },
+                (v0/*: any*/),
                 {
                   "args": null,
                   "kind": "FragmentSpread",
@@ -93,7 +97,8 @@ const node/*: ReaderFragment*/ = {
   "type": "GithubInstallation",
   "abstractKey": null
 };
+})();
 // prettier-ignore
-(node/*: any*/).hash = '4bda382255732459f02733006aac25c7';
+(node/*: any*/).hash = '35ed77a178b1450f92e15458afeff69f';
 
 module.exports = node;

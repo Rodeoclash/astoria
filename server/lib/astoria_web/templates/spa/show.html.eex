@@ -1,1 +1,8 @@
+<script>
+  window.SPA_CONFIG = {
+    channelToken: "<%= channel_token(@current_user) %>",
+    userWebsocketURL: "<%= user_websocket_url() %>",
+  };
+</script>
+
 <script type="text/javascript" src="<%= Routes.static_url(@conn, "/js/dashboard.js") %>"></script>

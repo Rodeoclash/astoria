@@ -10,14 +10,15 @@ defmodule Astoria.GithubInstallations.GithubRepositories do
   @doc """
   Trigger a sync of all repositories for this installation
   """
-  @spec sync(%GithubInstallations.GithubInstallation{}) :: :ok
-  def sync(github_installation) do
+  @spec enqueue_github_installation_pull_requests_sync(%GithubInstallations.GithubInstallation{}) ::
+          :ok
+  def enqueue_github_installation_pull_requests_sync(github_installation) do
     case GithubInstallations.client(github_installation) do
       {:ok, client} ->
         request = Github.Api.V3.Installation.Repositories.read(client)
 
         payload = %{
-          callback: &sync_callback/2,
+          callback: &handle_github_installation_pull_requests_response/2,
           github_installation_id: github_installation.id,
           request: request
         }
@@ -32,15 +33,22 @@ defmodule Astoria.GithubInstallations.GithubRepositories do
   @doc """
   Updates details on repositories and launchs a sync of pull requests
   """
-  def sync_callback(%{github_installation_id: github_installation_id}, response) do
+  def handle_github_installation_pull_requests_response(
+        %{github_installation_id: github_installation_id},
+        response
+      ) do
     github_installation = Repo.get(GithubInstallations.GithubInstallation, github_installation_id)
 
     Enum.map(response.poison_response.body["repositories"], fn repository ->
       case GithubInstallations.GithubRepositories.upsert(github_installation, repository) do
         {:ok, github_repository} ->
-          GithubRepositories.GithubPullRequests.sync(github_repository)
+          GithubRepositories.GithubPullRequests.enqueue_github_repository_pull_requests_sync(
+            github_repository
+          )
       end
     end)
+
+    GithubInstallations.indicate_github_installation_repositories_updated(github_installation)
   end
 
   @doc """

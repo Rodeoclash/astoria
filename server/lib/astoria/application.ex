@@ -7,18 +7,12 @@ defmodule Astoria.Application do
 
   def start(_type, _args) do
     children = [
-      # Start the Ecto repository
       Astoria.Repo,
-      # Start the Telemetry supervisor
       AstoriaWeb.Telemetry,
-      # Start the PubSub system
       {Phoenix.PubSub, name: Astoria.PubSub},
-      # Start the Endpoint (http/https)
       AstoriaWeb.Endpoint,
-      # Start a worker by calling: Astoria.Worker.start_link(arg)
-      # {Astoria.Worker, arg}
-      #
-      {Oban, oban_config()}
+      {Oban, oban_config()},
+      {Absinthe.Subscription, AstoriaWeb.Endpoint}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

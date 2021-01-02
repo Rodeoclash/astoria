@@ -14,6 +14,8 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       resolve(&Resolvers.GithubRepositoryResolver.name/3)
     end
 
+    field :last_activity_at, :datetime
+
     field :merged_prs_per_person, non_null(:plot_chart) do
       arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))

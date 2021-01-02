@@ -4,6 +4,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
 
   def list_from_installation(github_installation, args, _resolution) do
     GithubRepository.filter_by_github_installation_id(github_installation.id)
+    |> GithubRepository.order_by_alphabetical()
     |> Relay.Connection.from_query(&Repo.all/1, args)
   end
 

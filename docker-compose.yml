@@ -45,6 +45,7 @@ services:
       - ./passwd:/etc/passwd
       - ./server:/usr/src/app
       - home:/home/server
+      - opt:/opt
 
   astoria-analysis:
     build:
@@ -82,3 +83,4 @@ services:
 
 volumes:
   home:
+  opt:

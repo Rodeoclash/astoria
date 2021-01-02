@@ -11,11 +11,20 @@ defmodule Astoria.GithubRepositories do
   end
 
   @doc """
-  The list of contributors to this repo
+  Indicates that this repository has seen activity
   """
-  @spec logins(%GithubInstallations.GithubInstallation{}) :: :ok
-  def logins(github_repository) do
-    GithubRepositories.GithubRepository.count(github_repository)
-    |> Repo.all()
+  @spec indicate_activity(%GithubInstallations.GithubInstallation{}) ::
+          {:ok, %GithubInstallations.GithubInstallation{}} | {:error, Ecto.Changeset.t()}
+  def indicate_activity(github_repository) do
+    with changeset <-
+           GithubRepositories.GithubRepository.changeset(github_repository, %{
+             last_activity_at: DateTime.utc_now()
+           }),
+         {:ok, github_repository} <- Repo.update(changeset),
+         :ok <-
+           Absinthe.Subscription.publish(AstoriaWeb.Endpoint, github_repository,
+             github_repository_updated: "#{github_repository.pub_id}"
+           ),
+         do: {:ok, github_repository}
   end
 end
