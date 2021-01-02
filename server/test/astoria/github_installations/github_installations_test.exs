@@ -47,4 +47,12 @@ defmodule Astoria.GithubInstallationsTest do
     assert github_installation.data == %{"id" => 1}
     assert github_installation.github_id == 1
   end
+
+  test "indicate_github_installation_repositories_updated/1" do
+    github_installation = insert(:github_installation)
+
+    assert GithubInstallations.indicate_github_installation_repositories_updated(
+             github_installation
+           ) == :ok
+  end
 end

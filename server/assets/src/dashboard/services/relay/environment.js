@@ -1,23 +1,10 @@
 import { Environment, Network, RecordSource, Store } from "relay-runtime";
 import { commitLocalUpdate } from "react-relay";
-
-function fetchQuery(operation, variables) {
-  return fetch("/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      query: operation.text,
-      variables,
-    }),
-  }).then((response) => {
-    return response.json();
-  });
-}
+import fetchQuery from "./environment/fetchQuery.js";
+import fetchSubscription from "./environment/fetchSubscription.js";
 
 const environment = new Environment({
-  network: Network.create(fetchQuery),
+  network: Network.create(fetchQuery, fetchSubscription),
   store: new Store(new RecordSource()),
 });
 

@@ -10,6 +10,7 @@ defmodule Astoria.GithubRepositories.GithubRepository do
 
     field :data, :map
     field :github_id, :integer
+    field :last_activity_at, :utc_datetime
     field :pub_id, :binary_id, read_after_writes: true
 
     has_many :github_pull_requests,
@@ -24,8 +25,17 @@ defmodule Astoria.GithubRepositories.GithubRepository do
   @doc false
   def changeset(organisation, attrs) do
     organisation
-    |> cast(attrs, [:data, :github_id, :github_installation_id])
-    |> validate_required([:data, :github_id, :github_installation_id])
+    |> cast(attrs, [
+      :data,
+      :github_id,
+      :github_installation_id,
+      :last_activity_at
+    ])
+    |> validate_required([
+      :data,
+      :github_id,
+      :github_installation_id
+    ])
   end
 
   @doc """
@@ -42,5 +52,10 @@ defmodule Astoria.GithubRepositories.GithubRepository do
       [github_repository],
       github_repository.github_installation_id == ^github_installation_id
     )
+  end
+
+  def order_by_alphabetical(query \\ GithubRepository) do
+    query
+    |> order_by([github_repository], asc: fragment("?->>'name'", github_repository.data))
   end
 end

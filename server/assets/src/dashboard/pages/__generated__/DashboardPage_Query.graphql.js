@@ -43,6 +43,7 @@ fragment CurrentUserGithubInstallations_currentUser on CurrentUser {
 }
 
 fragment GithubInstallationGithubRepositories_githubInstallation on GithubInstallation {
+  id
   githubRepositories(first: 100) {
     edges {
       node {
@@ -58,7 +59,13 @@ fragment GithubInstallationNavigationItem_githubInstallation on GithubInstallati
   name
 }
 
+fragment GithubRepositoryNavigationItemActivity_githubRepository on GithubRepository {
+  id
+  lastActivityAt
+}
+
 fragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {
+  ...GithubRepositoryNavigationItemActivity_githubRepository
   id
   name
 }
@@ -153,6 +160,7 @@ return {
                     "name": "node",
                     "plural": false,
                     "selections": [
+                      (v0/*: any*/),
                       {
                         "alias": null,
                         "args": (v1/*: any*/),
@@ -178,6 +186,13 @@ return {
                                 "plural": false,
                                 "selections": [
                                   (v0/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "kind": "ScalarField",
+                                    "name": "lastActivityAt",
+                                    "storageKey": null
+                                  },
                                   (v2/*: any*/)
                                 ],
                                 "storageKey": null
@@ -188,8 +203,7 @@ return {
                         ],
                         "storageKey": "githubRepositories(first:100)"
                       },
-                      (v2/*: any*/),
-                      (v0/*: any*/)
+                      (v2/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -205,12 +219,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6388b36566dbeb0f3036e8a080d22194",
+    "cacheID": "8acb2e114e6c0d443f2bf6352c56f338",
     "id": null,
     "metadata": {},
     "name": "DashboardPage_Query",
     "operationKind": "query",
-    "text": "query DashboardPage_Query {\n  currentUser {\n    id\n    ...CurrentUserGithubInstallations_currentUser\n  }\n}\n\nfragment CurrentUserGithubInstallations_currentUser on CurrentUser {\n  githubInstallations(first: 100) {\n    edges {\n      node {\n        ...GithubInstallationNavigationItem_githubInstallation\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationGithubRepositories_githubInstallation on GithubInstallation {\n  githubRepositories(first: 100) {\n    edges {\n      node {\n        ...GithubRepositoryNavigationItem_githubRepository\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationNavigationItem_githubInstallation on GithubInstallation {\n  ...GithubInstallationGithubRepositories_githubInstallation\n  name\n}\n\nfragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {\n  id\n  name\n}\n"
+    "text": "query DashboardPage_Query {\n  currentUser {\n    id\n    ...CurrentUserGithubInstallations_currentUser\n  }\n}\n\nfragment CurrentUserGithubInstallations_currentUser on CurrentUser {\n  githubInstallations(first: 100) {\n    edges {\n      node {\n        ...GithubInstallationNavigationItem_githubInstallation\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationGithubRepositories_githubInstallation on GithubInstallation {\n  id\n  githubRepositories(first: 100) {\n    edges {\n      node {\n        ...GithubRepositoryNavigationItem_githubRepository\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationNavigationItem_githubInstallation on GithubInstallation {\n  ...GithubInstallationGithubRepositories_githubInstallation\n  name\n}\n\nfragment GithubRepositoryNavigationItemActivity_githubRepository on GithubRepository {\n  id\n  lastActivityAt\n}\n\nfragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {\n  ...GithubRepositoryNavigationItemActivity_githubRepository\n  id\n  name\n}\n"
   }
 };
 })();

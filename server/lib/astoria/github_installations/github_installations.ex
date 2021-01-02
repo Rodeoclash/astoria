@@ -78,4 +78,17 @@ defmodule Astoria.GithubInstallations do
       conflict_target: :github_id
     )
   end
+
+  @doc ~S"""
+  Indicate that the installations have updated
+  """
+  @spec indicate_github_installation_repositories_updated(
+          %GithubInstallations.GithubInstallation{}
+        ) ::
+          list(:ok)
+  def indicate_github_installation_repositories_updated(github_installation) do
+    Absinthe.Subscription.publish(AstoriaWeb.Endpoint, github_installation,
+      github_installation_repositories_updated: "#{github_installation.pub_id}"
+    )
+  end
 end

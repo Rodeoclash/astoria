@@ -8,12 +8,14 @@
 
 /*::
 import type { ReaderFragment } from 'relay-runtime';
+type GithubRepositoryNavigationItemActivity_githubRepository$ref = any;
 import type { FragmentReference } from "relay-runtime";
 declare export opaque type GithubRepositoryNavigationItem_githubRepository$ref: FragmentReference;
 declare export opaque type GithubRepositoryNavigationItem_githubRepository$fragmentType: GithubRepositoryNavigationItem_githubRepository$ref;
 export type GithubRepositoryNavigationItem_githubRepository = {|
   +id: string,
   +name: string,
+  +$fragmentRefs: GithubRepositoryNavigationItemActivity_githubRepository$ref,
   +$refType: GithubRepositoryNavigationItem_githubRepository$ref,
 |};
 export type GithubRepositoryNavigationItem_githubRepository$data = GithubRepositoryNavigationItem_githubRepository;
@@ -44,12 +46,17 @@ const node/*: ReaderFragment*/ = {
       "kind": "ScalarField",
       "name": "name",
       "storageKey": null
+    },
+    {
+      "args": null,
+      "kind": "FragmentSpread",
+      "name": "GithubRepositoryNavigationItemActivity_githubRepository"
     }
   ],
   "type": "GithubRepository",
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = '3ef9f96afc281cce38ea11ad72affe14';
+(node/*: any*/).hash = '822a5513ab104694e8ff6831dccdc964';
 
 module.exports = node;

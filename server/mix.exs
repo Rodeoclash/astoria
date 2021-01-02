@@ -47,6 +47,7 @@ defmodule Astoria.MixProject do
   defp deps do
     [
       {:absinthe, "~> 1.5.0"},
+      {:absinthe_phoenix, "~> 2.0.0"},
       {:absinthe_plug, "~> 1.5.0"},
       {:absinthe_relay, "~> 1.4.0-rc or ~> 1.4"},
       {:ecto_sql, "~> 3.4"},
