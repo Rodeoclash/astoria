@@ -12,4 +12,8 @@ defmodule AstoriaWeb.SpaView do
   def user_websocket_url() do
     "wss://" <> AstoriaWeb.Endpoint.host() <> "/socket"
   end
+
+  def public_name() do
+    Application.get_env(:astoria, :public_name)
+  end
 end

@@ -10,6 +10,15 @@ const environment = new Environment({
 
 commitLocalUpdate(environment, (store) => {
   store.getRoot().setLinkedRecords([], "flashes");
+
+  const dashboardSettingsRecord = store.create(
+    "DashboardSettings",
+    "DashboardSettings"
+  );
+  dashboardSettingsRecord.setValue(null, "selectedGithubInstallationName");
+  dashboardSettingsRecord.setValue(null, "selectedGithubRepositoryName");
+
+  store.getRoot().setLinkedRecord(dashboardSettingsRecord, "dashboardSettings");
 });
 
 export default environment;

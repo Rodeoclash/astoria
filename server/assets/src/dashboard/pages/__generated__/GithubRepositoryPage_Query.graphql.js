@@ -41,6 +41,10 @@ query GithubRepositoryPage_Query(
 
 fragment GithubRepositoryName_githubRepository on GithubRepository {
   name
+  githubInstallation {
+    name
+    id
+  }
 }
 */
 
@@ -60,6 +64,13 @@ v1 = [
   }
 ],
 v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -126,30 +137,37 @@ return {
             "name": "githubRepository",
             "plural": false,
             "selections": [
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "name",
+                "concreteType": "GithubInstallation",
+                "kind": "LinkedField",
+                "name": "githubInstallation",
+                "plural": false,
+                "selections": [
+                  (v2/*: any*/),
+                  (v3/*: any*/)
+                ],
                 "storageKey": null
               },
-              (v2/*: any*/)
+              (v3/*: any*/)
             ],
             "storageKey": null
           },
-          (v2/*: any*/)
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "9d9d3155528937f414e071429daf9293",
+    "cacheID": "59e31bc0f1475274b4a7e0e31be350c4",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPage_Query",
     "operationKind": "query",
-    "text": "query GithubRepositoryPage_Query(\n  $githubRepositoryId: ID!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryName_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryName_githubRepository on GithubRepository {\n  name\n}\n"
+    "text": "query GithubRepositoryPage_Query(\n  $githubRepositoryId: ID!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      ...GithubRepositoryName_githubRepository\n      id\n    }\n    id\n  }\n}\n\nfragment GithubRepositoryName_githubRepository on GithubRepository {\n  name\n  githubInstallation {\n    name\n    id\n  }\n}\n"
   }
 };
 })();

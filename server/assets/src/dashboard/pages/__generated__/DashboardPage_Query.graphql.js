@@ -11,10 +11,14 @@ import type { ConcreteRequest } from 'relay-runtime';
 type CurrentUserGithubInstallations_currentUser$ref = any;
 export type DashboardPage_QueryVariables = {||};
 export type DashboardPage_QueryResponse = {|
+  +dashboardSettings: {|
+    +selectedGithubInstallationName: ?string,
+    +selectedGithubRepositoryName: ?string,
+  |},
   +currentUser: ?{|
     +id: string,
     +$fragmentRefs: CurrentUserGithubInstallations_currentUser$ref,
-  |}
+  |},
 |};
 export type DashboardPage_Query = {|
   variables: DashboardPage_QueryVariables,
@@ -79,14 +83,44 @@ var v0 = {
   "name": "id",
   "storageKey": null
 },
-v1 = [
+v1 = {
+  "kind": "ClientExtension",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "concreteType": "DashboardSettings",
+      "kind": "LinkedField",
+      "name": "dashboardSettings",
+      "plural": false,
+      "selections": [
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "selectedGithubInstallationName",
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "kind": "ScalarField",
+          "name": "selectedGithubRepositoryName",
+          "storageKey": null
+        }
+      ],
+      "storageKey": null
+    }
+  ]
+},
+v2 = [
   {
     "kind": "Literal",
     "name": "first",
     "value": 100
   }
 ],
-v2 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -116,7 +150,8 @@ return {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v1/*: any*/)
     ],
     "type": "RootQueryType",
     "abstractKey": null
@@ -138,7 +173,7 @@ return {
           (v0/*: any*/),
           {
             "alias": null,
-            "args": (v1/*: any*/),
+            "args": (v2/*: any*/),
             "concreteType": "GithubInstallationConnection",
             "kind": "LinkedField",
             "name": "githubInstallations",
@@ -163,7 +198,7 @@ return {
                       (v0/*: any*/),
                       {
                         "alias": null,
-                        "args": (v1/*: any*/),
+                        "args": (v2/*: any*/),
                         "concreteType": "GithubRepositoryConnection",
                         "kind": "LinkedField",
                         "name": "githubRepositories",
@@ -193,7 +228,7 @@ return {
                                     "name": "lastActivityAt",
                                     "storageKey": null
                                   },
-                                  (v2/*: any*/)
+                                  (v3/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -203,7 +238,7 @@ return {
                         ],
                         "storageKey": "githubRepositories(first:100)"
                       },
-                      (v2/*: any*/)
+                      (v3/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -215,7 +250,8 @@ return {
           }
         ],
         "storageKey": null
-      }
+      },
+      (v1/*: any*/)
     ]
   },
   "params": {
@@ -229,6 +265,6 @@ return {
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '03e1cfc40c9c7caedf3edb014c4d8ecb';
+(node/*: any*/).hash = '02799b04498c01ce7c4d6c76e5c427a5';
 
 module.exports = node;

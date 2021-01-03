@@ -8,7 +8,7 @@
 use Mix.Config
 
 config :astoria,
-  public_name: "Astoria",
+  public_name: "JumpStart",
   ecto_repos: [Astoria.Repo],
   http_client: HTTPoison
 

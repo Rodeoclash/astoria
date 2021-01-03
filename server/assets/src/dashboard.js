@@ -17,6 +17,14 @@ const Router = createFarceRouter({
 
 const mountElement = document.createElement("div");
 
+if (window.SPA_FLASHES.info) {
+  alert(`INFO: ${window.SPA_FLASHES.info}`);
+}
+
+if (window.SPA_FLASHES.error) {
+  alert(`ERROR: ${window.SPA_FLASHES.error}`);
+}
+
 ReactDOM.render(
   <Router resolver={new Resolver(environment)} />,
   document.body.appendChild(mountElement)

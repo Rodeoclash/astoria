@@ -14,6 +14,10 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
       resolve(&Resolvers.GithubRepositoryResolver.name/3)
     end
 
+    field :github_installation, non_null(:github_installation) do
+      resolve(&Resolvers.GithubRepositoryResolver.github_installation/3)
+    end
+
     field :last_activity_at, :datetime
 
     field :analysis_monthly_total_change, non_null(:plot_chart) do
