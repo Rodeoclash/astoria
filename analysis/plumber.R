@@ -63,8 +63,8 @@ function(req) {
       change = (total - lag(total)) / lag(total)
     )
   out <- tibble(
-    name = '30 Day PRs',
-    value = round(store$total[store$group == 'current'],1),
+    name = 'Successful Merges',
+    value = paste0(round(store$total[store$group == 'current'],1),' PRs'),
     description = "Last 30 Days Total Merged PRs",
     change_direction = ifelse(store$change[store$group == 'current'] > 0,
                               'increase',
@@ -105,8 +105,8 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'Merged PRs',
-    value = as.character(round(store$avg_age_days_current[store$group == 'merged'],1)),
+    name = 'Merged PR Age',
+    value = paste0(as.character(round(store$avg_age_days_current[store$group == 'merged'],1)), ' days'),
     description = "Average Age in Days for Merged PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'merged'] > 0,
                               'increase',
