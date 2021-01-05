@@ -69,6 +69,8 @@ function(req) {
     change_direction = ifelse(store$change[store$group == 'current'] > 0,
                               'increase',
                               'decrease'),
+    sentiment = ifelse(change_direction == 'increase',
+                       'positive', 'negative'),
     byline = paste0('Change of ',
                     round(100*store$change[store$group == 'current'],1),
                     '% compared to previous 30 Day interval of ',
@@ -221,11 +223,11 @@ function(req) {
     unit_type = 'days',
     description = "Average age in days of currently Open PRs",
     change_direction = ifelse(
-      store$annual_avg_days > store$avg_days_currently_open, 
-      'negative',
-      'positive'
+      store$avg_days_currently_open > store$annual_avg_days, 
+      'increase',
+      'decrease'
       ),
-    sentiment = ifelse(change_direction == 'positive', 'negative', 'positive'),
+    sentiment = ifelse(change_direction == 'increase', 'negative', 'positive'),
     byline = paste0('Compared to Annual Average of ',
                     ifelse(is.nan(store$annual_avg_days), '-', round(store$annual_avg_days, 1)),
                     ' ', 
@@ -233,34 +235,4 @@ function(req) {
                            paste0('(', round(100*store$change,1), '%)'))))
   return(out)
 }
-
-pay_filt <- payload %>% 
-  select(created_at, merged_at, closed_at) %>%
-  # filter(is.na(closed_at) & is.na(merged_at))%>%
-  mutate(
-    created_at = lubridate::ymd_hms(created_at),
-    condition_date = case_when(
-      is.na(merged_at) ~ Sys.Date(),
-      TRUE ~ as.Date(merged_at, origin = '1970-01-01')),
-    age_days = round(difftime(
-      condition_date,
-      created_at, 
-      units = 'days'), 0)) %>%
-  summarise(
-    total = sum(is.na(closed_at) & is.na(merged_at)),
-    avg_days_currently_open = as.numeric(mean(age_days[is.na(closed_at) & is.na(merged_at)], na.rm = TRUE)),
-    annual_avg_days = as.numeric(mean(age_days[!is.na(merged_at)], na.rm = TRUE))
-  )
-pay_filt  
-
-test <- payload %>% 
-  select(created_at, merged_at, closed_at) %>%
-  filter(is.na(closed_at) & is.na(merged_at)) %>% 
-  mutate(
-    created_at = lubridate::ymd_hms(created_at),
-    condition_date = as.Date(ifelse(test = is.na(merged_at),yes =  Sys.Date(),no =  merged_at), origin = '1970-01-01'),
-    age_days = round(difftime(
-      condition_date,
-      created_at, 
-      units = 'days'), 0))
     
