@@ -15,6 +15,7 @@ defmodule AstoriaWeb.Schema do
   import_types(Types.GithubRepositoryType)
   import_types(Types.PlotChartType)
   import_types(Types.PlotHeroType)
+  import_types(Types.SentimentType)
   import_types(Types.UserType)
 
   query do

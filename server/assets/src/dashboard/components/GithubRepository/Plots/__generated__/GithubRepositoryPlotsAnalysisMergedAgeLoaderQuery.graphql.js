@@ -52,6 +52,7 @@ fragment PlotHero_plotHero on PlotHero {
   changeDirection
   description
   name
+  sentiment
   value
 }
 */
@@ -217,6 +218,13 @@ return {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
+                    "name": "sentiment",
+                    "storageKey": null
+                  },
+                  {
+                    "alias": null,
+                    "args": null,
+                    "kind": "ScalarField",
                     "name": "value",
                     "storageKey": null
                   }
@@ -234,12 +242,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "0c3cd23b3489d5c879ef60050c8da03c",
+    "cacheID": "4d8c4a011142751cb095414a11b826af",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisMergedAge(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  value\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisMergedAge(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  sentiment\n  value\n}\n"
   }
 };
 })();
