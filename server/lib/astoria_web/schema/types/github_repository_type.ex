@@ -16,64 +16,31 @@ defmodule AstoriaWeb.Schema.Types.GithubRepositoryType do
 
     field :last_activity_at, :datetime
 
-    field :merged_prs_per_person, non_null(:plot_chart) do
-      arg(:period, non_null(:period))
-      arg(:start, non_null(:datetime))
-      arg(:finish, non_null(:datetime))
-      resolve(&Resolvers.GithubPullRequestResolver.merged_prs_per_person/3)
-    end
-
-    field :merged_prs, non_null(:plot_chart) do
-      arg(:period, non_null(:period))
-      arg(:start, non_null(:datetime))
-      arg(:finish, non_null(:datetime))
-      resolve(&Resolvers.GithubPullRequestResolver.merged_prs/3)
-    end
-
-    field :average_days_pr_open_before_merge, non_null(:plot_chart) do
-      arg(:period, non_null(:period))
-      arg(:start, non_null(:datetime))
-      arg(:finish, non_null(:datetime))
-      resolve(&Resolvers.GithubPullRequestResolver.average_days_pr_open_before_merge/3)
-    end
-
-    field :average_change_in_pr, non_null(:plot_chart) do
-      arg(:period, non_null(:period))
-      arg(:start, non_null(:datetime))
-      arg(:finish, non_null(:datetime))
-      resolve(&Resolvers.GithubPullRequestResolver.average_change_in_pr/3)
-    end
-
     field :analysis_monthly_total_change, non_null(:plot_chart) do
-      arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.analysis_monthly_total_change/3)
     end
 
     field :analysis_last30_total, :plot_hero do
-      arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.analysis_last30_total/3)
     end
 
     field :analysis_merged_age, :plot_hero do
-      arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.analysis_merged_age/3)
     end
 
     field :analysis_closed_age, :plot_hero do
-      arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.analysis_closed_age/3)
     end
 
     field :analysis_opened_age, :plot_hero do
-      arg(:period, non_null(:period))
       arg(:start, non_null(:datetime))
       arg(:finish, non_null(:datetime))
       resolve(&Resolvers.GithubPullRequestResolver.analysis_opened_age/3)

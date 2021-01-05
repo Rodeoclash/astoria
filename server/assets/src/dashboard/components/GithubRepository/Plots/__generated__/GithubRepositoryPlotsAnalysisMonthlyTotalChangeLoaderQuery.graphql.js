@@ -9,10 +9,8 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotChart_plotChart$ref = any;
-export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
 export type GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQueryVariables = {|
   githubRepositoryId: string,
-  period: Period,
   start: any,
   finish: any,
 |};
@@ -35,13 +33,12 @@ export type GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery = {|
 /*
 query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(
   $githubRepositoryId: ID!
-  $period: Period!
   $start: DateTime!
   $finish: DateTime!
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      analysisMonthlyTotalChange(period: $period, start: $start, finish: $finish) {
+      analysisMonthlyTotalChange(start: $start, finish: $finish) {
         ...PlotChart_plotChart
       }
       id
@@ -71,21 +68,16 @@ v1 = {
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "period"
-},
-v3 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
   "name": "start"
 },
-v4 = [
+v3 = [
   {
     "kind": "Variable",
     "name": "id",
     "variableName": "githubRepositoryId"
   }
 ],
-v5 = [
+v4 = [
   {
     "kind": "Variable",
     "name": "finish",
@@ -93,16 +85,11 @@ v5 = [
   },
   {
     "kind": "Variable",
-    "name": "period",
-    "variableName": "period"
-  },
-  {
-    "kind": "Variable",
     "name": "start",
     "variableName": "start"
   }
 ],
-v6 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -114,8 +101,7 @@ return {
     "argumentDefinitions": [
       (v0/*: any*/),
       (v1/*: any*/),
-      (v2/*: any*/),
-      (v3/*: any*/)
+      (v2/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
@@ -131,7 +117,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v3/*: any*/),
             "concreteType": "GithubRepository",
             "kind": "LinkedField",
             "name": "githubRepository",
@@ -139,7 +125,7 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v4/*: any*/),
                 "concreteType": "PlotChart",
                 "kind": "LinkedField",
                 "name": "analysisMonthlyTotalChange",
@@ -168,7 +154,6 @@ return {
     "argumentDefinitions": [
       (v1/*: any*/),
       (v2/*: any*/),
-      (v3/*: any*/),
       (v0/*: any*/)
     ],
     "kind": "Operation",
@@ -184,7 +169,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v3/*: any*/),
             "concreteType": "GithubRepository",
             "kind": "LinkedField",
             "name": "githubRepository",
@@ -192,7 +177,7 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v4/*: any*/),
                 "concreteType": "PlotChart",
                 "kind": "LinkedField",
                 "name": "analysisMonthlyTotalChange",
@@ -222,27 +207,27 @@ return {
                 ],
                 "storageKey": null
               },
-              (v6/*: any*/)
+              (v5/*: any*/)
             ],
             "storageKey": null
           },
-          (v6/*: any*/)
+          (v5/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "1bb96ca36fb547e1c9a5d612829299ae",
+    "cacheID": "6500da37090919e996eee3d2b1cf344c",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisMonthlyTotalChange(period: $period, start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisMonthlyTotalChange(start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '7816005eb22be2e8aabb8c39953f41bb';
+(node/*: any*/).hash = '84453b196143e3090263b9ae5f995f01';
 
 module.exports = node;

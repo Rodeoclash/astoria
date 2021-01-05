@@ -6,7 +6,6 @@ import PlotHero from "dashboard/components/PlotHero/PlotHero.jsx";
 
 const GithubRepositoryPlotsAnalysisLast30TotalLoader = function ({
   githubRepositoryId,
-  period,
 }) {
   const renderQuery = ({ error, props }) => {
     if (error) {
@@ -27,17 +26,12 @@ const GithubRepositoryPlotsAnalysisLast30TotalLoader = function ({
       query={graphql`
         query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(
           $githubRepositoryId: ID!
-          $period: Period!
           $start: DateTime!
           $finish: DateTime!
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              analysisLast30Total(
-                period: $period
-                start: $start
-                finish: $finish
-              ) {
+              analysisLast30Total(start: $start, finish: $finish) {
                 ...PlotHero_plotHero
               }
             }
@@ -46,7 +40,6 @@ const GithubRepositoryPlotsAnalysisLast30TotalLoader = function ({
       `}
       variables={{
         githubRepositoryId,
-        period,
         start: new Date(2020, 0, 1).toISOString(),
         finish: new Date().toISOString(),
       }}

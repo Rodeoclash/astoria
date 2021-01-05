@@ -1,6 +1,5 @@
 import React from "react";
 import { css } from "@emotion/core";
-import { PERIODS, defaultPeriod } from "dashboard/services/periods.js";
 
 import GithubRepositoryName from "dashboard/components/GithubRepository/GithubRepositoryName.jsx";
 import GithubRepositoryPlotsAnalysisClosedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisClosedAgeLoader.jsx";
@@ -8,11 +7,6 @@ import GithubRepositoryPlotsAnalysisLast30TotalLoader from "dashboard/components
 import GithubRepositoryPlotsAnalysisMergedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMergedAgeLoader.jsx";
 import GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader.jsx";
 import GithubRepositoryPlotsAnalysisOpenedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedAgeLoader.jsx";
-import GithubRepositoryPlotsAverageChangeInPrLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageChangeInPrLoader.jsx";
-import GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader.jsx";
-import GithubRepositoryPlotsMergedPrsLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsLoader.jsx";
-import GithubRepositoryPlotsMergedPrsPerPersonLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsMergedPrsPerPersonLoader.jsx";
-import PeriodSelector from "dashboard/components/Period/PeriodSelector.jsx";
 
 const headerStyles = css`
   align-items: center;
@@ -58,67 +52,31 @@ const GithubRepositoryPage = function ({
   router,
   path,
 } = props) {
-  const location = match.location;
-  const selectedPeriod = location.query.period || defaultPeriod;
   const githubRepositoryId = match.params.githubRepositoryId;
-
-  const handleChangePeriod = (period) => {
-    router.push({
-      ...location,
-      query: {
-        ...location.query,
-        period,
-      },
-    });
-  };
 
   return (
     <>
       <header css={headerStyles}>
         <GithubRepositoryName githubRepository={currentUser.githubRepository} />
-        <div>
-          Period: <PeriodSelector onChangePeriod={handleChangePeriod} />
-        </div>
       </header>
       <div>
         <div css={heroStyles}>
           <GithubRepositoryPlotsAnalysisLast30TotalLoader
             githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
           />
           <GithubRepositoryPlotsAnalysisMergedAgeLoader
             githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
           />
           <GithubRepositoryPlotsAnalysisClosedAgeLoader
             githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
           />
           <GithubRepositoryPlotsAnalysisOpenedAgeLoader
             githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
           />
         </div>
         <div css={chartStyles}>
           <GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader
             githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
-          />
-          <GithubRepositoryPlotsMergedPrsPerPersonLoader
-            githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
-          />
-          <GithubRepositoryPlotsMergedPrsLoader
-            githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
-          />
-          <GithubRepositoryPlotsAverageDaysPerOpenBeforeMergeLoader
-            githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
-          />
-          <GithubRepositoryPlotsAverageChangeInPrLoader
-            githubRepositoryId={githubRepositoryId}
-            period={selectedPeriod}
           />
         </div>
       </div>
