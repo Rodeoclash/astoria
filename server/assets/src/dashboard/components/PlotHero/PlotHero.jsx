@@ -14,38 +14,42 @@ export const PlotHero = function ({ plotHero }) {
     display: block;
   `;
 
-  const [changeStyles, icon] = (() => {
+  const icon = (() => {
     switch (plotHero.changeDirection) {
       case null:
-        return [
-          css`
-            color: grey;
-          `,
-          "",
-        ];
-      case "POSITIVE":
-        return [
-          css`
-            color: green;
-          `,
-          "↑",
-        ];
-      case "NEGATIVE":
-        return [
-          css`
-            color: red;
-          `,
-          "↓",
-        ];
+        return null;
+      case "INCREASE":
+        return "↑";
+      case "DECREASE":
+        return "↓";
       default:
-        throw new Error("Unknown change direction");
+        throw new Error(
+          `Unknown change direction: ${plotHero.changeDirection}`
+        );
+    }
+  })();
+
+  const sentimentStyles = (() => {
+    switch (plotHero.sentiment) {
+      case null:
+        return null;
+      case "POSITIVE":
+        return css`
+          color: green;
+        `;
+      case "NEGATIVE":
+        return css`
+          color: red;
+        `;
+      default:
+        throw new Error(`Unknown sentiment: ${plotHero.sentiment}`);
     }
   })();
 
   return (
     <div css={rootStyles}>
       <h3>{plotHero.name}</h3>
-      <span css={[mainStyles, changeStyles]}>
+      <span css={[mainStyles, sentimentStyles]}>
         {plotHero.value} {icon}
       </span>
       {plotHero.byline ? <p>{plotHero.byline}</p> : null}
@@ -63,6 +67,7 @@ export default createFragmentContainer(PlotHero, {
       changeDirection
       description
       name
+      sentiment
       value
     }
   `,

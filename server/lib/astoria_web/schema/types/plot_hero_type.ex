@@ -7,6 +7,7 @@ defmodule AstoriaWeb.Schema.Types.PlotHeroType do
     field :change_direction, :change_direction
     field :description, non_null(:string)
     field :name, non_null(:string)
+    field :sentiment, :sentiment
     field :value, non_null(:string)
   end
 end
