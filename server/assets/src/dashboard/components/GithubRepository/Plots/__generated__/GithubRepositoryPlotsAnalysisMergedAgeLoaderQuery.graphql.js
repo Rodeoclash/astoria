@@ -9,10 +9,8 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotHero_plotHero$ref = any;
-export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
 export type GithubRepositoryPlotsAnalysisMergedAgeLoaderQueryVariables = {|
   githubRepositoryId: string,
-  period: Period,
   start: any,
   finish: any,
 |};
@@ -35,13 +33,12 @@ export type GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery = {|
 /*
 query GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery(
   $githubRepositoryId: ID!
-  $period: Period!
   $start: DateTime!
   $finish: DateTime!
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      analysisMergedAge(period: $period, start: $start, finish: $finish) {
+      analysisMergedAge(start: $start, finish: $finish) {
         ...PlotHero_plotHero
       }
       id
@@ -73,21 +70,16 @@ v1 = {
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "period"
-},
-v3 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
   "name": "start"
 },
-v4 = [
+v3 = [
   {
     "kind": "Variable",
     "name": "id",
     "variableName": "githubRepositoryId"
   }
 ],
-v5 = [
+v4 = [
   {
     "kind": "Variable",
     "name": "finish",
@@ -95,16 +87,11 @@ v5 = [
   },
   {
     "kind": "Variable",
-    "name": "period",
-    "variableName": "period"
-  },
-  {
-    "kind": "Variable",
     "name": "start",
     "variableName": "start"
   }
 ],
-v6 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -116,8 +103,7 @@ return {
     "argumentDefinitions": [
       (v0/*: any*/),
       (v1/*: any*/),
-      (v2/*: any*/),
-      (v3/*: any*/)
+      (v2/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
@@ -133,7 +119,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v3/*: any*/),
             "concreteType": "GithubRepository",
             "kind": "LinkedField",
             "name": "githubRepository",
@@ -141,7 +127,7 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v4/*: any*/),
                 "concreteType": "PlotHero",
                 "kind": "LinkedField",
                 "name": "analysisMergedAge",
@@ -170,7 +156,6 @@ return {
     "argumentDefinitions": [
       (v1/*: any*/),
       (v2/*: any*/),
-      (v3/*: any*/),
       (v0/*: any*/)
     ],
     "kind": "Operation",
@@ -186,7 +171,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v3/*: any*/),
             "concreteType": "GithubRepository",
             "kind": "LinkedField",
             "name": "githubRepository",
@@ -194,7 +179,7 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v4/*: any*/),
                 "concreteType": "PlotHero",
                 "kind": "LinkedField",
                 "name": "analysisMergedAge",
@@ -238,27 +223,27 @@ return {
                 ],
                 "storageKey": null
               },
-              (v6/*: any*/)
+              (v5/*: any*/)
             ],
             "storageKey": null
           },
-          (v6/*: any*/)
+          (v5/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "17929389342363bd25e9c2ab3629aefb",
+    "cacheID": "0c3cd23b3489d5c879ef60050c8da03c",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisMergedAge(period: $period, start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  value\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisMergedAge(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  value\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'a2346996524f02bd206ff31ccb9daf7e';
+(node/*: any*/).hash = '9b578fd0624184c70117953bd0e6e1ac';
 
 module.exports = node;

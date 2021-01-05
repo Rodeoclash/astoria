@@ -9,10 +9,8 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotHero_plotHero$ref = any;
-export type Period = "DAY" | "MONTH" | "WEEK" | "YEAR" | "%future added value";
 export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQueryVariables = {|
   githubRepositoryId: string,
-  period: Period,
   start: any,
   finish: any,
 |};
@@ -35,13 +33,12 @@ export type GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery = {|
 /*
 query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(
   $githubRepositoryId: ID!
-  $period: Period!
   $start: DateTime!
   $finish: DateTime!
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      analysisLast30Total(period: $period, start: $start, finish: $finish) {
+      analysisLast30Total(start: $start, finish: $finish) {
         ...PlotHero_plotHero
       }
       id
@@ -73,21 +70,16 @@ v1 = {
 v2 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "period"
-},
-v3 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
   "name": "start"
 },
-v4 = [
+v3 = [
   {
     "kind": "Variable",
     "name": "id",
     "variableName": "githubRepositoryId"
   }
 ],
-v5 = [
+v4 = [
   {
     "kind": "Variable",
     "name": "finish",
@@ -95,16 +87,11 @@ v5 = [
   },
   {
     "kind": "Variable",
-    "name": "period",
-    "variableName": "period"
-  },
-  {
-    "kind": "Variable",
     "name": "start",
     "variableName": "start"
   }
 ],
-v6 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -116,8 +103,7 @@ return {
     "argumentDefinitions": [
       (v0/*: any*/),
       (v1/*: any*/),
-      (v2/*: any*/),
-      (v3/*: any*/)
+      (v2/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
@@ -133,7 +119,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v3/*: any*/),
             "concreteType": "GithubRepository",
             "kind": "LinkedField",
             "name": "githubRepository",
@@ -141,7 +127,7 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v4/*: any*/),
                 "concreteType": "PlotHero",
                 "kind": "LinkedField",
                 "name": "analysisLast30Total",
@@ -170,7 +156,6 @@ return {
     "argumentDefinitions": [
       (v1/*: any*/),
       (v2/*: any*/),
-      (v3/*: any*/),
       (v0/*: any*/)
     ],
     "kind": "Operation",
@@ -186,7 +171,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v4/*: any*/),
+            "args": (v3/*: any*/),
             "concreteType": "GithubRepository",
             "kind": "LinkedField",
             "name": "githubRepository",
@@ -194,7 +179,7 @@ return {
             "selections": [
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v4/*: any*/),
                 "concreteType": "PlotHero",
                 "kind": "LinkedField",
                 "name": "analysisLast30Total",
@@ -238,27 +223,27 @@ return {
                 ],
                 "storageKey": null
               },
-              (v6/*: any*/)
+              (v5/*: any*/)
             ],
             "storageKey": null
           },
-          (v6/*: any*/)
+          (v5/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "fc61869b02e8df85df50f5418e9f4408",
+    "cacheID": "2ab39a8190c6448bb8abb684c1177022",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $period: Period!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisLast30Total(period: $period, start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  value\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisLast30TotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisLast30Total(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  value\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '7f5729a60ce497791b1d3832544a1011';
+(node/*: any*/).hash = 'da8c6ddd9aa2fd3fb7643eeb975e7c96';
 
 module.exports = node;

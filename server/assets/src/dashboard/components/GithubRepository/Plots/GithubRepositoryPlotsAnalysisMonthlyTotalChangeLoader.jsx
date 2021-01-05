@@ -6,7 +6,6 @@ import PlotChart from "dashboard/components/PlotChart/PlotChart.jsx";
 
 const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
   githubRepositoryId,
-  period,
 }) {
   const renderQuery = ({ error, props }) => {
     if (error) {
@@ -29,17 +28,12 @@ const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
       query={graphql`
         query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(
           $githubRepositoryId: ID!
-          $period: Period!
           $start: DateTime!
           $finish: DateTime!
         ) {
           currentUser {
             githubRepository(id: $githubRepositoryId) {
-              analysisMonthlyTotalChange(
-                period: $period
-                start: $start
-                finish: $finish
-              ) {
+              analysisMonthlyTotalChange(start: $start, finish: $finish) {
                 ...PlotChart_plotChart
               }
             }
@@ -48,7 +42,6 @@ const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
       `}
       variables={{
         githubRepositoryId,
-        period,
         start: new Date(2020, 0, 1).toISOString(),
         finish: new Date().toISOString(),
       }}
