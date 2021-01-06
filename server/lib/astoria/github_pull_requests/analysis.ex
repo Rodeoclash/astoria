@@ -69,4 +69,13 @@ defmodule Astoria.GithubPullRequests.Analysis do
         {:ok, Enum.at(response.body, 0)}
     end
   end
+
+  @spec opened_total(list(%GithubPullRequests.GithubPullRequest{})) :: map()
+  def opened_total(payload) do
+    case Analysis.Api.Endpoints.OpenedTotal.create(payload)
+         |> Analysis.Api.Request.perform() do
+      {:ok, response} ->
+        {:ok, Enum.at(response.body, 0)}
+    end
+  end
 end

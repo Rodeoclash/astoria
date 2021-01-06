@@ -63,12 +63,15 @@ function(req) {
       change = (total - lag(total)) / lag(total)
     )
   out <- tibble(
-    name = '30 Day PRs',
-    value = round(store$total[store$group == 'current'],1),
+    name = 'How Many PRs Were Merged?',
+    value = paste0(round(store$total[store$group == 'current'],1)),
+    unit_type = 'PRs',
     description = "Last 30 Days Total Merged PRs",
     change_direction = ifelse(store$change[store$group == 'current'] > 0,
                               'increase',
                               'decrease'),
+    sentiment = ifelse(change_direction == 'increase',
+                       'positive', 'negative'),
     byline = paste0('Change of ',
                     round(100*store$change[store$group == 'current'],1),
                     '% compared to previous 30 Day interval of ',
@@ -105,17 +108,18 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'Merged PRs',
-    value = as.character(round(store$avg_age_days_current[store$group == 'merged'],1)),
+    name = 'How Long Until Work Is Merged?',
+    value = paste0(as.character(round(store$avg_age_days_current[store$group == 'merged'],1))),
+    unit_type = 'days',
     description = "Average Age in Days for Merged PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'merged'] > 0,
                               'increase',
                               'decrease'),
     sentiment = ifelse(change_direction == 'decrease',
-                       'negative', 'positive'),
-    byline = paste0('Change of ',
+                       'positive', 'negative'),
+    byline = paste0('Compared to ',
                     ifelse(is.nan(store$change[store$group == 'merged']),
-                           '0%', 
+                           '0%',
                            paste0(round(100*store$change[store$group == 'merged'],1), '%')),
                     ' compared to annual average of ',
                     ifelse(is.nan(store$avg_age_days_annual[store$group == 'merged']),
@@ -154,8 +158,9 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'Closed PRs',
+    name = 'How Old Were Lost PRs?',
     value = as.character(round(store$avg_age_days_current[store$group == 'closed'],1)),
+    unit_type = 'days',
     description = "Average Age in Days for Unmerged Closed PRs (Last 30 Days)",
     change_direction = ifelse(store$change[store$group == 'closed'] > 0,
                               'increase',
@@ -171,6 +176,28 @@ function(req) {
   return(out)
 }
 
+#* Return total Open PRs
+#* @post /opened_total
+function(req) {
+  payload <- req$body %>% as.data.table()
+  store <- payload %>%
+    select(created_at, merged_at, closed_at) %>%
+    mutate(
+      created_at = lubridate::ymd_hms(created_at),
+      condition_date = as.Date(ifelse(is.na(merged_at), Sys.Date(), merged_at), origin = '1970-01-01')) %>%
+    summarise(
+      total = sum(is.na(closed_at) & is.na(merged_at))
+    )
+  out <- tibble(
+    name = 'How Many PRs Are Open?',
+    value = as.character(store$total),
+    unit_type = 'PRs',
+    description = "Total Open PRs in this Repository",
+    change_direction = NULL,
+    byline = "Total Open PRs in this repository")
+  return(out)
+}
+
 #* Return average age of all PRs currently open
 #* @post /opened_age
 function(req) {
@@ -179,29 +206,33 @@ function(req) {
     select(created_at, merged_at, closed_at) %>%
     mutate(
       created_at = lubridate::ymd_hms(created_at),
-      condition_date = as.Date(ifelse(is.na(merged_at), Sys.Date(), merged_at), origin = '1970-01-01'),
+      condition_date = case_when(
+        is.na(merged_at) ~ Sys.Date(),
+        TRUE ~ as.Date(merged_at, origin = '1970-01-01')),
       age_days = round(difftime(
         condition_date,
-        created_at, units = 'days'), 0)) %>%
+        created_at,
+        units = 'days'), 0)) %>%
     summarise(
       total = sum(is.na(closed_at) & is.na(merged_at)),
       avg_days_currently_open = as.numeric(mean(age_days[is.na(closed_at) & is.na(merged_at)], na.rm = TRUE)),
       annual_avg_days = as.numeric(mean(age_days[!is.na(merged_at)], na.rm = TRUE))
-    ) %>%
-    mutate(
-      diff = ifelse(is.nan(avg_days_currently_open - annual_avg_days), '-' , avg_days_currently_open - annual_avg_days),
-      change = ifelse(is.nan(avg_days_currently_open - annual_avg_days), '-', diff / annual_avg_days))
+    )
   out <- tibble(
-    name = 'Open PRs',
-    value = as.character(store$total),
-    description = "Total Open PRs",
-    change_direction = NULL,
-    byline = paste0('Current Average Days for Open PRs ',
-                    ifelse(is.nan(store$avg_days_currently_open), '0', round(store$avg_days_currently_open, 1)),
-                    ' Compared to Annual Average of ',
-                    ifelse(is.nan(store$annual_avg_days), '0', round(store$annual_avg_days, 1)),
-                    ' ', 
-                    ifelse(!is.numeric(store$change), paste0('(0%)'),
+    name = 'How Old Are The Open PRs?',
+    value = ifelse(is.nan(store$avg_days_currently_open), '-', round(store$avg_days_currently_open, 1)),
+    unit_type = 'days',
+    description = "Average age in days of currently Open PRs",
+    change_direction = ifelse(
+      store$avg_days_currently_open > store$annual_avg_days,
+      'increase',
+      'decrease'
+      ),
+    sentiment = ifelse(change_direction == 'increase', 'negative', 'positive'),
+    byline = paste0('Compared to Annual Average of ',
+                    ifelse(is.nan(store$annual_avg_days), '-', round(store$annual_avg_days, 1)),
+                    ' ',
+                    ifelse(!is.numeric(store$change), paste0('(-%)'),
                            paste0('(', round(100*store$change,1), '%)'))))
   return(out)
 }

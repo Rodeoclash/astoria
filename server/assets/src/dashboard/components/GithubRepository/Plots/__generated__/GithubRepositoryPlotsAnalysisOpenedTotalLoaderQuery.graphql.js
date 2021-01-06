@@ -9,36 +9,36 @@
 /*::
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotHero_plotHero$ref = any;
-export type GithubRepositoryPlotsAnalysisOpenedAgeLoaderQueryVariables = {|
+export type GithubRepositoryPlotsAnalysisOpenedTotalLoaderQueryVariables = {|
   githubRepositoryId: string,
   start: any,
   finish: any,
 |};
-export type GithubRepositoryPlotsAnalysisOpenedAgeLoaderQueryResponse = {|
+export type GithubRepositoryPlotsAnalysisOpenedTotalLoaderQueryResponse = {|
   +currentUser: ?{|
     +githubRepository: {|
-      +analysisOpenedAge: ?{|
+      +analysisOpenedTotal: ?{|
         +$fragmentRefs: PlotHero_plotHero$ref
       |}
     |}
   |}
 |};
-export type GithubRepositoryPlotsAnalysisOpenedAgeLoaderQuery = {|
-  variables: GithubRepositoryPlotsAnalysisOpenedAgeLoaderQueryVariables,
-  response: GithubRepositoryPlotsAnalysisOpenedAgeLoaderQueryResponse,
+export type GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery = {|
+  variables: GithubRepositoryPlotsAnalysisOpenedTotalLoaderQueryVariables,
+  response: GithubRepositoryPlotsAnalysisOpenedTotalLoaderQueryResponse,
 |};
 */
 
 
 /*
-query GithubRepositoryPlotsAnalysisOpenedAgeLoaderQuery(
+query GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery(
   $githubRepositoryId: ID!
   $start: DateTime!
   $finish: DateTime!
 ) {
   currentUser {
     githubRepository(id: $githubRepositoryId) {
-      analysisOpenedAge(start: $start, finish: $finish) {
+      analysisOpenedTotal(start: $start, finish: $finish) {
         ...PlotHero_plotHero
       }
       id
@@ -109,7 +109,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "GithubRepositoryPlotsAnalysisOpenedAgeLoaderQuery",
+    "name": "GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -132,7 +132,7 @@ return {
                 "args": (v4/*: any*/),
                 "concreteType": "PlotHero",
                 "kind": "LinkedField",
-                "name": "analysisOpenedAge",
+                "name": "analysisOpenedTotal",
                 "plural": false,
                 "selections": [
                   {
@@ -161,7 +161,7 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "GithubRepositoryPlotsAnalysisOpenedAgeLoaderQuery",
+    "name": "GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery",
     "selections": [
       {
         "alias": null,
@@ -184,7 +184,7 @@ return {
                 "args": (v4/*: any*/),
                 "concreteType": "PlotHero",
                 "kind": "LinkedField",
-                "name": "analysisOpenedAge",
+                "name": "analysisOpenedTotal",
                 "plural": false,
                 "selections": [
                   {
@@ -250,16 +250,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "74d9601cfaf4ba0c2b8cbd217ac4a524",
+    "cacheID": "8c5afabad0245b9407694e8ae2314ec8",
     "id": null,
     "metadata": {},
-    "name": "GithubRepositoryPlotsAnalysisOpenedAgeLoaderQuery",
+    "name": "GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisOpenedAgeLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisOpenedAge(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  sentiment\n  unitType\n  value\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisOpenedTotal(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  sentiment\n  unitType\n  value\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = 'd7f5d4255a2e04a965f8641f4f342692';
+(node/*: any*/).hash = '60660152ccb08875d01075014cb2542c';
 
 module.exports = node;

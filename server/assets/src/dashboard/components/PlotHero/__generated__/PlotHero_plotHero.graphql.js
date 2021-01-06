@@ -19,6 +19,7 @@ export type PlotHero_plotHero = {|
   +description: string,
   +name: string,
   +sentiment: ?Sentiment,
+  +unitType: string,
   +value: string,
   +$refType: PlotHero_plotHero$ref,
 |};
@@ -76,6 +77,13 @@ const node/*: ReaderFragment*/ = {
       "alias": null,
       "args": null,
       "kind": "ScalarField",
+      "name": "unitType",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
       "name": "value",
       "storageKey": null
     }
@@ -84,6 +92,6 @@ const node/*: ReaderFragment*/ = {
   "abstractKey": null
 };
 // prettier-ignore
-(node/*: any*/).hash = '371164e4248f0d9179262647ba5652d2';
+(node/*: any*/).hash = '982037f2240e5471a45c8eefeb33bf82';
 
 module.exports = node;
