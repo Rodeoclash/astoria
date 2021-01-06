@@ -15,4 +15,8 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubRepositoryResolver do
   def name(github_repository, _args, _resolution) do
     {:ok, github_repository.data["name"]}
   end
+
+  def github_installation(github_repository, _args, _resolution) do
+    {:ok, Repo.preload(github_repository, :github_installation).github_installation}
+  end
 end

@@ -4,6 +4,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubInstallationResolver do
 
   def list_from_user(user, args, _resolution) do
     GithubInstallation.for_user(user.id)
+    |> GithubInstallation.order_by_alphabetical()
     |> Relay.Connection.from_query(&Repo.all/1, args)
   end
 

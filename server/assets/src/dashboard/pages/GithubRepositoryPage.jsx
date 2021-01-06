@@ -11,7 +11,6 @@ import GithubRepositoryPlotsAnalysisOpenedTotalLoader from "dashboard/components
 
 const headerStyles = css`
   align-items: center;
-  border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
@@ -21,7 +20,6 @@ const headerStyles = css`
 
 const heroStyles = css`
   align-items: stretch;
-  border-bottom: 1px solid #ccc;
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
@@ -31,19 +29,13 @@ const heroStyles = css`
     margin: 0 1rem;
     width: 20rem;
     padding: 1rem;
-    background: #eee;
   }
 `;
 
 const chartStyles = css`
-  display: grid;
-  grid-template-columns: 50% 50%;
-  grid-template-rows: repeat(3, 50vh);
-
   & > * {
     margin: 1rem;
     padding: 1rem;
-    border: 1px solid #ccc;
   }
 `;
 

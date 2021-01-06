@@ -5,12 +5,8 @@ import {
   requestSubscription,
 } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
-import BounceLoader from "react-spinners/BounceLoader";
 import { css } from "@emotion/core";
-
-const rootStyles = css`
-  margin-right: 1.25rem;
-`;
+import { ImSpinner2 } from "react-icons/im";
 
 const subscription = graphql`
   subscription GithubRepositoryNavigationItemActivitySubscription($id: ID!) {
@@ -58,11 +54,7 @@ export const GithubRepositoryNavigationItemActivity = function ({
     return null;
   }
 
-  return (
-    <div css={rootStyles} title="Currently syncing data">
-      <BounceLoader size={15} />
-    </div>
-  );
+  return <ImSpinner2 />;
 };
 
 export default createFragmentContainer(GithubRepositoryNavigationItemActivity, {

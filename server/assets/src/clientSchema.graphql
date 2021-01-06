@@ -6,6 +6,12 @@ type Flash {
   secondsVisible: Int!
 }
 
+type DashboardSettings {
+  selectedGithubInstallationName: String
+  selectedGithubRepositoryName: String
+}
+
 extend type RootQueryType {
   flashes: [Flash]
+  dashboardSettings: DashboardSettings!
 }

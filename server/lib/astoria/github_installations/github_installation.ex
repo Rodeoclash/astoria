@@ -58,4 +58,11 @@ defmodule Astoria.GithubInstallations.GithubInstallation do
       user.id == ^user_id
     )
   end
+
+  def order_by_alphabetical(query \\ GithubInstallation) do
+    query
+    |> order_by([github_repository],
+      asc: fragment("?->'account'->>'login'", github_repository.data)
+    )
+  end
 end

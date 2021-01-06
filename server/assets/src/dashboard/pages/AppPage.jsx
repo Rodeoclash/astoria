@@ -4,11 +4,13 @@ import { Link } from "found";
 import { theme } from "dashboard/services/css.js";
 
 import FlashList from "dashboard/components/Flash/FlashList.jsx";
-import { ThemeProvider } from "emotion-theming";
 
 const globalStyles = css`
   body {
-    font-family: "Lato", sans-serif;
+    background: ${theme.background};
+    color: ${theme.text};
+    font-family: "Raleway", sans-serif;
+    font-weight: 400;
     margin: 0;
     padding: 0;
   }
@@ -18,11 +20,11 @@ const rootStyles = css``;
 
 const AppPage = function ({ children, flashes }) {
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Global styles={globalStyles} />
       <div css={rootStyles}>{children}</div>
       <FlashList flashes={flashes} />
-    </ThemeProvider>
+    </>
   );
 };
 

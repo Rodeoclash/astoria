@@ -1,6 +1,7 @@
 <script>
   window.SPA_CONFIG = {
     channelToken: "<%= channel_token(@current_user) %>",
+    publicName: "<%= public_name() %>",
     userWebsocketURL: "<%= user_websocket_url() %>",
   };
 </script>

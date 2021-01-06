@@ -2,6 +2,8 @@ defmodule AstoriaWeb.InstalledControllerTest do
   import Astoria.Factory
   use AstoriaWeb.ConnCase
 
+  @public_name Application.get_env(:astoria, :public_name)
+
   describe "/github/authorized" do
     test "without installation existing", %{conn: conn} do
       conn =
@@ -15,7 +17,7 @@ defmodule AstoriaWeb.InstalledControllerTest do
         )
 
       assert redirected_to(conn) =~ "/auth/github"
-      assert assert get_flash(conn, :info) == "Astoria was installed"
+      assert assert get_flash(conn, :info) == "#{@public_name} was installed"
       assert assert get_session(conn, :github_installation_id)
     end
 
@@ -33,7 +35,7 @@ defmodule AstoriaWeb.InstalledControllerTest do
         )
 
       assert redirected_to(conn) =~ "/auth/github"
-      assert assert get_flash(conn, :info) == "Astoria was installed"
+      assert assert get_flash(conn, :info) == "#{@public_name} was installed"
       assert assert get_session(conn, :github_installation_id) == github_installation.id
     end
   end
