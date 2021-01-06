@@ -16,7 +16,6 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
     github_pull_requests =
       GithubPullRequest
       |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> GithubPullRequest.where_merged()
       |> select([github_pull_request], %{
         merged_at: fragment("?->>'merged_at'", github_pull_request.data)
       })
@@ -64,7 +63,6 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
     github_pull_requests =
       GithubPullRequest
       |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> GithubPullRequest.where_merged()
       |> select([github_pull_request], %{
         closed_at: fragment("?->>'closed_at'", github_pull_request.data),
         created_at: fragment("?->>'created_at'", github_pull_request.data),
@@ -87,7 +85,6 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
     github_pull_requests =
       GithubPullRequest
       |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> GithubPullRequest.where_merged()
       |> select([github_pull_request], %{
         closed_at: fragment("?->>'closed_at'", github_pull_request.data),
         created_at: fragment("?->>'created_at'", github_pull_request.data),
@@ -110,7 +107,6 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
     github_pull_requests =
       GithubPullRequest
       |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> GithubPullRequest.where_merged()
       |> select([github_pull_request], %{
         closed_at: fragment("?->>'closed_at'", github_pull_request.data),
         created_at: fragment("?->>'created_at'", github_pull_request.data),

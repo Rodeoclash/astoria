@@ -8,6 +8,7 @@ defmodule AstoriaWeb.Schema.Types.PlotHeroType do
     field :description, non_null(:string)
     field :name, non_null(:string)
     field :sentiment, :sentiment
+    field :unit_type, non_null(:string)
     field :value, non_null(:string)
   end
 end

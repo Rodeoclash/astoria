@@ -64,7 +64,8 @@ function(req) {
     )
   out <- tibble(
     name = 'How Many PRs Were Merged?',
-    value = paste0(round(store$total[store$group == 'current'],1),' PRs'),
+    value = paste0(round(store$total[store$group == 'current'],1)),
+    unit_type = 'PRs',
     description = "Last 30 Days Total Merged PRs",
     change_direction = ifelse(store$change[store$group == 'current'] > 0,
                               'increase',
@@ -118,7 +119,7 @@ function(req) {
                        'positive', 'negative'),
     byline = paste0('Compared to ',
                     ifelse(is.nan(store$change[store$group == 'merged']),
-                           '0%', 
+                           '0%',
                            paste0(round(100*store$change[store$group == 'merged'],1), '%')),
                     ' compared to annual average of ',
                     ifelse(is.nan(store$avg_age_days_annual[store$group == 'merged']),
@@ -201,7 +202,7 @@ function(req) {
 #* @post /opened_age
 function(req) {
   payload <- req$body %>% as.data.table()
-  store <- payload %>% 
+  store <- payload %>%
     select(created_at, merged_at, closed_at) %>%
     mutate(
       created_at = lubridate::ymd_hms(created_at),
@@ -210,29 +211,28 @@ function(req) {
         TRUE ~ as.Date(merged_at, origin = '1970-01-01')),
       age_days = round(difftime(
         condition_date,
-        created_at, 
+        created_at,
         units = 'days'), 0)) %>%
     summarise(
       total = sum(is.na(closed_at) & is.na(merged_at)),
       avg_days_currently_open = as.numeric(mean(age_days[is.na(closed_at) & is.na(merged_at)], na.rm = TRUE)),
       annual_avg_days = as.numeric(mean(age_days[!is.na(merged_at)], na.rm = TRUE))
-    ) 
+    )
   out <- tibble(
     name = 'How Old Are The Open PRs?',
     value = ifelse(is.nan(store$avg_days_currently_open), '-', round(store$avg_days_currently_open, 1)),
     unit_type = 'days',
     description = "Average age in days of currently Open PRs",
     change_direction = ifelse(
-      store$avg_days_currently_open > store$annual_avg_days, 
+      store$avg_days_currently_open > store$annual_avg_days,
       'increase',
       'decrease'
       ),
     sentiment = ifelse(change_direction == 'increase', 'negative', 'positive'),
     byline = paste0('Compared to Annual Average of ',
                     ifelse(is.nan(store$annual_avg_days), '-', round(store$annual_avg_days, 1)),
-                    ' ', 
+                    ' ',
                     ifelse(!is.numeric(store$change), paste0('(-%)'),
                            paste0('(', round(100*store$change,1), '%)'))))
   return(out)
 }
-    

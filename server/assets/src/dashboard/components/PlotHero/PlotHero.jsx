@@ -3,6 +3,8 @@ import { createFragmentContainer, graphql } from "react-relay";
 import { css } from "@emotion/core";
 
 export const PlotHero = function ({ plotHero }) {
+  console.log(plotHero);
+
   if (plotHero === null) {
     return <p>No data</p>;
   }
@@ -50,7 +52,7 @@ export const PlotHero = function ({ plotHero }) {
     <div css={rootStyles}>
       <h3>{plotHero.name}</h3>
       <span css={[mainStyles, sentimentStyles]}>
-        {plotHero.value} {icon}
+        {plotHero.value} {plotHero.unitType} {icon}
       </span>
       {plotHero.byline ? <p>{plotHero.byline}</p> : null}
       <p>
@@ -68,6 +70,7 @@ export default createFragmentContainer(PlotHero, {
       description
       name
       sentiment
+      unitType
       value
     }
   `,
