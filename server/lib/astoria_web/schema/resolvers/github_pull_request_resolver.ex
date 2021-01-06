@@ -120,4 +120,26 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       GithubPullRequests.Analysis.opened_age(github_pull_requests)
     end
   end
+
+  def analysis_opened_total(
+        github_repository,
+        %{start: start, finish: finish},
+        _resolution
+      ) do
+    github_pull_requests =
+      GithubPullRequest
+      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
+      |> select([github_pull_request], %{
+        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
+        created_at: fragment("?->>'created_at'", github_pull_request.data),
+        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
+      })
+      |> Repo.all()
+
+    if github_pull_requests == [] do
+      {:ok, nil}
+    else
+      GithubPullRequests.Analysis.opened_total(github_pull_requests)
+    end
+  end
 end

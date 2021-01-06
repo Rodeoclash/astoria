@@ -7,6 +7,7 @@ import GithubRepositoryPlotsAnalysisLast30TotalLoader from "dashboard/components
 import GithubRepositoryPlotsAnalysisMergedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMergedAgeLoader.jsx";
 import GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader.jsx";
 import GithubRepositoryPlotsAnalysisOpenedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedAgeLoader.jsx";
+import GithubRepositoryPlotsAnalysisOpenedTotalLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedTotalLoader.jsx";
 
 const headerStyles = css`
   align-items: center;
@@ -71,6 +72,9 @@ const GithubRepositoryPage = function ({
             githubRepositoryId={githubRepositoryId}
           />
           <GithubRepositoryPlotsAnalysisOpenedAgeLoader
+            githubRepositoryId={githubRepositoryId}
+          />
+          <GithubRepositoryPlotsAnalysisOpenedTotalLoader
             githubRepositoryId={githubRepositoryId}
           />
         </div>

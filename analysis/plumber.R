@@ -194,7 +194,7 @@ function(req) {
     unit_type = 'PRs',
     description = "Total Open PRs in this Repository",
     change_direction = NULL,
-    byline = NULL)
+    byline = "Total Open PRs in this repository")
   return(out)
 }
 
