@@ -16,13 +16,11 @@ const globalStyles = css`
   }
 `;
 
-const rootStyles = css``;
-
 const AppPage = function ({ children, flashes }) {
   return (
     <>
       <Global styles={globalStyles} />
-      <div css={rootStyles}>{children}</div>
+      {children}
       <FlashList flashes={flashes} />
     </>
   );

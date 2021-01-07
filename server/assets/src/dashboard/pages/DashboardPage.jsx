@@ -3,7 +3,9 @@ import CurrentUserGithubInstallations from "dashboard/components/CurrentUser/Cur
 import { theme } from "dashboard/services/css.js";
 import { css } from "@emotion/core";
 
-const rootStyles = css``;
+const rootStyles = css`
+  position: relative;
+`;
 
 const headerStyles = css`
   align-items: stretch;
@@ -11,7 +13,11 @@ const headerStyles = css`
   display: flex;
   font-weight: 700;
   height: 5rem;
-  margin-bottom: 2px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 2;
 `;
 
 const logoStyles = css`
@@ -26,7 +32,7 @@ const logoStyles = css`
   width: 18rem;
 `;
 
-const selectedGithubRepositoryNameStyles = css`
+const titleStyles = css`
   align-items: center;
   justify-content: center;
   display: flex;
@@ -36,32 +42,44 @@ const selectedGithubRepositoryNameStyles = css`
   padding: 0 1rem;
 `;
 
-const contentStyles = css`
-  display: flex;
-`;
+const contentStyles = css``;
 
 const navStyles = css`
   background: ${theme.panelBackground};
-  width: 18rem;
-  padding: 0 1rem;
   overflow-y: auto;
-  height: calc(100vh - 5rem - 1px);
+  padding: 0 1rem;
+  position: fixed;
+  top: calc(5rem + 2px);
+  left: 0;
+  width: 18rem;
+  height: calc(100vh - (5rem -2px));
+  z-index: 2;
 `;
 
 const mainStyles = css`
-  flex-grow: 1;
-  padding: 1rem;
+  padding-left: 20rem;
+  padding-top: calc(5rem + 2px);
 `;
 
 const DashboardPage = function ({ children, currentUser, dashboardSettings }) {
-  return (
-    <main css={rootStyles}>
-      <header css={headerStyles}>
-        <div css={logoStyles}>{window.SPA_CONFIG.publicName}</div>
-        <div css={selectedGithubRepositoryNameStyles}>
+  const title = (() => {
+    if (
+      dashboardSettings.selectedGithubInstallationName &&
+      dashboardSettings.selectedGithubRepositoryName
+    ) {
+      return (
+        <>
           {dashboardSettings.selectedGithubInstallationName} /{" "}
           {dashboardSettings.selectedGithubRepositoryName}
-        </div>
+        </>
+      );
+    }
+  })();
+  return (
+    <div css={rootStyles}>
+      <header css={headerStyles}>
+        <div css={logoStyles}>{window.SPA_CONFIG.publicName}</div>
+        <div css={titleStyles}>{title}</div>
       </header>
       <div css={contentStyles}>
         <nav css={navStyles}>
@@ -69,7 +87,7 @@ const DashboardPage = function ({ children, currentUser, dashboardSettings }) {
         </nav>
         <main css={mainStyles}>{children}</main>
       </div>
-    </main>
+    </div>
   );
   return children;
 };
