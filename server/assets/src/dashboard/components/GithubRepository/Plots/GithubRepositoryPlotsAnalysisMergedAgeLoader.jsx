@@ -1,6 +1,7 @@
 import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
+import { defaultDateRange } from "dashboard/services/data.js";
 
 import PlotHero from "dashboard/components/PlotHero/PlotHero.jsx";
 
@@ -19,6 +20,8 @@ const GithubRepositoryPlotsAnalysisMergedAgeLoader = function ({
     }
     return <div>Loading</div>;
   };
+
+  const [start, finish] = defaultDateRange();
 
   return (
     <QueryRenderer
@@ -40,8 +43,8 @@ const GithubRepositoryPlotsAnalysisMergedAgeLoader = function ({
       `}
       variables={{
         githubRepositoryId,
-        start: new Date(2020, 0, 1).toISOString(),
-        finish: new Date().toISOString(),
+        start: start.toISOString(),
+        finish: finish.toISOString(),
       }}
       render={renderQuery}
     />
