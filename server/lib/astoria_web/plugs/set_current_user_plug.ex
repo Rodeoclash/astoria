@@ -5,6 +5,7 @@ defmodule AstoriaWeb.Plugs.SetSessionCurrentUserPlug do
   def init(opts), do: opts
 
   def call(conn, _params) do
+    IO.inspect("=== found set user")
     conn = fetch_session(conn)
 
     current_user_id = get_session(conn, :current_user_id)

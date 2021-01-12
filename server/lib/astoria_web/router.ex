@@ -20,6 +20,10 @@ defmodule AstoriaWeb.Router do
     plug AstoriaWeb.Plugs.SetGraphQLContextPlug
   end
 
+  pipeline :current_user_required do
+    plug AstoriaWeb.Plugs.CurrentUserRequiredPlug
+  end
+
   scope "/api", AstoriaWeb, as: :api do
     pipe_through :api
 
@@ -64,6 +68,9 @@ defmodule AstoriaWeb.Router do
     end
 
     # must be last
-    get "/*path", SpaController, :show
+    scope "/dashboard" do
+      pipe_through :current_user_required
+      get "/*path", DashboardController, :show
+    end
   end
 end
