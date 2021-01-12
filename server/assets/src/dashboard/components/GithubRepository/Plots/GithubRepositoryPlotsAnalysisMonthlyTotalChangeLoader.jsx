@@ -1,6 +1,7 @@
 import React from "react";
 import { QueryRenderer, graphql } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
+import { defaultDateRange } from "dashboard/services/data.js";
 
 import PlotChart from "dashboard/components/PlotChart/PlotChart.jsx";
 
@@ -22,6 +23,8 @@ const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
     return <div>Loading</div>;
   };
 
+  const [start, finish] = defaultDateRange();
+
   return (
     <QueryRenderer
       environment={environment}
@@ -42,8 +45,8 @@ const GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader = function ({
       `}
       variables={{
         githubRepositoryId,
-        start: new Date(2020, 0, 1).toISOString(),
-        finish: new Date().toISOString(),
+        start: start.toISOString(),
+        finish: finish.toISOString(),
       }}
       render={renderQuery}
     />

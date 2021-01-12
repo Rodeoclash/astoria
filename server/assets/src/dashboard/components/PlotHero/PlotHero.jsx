@@ -1,17 +1,25 @@
 import React from "react";
 import { createFragmentContainer, graphql } from "react-relay";
 import { css } from "@emotion/core";
+import ReactMarkdown from "react-markdown";
 
 export const PlotHero = function ({ plotHero }) {
   if (plotHero === null) {
     return <p>No data</p>;
   }
 
-  const rootStyles = css``;
+  const rootStyles = css`
+    & > h3 {
+      margin-top: 0;
+      height: 2rem;
+    }
+  `;
 
   const mainStyles = css`
-    font-size: 3rem;
     display: block;
+    display: block;
+    font-size: 3.5rem;
+    margin: 1rem 0;
   `;
 
   const icon = (() => {
@@ -46,16 +54,30 @@ export const PlotHero = function ({ plotHero }) {
     }
   })();
 
+  const descriptionStyles = css`
+    font-size: 0.9rem;
+
+    & li {
+      margin-bottom: 0.5rem;
+    }
+  `;
+
+  const bylineStyles = css`
+    font-size: 1.3rem;
+  `;
+
   return (
     <div css={rootStyles}>
       <h3>{plotHero.name}</h3>
       <span css={[mainStyles, sentimentStyles]}>
         {plotHero.value} {plotHero.unitType} {icon}
       </span>
-      {plotHero.byline ? <p>{plotHero.byline}</p> : null}
-      <p>
-        <em>{plotHero.description}</em>
-      </p>
+      <div css={bylineStyles}>
+        <ReactMarkdown>{plotHero.byline}</ReactMarkdown>
+      </div>
+      <div css={descriptionStyles}>
+        <ReactMarkdown>{plotHero.description}</ReactMarkdown>
+      </div>
     </div>
   );
 };
