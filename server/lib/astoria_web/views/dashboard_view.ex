@@ -1,4 +1,4 @@
-defmodule AstoriaWeb.SpaView do
+defmodule AstoriaWeb.DashboardView do
   use AstoriaWeb, :view
 
   def channel_token(user) do

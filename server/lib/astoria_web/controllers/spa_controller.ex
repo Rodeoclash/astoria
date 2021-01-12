@@ -1,4 +1,4 @@
-defmodule AstoriaWeb.SpaController do
+defmodule AstoriaWeb.DashboardController do
   use AstoriaWeb, :controller
 
   def show(conn, _params) do

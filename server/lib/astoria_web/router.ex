@@ -64,6 +64,6 @@ defmodule AstoriaWeb.Router do
     end
 
     # must be last
-    get "/*path", SpaController, :show
+    get "/dashboard*path", DashboardController, :show
   end
 end
