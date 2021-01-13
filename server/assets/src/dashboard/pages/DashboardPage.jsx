@@ -57,8 +57,10 @@ const navStyles = css`
 `;
 
 const mainStyles = css`
-  padding-left: 20rem;
-  padding-top: calc(5rem + 2px);
+  height: calc(100vh - (5rem + 2px));
+  margin-left: 20rem;
+  margin-top: calc(5rem + 2px);
+  position: relative;
 `;
 
 const DashboardPage = function ({ children, currentUser, dashboardSettings }) {
