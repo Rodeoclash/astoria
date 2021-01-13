@@ -16,10 +16,14 @@ export const PlotHero = function ({ plotHero }) {
   `;
 
   const mainStyles = css`
-    display: block;
-    display: block;
     font-size: 3.5rem;
     margin: 1rem 0;
+  `;
+
+  const headerStyles = css`
+    align-items: flex-end;
+    display: flex;
+    height: 4rem;
   `;
 
   const icon = (() => {
@@ -68,10 +72,10 @@ export const PlotHero = function ({ plotHero }) {
 
   return (
     <div css={rootStyles}>
-      <h3>{plotHero.name}</h3>
-      <span css={[mainStyles, sentimentStyles]}>
+      <h2 css={headerStyles}>{plotHero.name}</h2>
+      <div css={[mainStyles, sentimentStyles]}>
         {plotHero.value} {plotHero.unitType} {icon}
-      </span>
+      </div>
       <div css={bylineStyles}>
         <ReactMarkdown>{plotHero.byline}</ReactMarkdown>
       </div>
