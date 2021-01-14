@@ -63,6 +63,11 @@ export const PlotHero = function ({ plotHero }) {
 
     & li {
       margin-bottom: 0.5rem;
+      opacity: 0.75;
+    }
+
+    & p {
+      opacity: 0.75;
     }
   `;
 
