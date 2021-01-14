@@ -133,10 +133,10 @@ A fast turnaround on reviews means that features and fixes to get into the hands
 ### Decreased due to:
 * Bottlenecks in the review process
 * Code that is complicated and hard to reason about
-* Underconfident developers
+* Underconfident developers avoiding reviews
 
 ### Increased through:
-* Education around the purpose of PRs
+* Education around the benefits of using PRs to merge code
 * Improving the quality of code and size of PRs
 * Deveopers becoming more experienced",
     change_direction = ifelse(store$change[store$group == 'merged'] > 0,
@@ -185,26 +185,29 @@ function(req) {
       change = (avg_age_days_current - avg_age_days_annual) / avg_age_days_annual
     )
   out <- tibble(
-    name = 'How Old Were Lost PRs?',
+    name = 'How old were lost PRs?',
     value = as.character(round(store$avg_age_days_current[store$group == 'closed'],1)),
     unit_type = 'days',
     description = "This value represents the average age of PRs that closed without being merged (a.k.a 'lost' PRs).
 
-All PRs take some time to be reviewed, however, the longer PRs are left, the more likely they are to be closed rather than merged.
-
 A closed PR does not always mean that time was wasted, however it does indicate that the initial assumptions that lead to the PR being created have likely changed. This can include:
 
-* The underlying code changing so much that it's impossible to merge
-* The feature is no longer relevant
-* The developer moving on to new features",
+### Decreased due to:
+* Well reasoned and designed features
+* Education in the team around the benefits of timely reviews
+
+### Increased through:
+* Delayed Code reviews
+* Changing requirements
+* Developers moving on to new features",
     change_direction = ifelse(store$change[store$group == 'closed'] > 0,
                               'increase',
                               'decrease'),
-    byline = paste0('Change of ',
+    byline = paste0('Change of **',
                     round(100*store$change[store$group == 'closed'],1),
-                    '% compared to annual average of ',
+                    '%** compared to annual average of **',
                     round(store$avg_age_days_annual[store$group == 'closed'],1),
-                    ' days')
+                    '** days')
   )
   return(out)
 }
@@ -252,12 +255,20 @@ function(req) {
       annual_avg_days = as.numeric(mean(age_days[!is.na(merged_at)], na.rm = TRUE))
     )
   out <- tibble(
-    name = 'How Old Are The Open PRs?',
+    name = 'How old are the open PRs?',
     value = ifelse(is.nan(store$avg_days_currently_open), '-', round(store$avg_days_currently_open, 1)),
     unit_type = 'days',
-    description = "This value represents the average age of the currently open PRs.
+    description = "This value represents the average length of time open PRs have been waiting for review.
 
-All PRs will take some time to be reviewed and to have review feedback implemented. However, an excessivly long length of time before merging can indicate problems with the way work is being done. Additionally, the longer PRs exist, the more at risk they become to being closed rather than merged.",
+All PRs will take some time to be reviewed and to have review feedback implemented. However, an excessivly long length of time before merging can indicate problems with the way work is being done. Additionally, the longer PRs exist, the more at risk they become to being closed rather than merged.
+
+### Decreased due to:
+* Education in the team around the benefits of timely reviews
+* Systems to notify and remind developers of open PRs
+
+### Increased due to:
+* Developers concentrating on other priorities
+* Underconfident developers avoiding reviews",
     change_direction = ifelse(
       store$avg_days_currently_open > store$annual_avg_days,
       'increase',
