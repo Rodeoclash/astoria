@@ -89,6 +89,7 @@ function(req) {
                    round(difftime(Sys.Date(),created_at, unit = 'days'),1),
                    age)
       ) %>% 
+    filter(!is.na(date)) %>% 
     group_by(date) %>% 
     summarise(
       total_merged = n(),
