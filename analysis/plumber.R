@@ -44,21 +44,16 @@ function(req) {
     )
 }
 
-#* Return the weekly changes of PRs merged
-#* @post /monthly_closed_timeline
+#* PRs created each month
+#* @post /open_timeline
 function(req) {
   payload <- req$body %>% as.data.table()
   payload %>%
-    filter(is.na(merged_at) & !is.na(closed_at)) %>% 
+    select(created_at) %>% 
     mutate(
-      closed_at = lubridate::ymd_hms(closed_at),
-      year_week = format(closed_at, '%Y-%U'),
-      date = anytime::iso8601(anytime(as.Date(lubridate::floor_date(closed_at, unit = 'month'))))
-    ) %>%
-    filter(!is.na(date)) %>%
-    group_by(date) %>%
-    summarise(total = n()) %>%
-    arrange(date)
+      created_at = lubridate::ymd_hms(created_at),
+      year_month = format(created_at, '%Y, %m')) %>% 
+    count(year_month) 
 }
 
 ######### HERO NUMBERS #########
