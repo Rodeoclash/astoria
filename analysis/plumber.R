@@ -57,6 +57,23 @@ function(req) {
     summarise(total = n())
 }
 
+#* Return the weekly changes of PRs merged
+#* @post /monthly_closed_timeline
+function(req) {
+  payload <- req$body %>% as.data.table()
+  payload %>%
+    filter(is.na(merged_at) & !is.na(closed_at)) %>% 
+    mutate(
+      closed_at = lubridate::ymd_hms(closed_at),
+      year_week = format(closed_at, '%Y-%U'),
+      date = anytime::iso8601(anytime(as.Date(lubridate::floor_date(closed_at, unit = 'month'))))
+    ) %>%
+    filter(!is.na(date)) %>%
+    group_by(date) %>%
+    summarise(total = n()) %>%
+    arrange(date)
+}
+
 #* The weekly rolling average of ages of merged PRs
 #* @post /merged_age_timeline
 function(req) {
@@ -450,8 +467,6 @@ Bad is less than 3 to 1?
     )
   return(out)
 }
-
-
 
 
 ## TODO: create timeline of closed
