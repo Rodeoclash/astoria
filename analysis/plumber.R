@@ -52,9 +52,34 @@ function(req) {
     select(created_at) %>% 
     mutate(
       created_at = lubridate::ymd_hms(created_at),
-      year_month = format(created_at, '%Y, %m')) %>% 
-    count(year_month) 
+      date = anytime::iso8601(anytime(as.Date(lubridate::floor_date(created_at, unit = 'month'))))) %>% 
+    group_by(date) %>% 
+    summarise(total = n())
 }
+
+#* The weekly rolling average of ages of merged PRs
+#* @post /merged_age_timeline
+function(req) {
+  payload <- req$body %>% as.data.table()
+  payload %>%
+    select(created_at, merged_at) %>% 
+    mutate(
+      created_at = lubridate::ymd_hms(created_at),
+      merged_at = lubridate::ymd_hms(merged_at),
+      date = anytime::iso8601(anytime(as.Date(lubridate::floor_date(merged_at, unit = 'month')))),
+      age = round(difftime(merged_at,created_at, unit = 'days'),1),
+      age = ifelse(is.na(age), 
+                   round(difftime(Sys.Date(),created_at, unit = 'days'),1),
+                   age)
+      ) %>% 
+    group_by(date) %>% 
+    summarise(
+      total_merged = n(),
+      total_age_in_days = round(sum(age, na.rm = TRUE),0),
+      mean_age_in_days = round(mean(age, na.rm = TRUE),2)
+    )
+}  
+
 
 ######### HERO NUMBERS #########
 
