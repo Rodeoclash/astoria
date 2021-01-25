@@ -13,7 +13,7 @@ defmodule Astoria.Application do
       AstoriaWeb.Endpoint,
       {Oban, oban_config()},
       {Absinthe.Subscription, AstoriaWeb.Endpoint},
-      Astoria.GithubRepositories.UpdateRegister,
+      AstoriaWeb.Schema.QueuedPublisher
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
