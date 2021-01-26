@@ -1,5 +1,6 @@
 defmodule Astoria.GithubRepositories do
   alias Astoria.{GithubInstallations, GithubRepositories, Repo}
+  alias AstoriaWeb.{Schema}
 
   @doc """
   How many repositories have been created
@@ -22,8 +23,14 @@ defmodule Astoria.GithubRepositories do
            }),
          {:ok, github_repository} <- Repo.update(changeset),
          :ok <-
-           Absinthe.Subscription.publish(AstoriaWeb.Endpoint, github_repository,
-             github_repository_updated: "#{github_repository.pub_id}"
+           Schema.QueuedPublisher.enqueue(
+             [
+               AstoriaWeb.Endpoint,
+               github_repository,
+               [github_repository_updated: "#{github_repository.pub_id}"]
+             ],
+             id: github_repository.pub_id,
+             window: 2
            ),
          do: {:ok, github_repository}
   end

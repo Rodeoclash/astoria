@@ -15,7 +15,7 @@ ENV APP_HOME=/usr/src/app \
 
 WORKDIR $APP_HOME
 
-RUN curl -sL https://deb.nodesource.com/setup_14.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_15.x | bash -
 
 # Install libs
 RUN apt-get update && \

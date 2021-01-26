@@ -10,7 +10,7 @@
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotChart_plotChart$ref = any;
 export type GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQueryVariables = {|
-  githubRepositoryId: string,
+  id: string,
   start: any,
   finish: any,
 |};
@@ -32,12 +32,12 @@ export type GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery = {|
 
 /*
 query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(
-  $githubRepositoryId: ID!
+  $id: ID!
   $start: DateTime!
   $finish: DateTime!
 ) {
   currentUser {
-    githubRepository(id: $githubRepositoryId) {
+    githubRepository(id: $id) {
       analysisMonthlyTotalChange(start: $start, finish: $finish) {
         ...PlotChart_plotChart
       }
@@ -63,7 +63,7 @@ var v0 = {
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "githubRepositoryId"
+  "name": "id"
 },
 v2 = {
   "defaultValue": null,
@@ -74,7 +74,7 @@ v3 = [
   {
     "kind": "Variable",
     "name": "id",
-    "variableName": "githubRepositoryId"
+    "variableName": "id"
   }
 ],
 v4 = [
@@ -218,16 +218,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6500da37090919e996eee3d2b1cf344c",
+    "cacheID": "30e3d02181cabc94d1010eafdfb5b562",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisMonthlyTotalChange(start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoaderQuery(\n  $id: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $id) {\n      analysisMonthlyTotalChange(start: $start, finish: $finish) {\n        ...PlotChart_plotChart\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotChart_plotChart on PlotChart {\n  description\n  name\n  traces\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '84453b196143e3090263b9ae5f995f01';
+(node/*: any*/).hash = '1a21c416cda097b3fd7d90dbe65720d7';
 
 module.exports = node;

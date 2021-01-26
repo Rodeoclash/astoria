@@ -12,7 +12,8 @@ defmodule Astoria.Application do
       {Phoenix.PubSub, name: Astoria.PubSub},
       AstoriaWeb.Endpoint,
       {Oban, oban_config()},
-      {Absinthe.Subscription, AstoriaWeb.Endpoint}
+      {Absinthe.Subscription, AstoriaWeb.Endpoint},
+      AstoriaWeb.Schema.QueuedPublisher
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
