@@ -9,7 +9,7 @@ env:
   IMAGE_PATH_LATEST_ANALYSIS: "docker.pkg.github.com/rodeoclash/astoria/astoria-analysis:latest"
 
 jobs:
-  build-server:
+  build:
     runs-on: ubuntu-latest
 
     steps:
