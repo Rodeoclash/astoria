@@ -48,7 +48,7 @@ export const GithubRepositoryNavigationItemActivity = function ({
 
   const now = new Date().getTime();
   const lastActivityAt = new Date(githubRepository.lastActivityAt).getTime();
-  const hasActivity = (now - lastActivityAt) / 1000 <= 5;
+  const hasActivity = (now - lastActivityAt) / 1000 <= 10;
 
   if (hasActivity === false) {
     return null;

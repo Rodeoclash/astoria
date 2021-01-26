@@ -12,12 +12,19 @@ defmodule AstoriaWeb.Schema.QueuedPublisher do
   defstruct args: [], publish_at: nil
 
   def start_link(_default) do
-    GenServer.start_link(__MODULE__, %{}, name: :github_repository_update_register)
+    GenServer.start_link(__MODULE__, %{}, name: :schema_queued_publisher)
   end
 
   @impl true
   def init(state) do
     {:ok, state, {:continue, :start_timer}}
+  end
+
+  def enqueue(args, options) do
+    GenServer.cast(
+      :schema_queued_publisher,
+      {:queue_publish, args, options}
+    )
   end
 
   @impl true
@@ -28,10 +35,6 @@ defmodule AstoriaWeb.Schema.QueuedPublisher do
 
   @impl true
   def handle_info(:tick, state) do
-    # loop through all, check if current time > queued time, execute and clear
-
-    Process.send_after(self(), :tick, @interval)
-
     new_state =
       Enum.reduce(state, %{}, fn {id, publisher}, acc ->
         case DateTime.compare(publisher.publish_at, DateTime.utc_now()) do
@@ -44,6 +47,8 @@ defmodule AstoriaWeb.Schema.QueuedPublisher do
             Map.put(acc, id, publisher)
         end
       end)
+
+    Process.send_after(self(), :tick, @interval)
 
     {:noreply, new_state}
   end
