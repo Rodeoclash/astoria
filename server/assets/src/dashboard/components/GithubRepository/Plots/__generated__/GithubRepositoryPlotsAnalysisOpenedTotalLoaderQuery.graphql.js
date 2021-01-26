@@ -10,7 +10,7 @@
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotHero_plotHero$ref = any;
 export type GithubRepositoryPlotsAnalysisOpenedTotalLoaderQueryVariables = {|
-  githubRepositoryId: string,
+  id: string,
   start: any,
   finish: any,
 |};
@@ -32,12 +32,12 @@ export type GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery = {|
 
 /*
 query GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery(
-  $githubRepositoryId: ID!
+  $id: ID!
   $start: DateTime!
   $finish: DateTime!
 ) {
   currentUser {
-    githubRepository(id: $githubRepositoryId) {
+    githubRepository(id: $id) {
       analysisOpenedTotal(start: $start, finish: $finish) {
         ...PlotHero_plotHero
       }
@@ -67,7 +67,7 @@ var v0 = {
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "githubRepositoryId"
+  "name": "id"
 },
 v2 = {
   "defaultValue": null,
@@ -78,7 +78,7 @@ v3 = [
   {
     "kind": "Variable",
     "name": "id",
-    "variableName": "githubRepositoryId"
+    "variableName": "id"
   }
 ],
 v4 = [
@@ -250,16 +250,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8c5afabad0245b9407694e8ae2314ec8",
+    "cacheID": "77d3906fc8f4b1b7ebf0e03f897a0e67",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisOpenedTotal(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  sentiment\n  unitType\n  value\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisOpenedTotalLoaderQuery(\n  $id: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $id) {\n      analysisOpenedTotal(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  sentiment\n  unitType\n  value\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '60660152ccb08875d01075014cb2542c';
+(node/*: any*/).hash = 'ece4775801c5b2bdf69cfa601f22b688';
 
 module.exports = node;

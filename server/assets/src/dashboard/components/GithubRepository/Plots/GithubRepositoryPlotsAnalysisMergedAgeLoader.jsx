@@ -1,9 +1,23 @@
-import React from "react";
-import { QueryRenderer, graphql } from "react-relay";
+import React, { useEffect } from "react";
+import { QueryRenderer, graphql, requestSubscription } from "react-relay";
 import environment from "dashboard/services/relay/environment.js";
 import { defaultDateRange } from "dashboard/services/data.js";
 
 import PlotHero from "dashboard/components/PlotHero/PlotHero.jsx";
+
+const subscription = graphql`
+  subscription GithubRepositoryPlotsAnalysisMergedAgeLoaderSubscription(
+    $id: ID!
+    $start: DateTime!
+    $finish: DateTime!
+  ) {
+    githubRepositoryUpdated(id: $id) {
+      analysisMergedAge(start: $start, finish: $finish) {
+        ...PlotHero_plotHero
+      }
+    }
+  }
+`;
 
 const GithubRepositoryPlotsAnalysisMergedAgeLoader = function ({
   githubRepositoryId,
@@ -23,17 +37,34 @@ const GithubRepositoryPlotsAnalysisMergedAgeLoader = function ({
 
   const [start, finish] = defaultDateRange();
 
+  const variables = {
+    id: githubRepositoryId,
+    start: start.toISOString(),
+    finish: finish.toISOString(),
+  };
+
+  useEffect(() => {
+    const disposable = requestSubscription(environment, {
+      subscription,
+      variables,
+    });
+
+    return function () {
+      disposable.dispose();
+    };
+  });
+
   return (
     <QueryRenderer
       environment={environment}
       query={graphql`
         query GithubRepositoryPlotsAnalysisMergedAgeLoaderQuery(
-          $githubRepositoryId: ID!
+          $id: ID!
           $start: DateTime!
           $finish: DateTime!
         ) {
           currentUser {
-            githubRepository(id: $githubRepositoryId) {
+            githubRepository(id: $id) {
               analysisMergedAge(start: $start, finish: $finish) {
                 ...PlotHero_plotHero
               }
@@ -41,11 +72,7 @@ const GithubRepositoryPlotsAnalysisMergedAgeLoader = function ({
           }
         }
       `}
-      variables={{
-        githubRepositoryId,
-        start: start.toISOString(),
-        finish: finish.toISOString(),
-      }}
+      variables={variables}
       render={renderQuery}
     />
   );

@@ -10,7 +10,7 @@
 import type { ConcreteRequest } from 'relay-runtime';
 type PlotHero_plotHero$ref = any;
 export type GithubRepositoryPlotsAnalysisClosedAgeLoaderQueryVariables = {|
-  githubRepositoryId: string,
+  id: string,
   start: any,
   finish: any,
 |};
@@ -32,12 +32,12 @@ export type GithubRepositoryPlotsAnalysisClosedAgeLoaderQuery = {|
 
 /*
 query GithubRepositoryPlotsAnalysisClosedAgeLoaderQuery(
-  $githubRepositoryId: ID!
+  $id: ID!
   $start: DateTime!
   $finish: DateTime!
 ) {
   currentUser {
-    githubRepository(id: $githubRepositoryId) {
+    githubRepository(id: $id) {
       analysisClosedAge(start: $start, finish: $finish) {
         ...PlotHero_plotHero
       }
@@ -67,7 +67,7 @@ var v0 = {
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "githubRepositoryId"
+  "name": "id"
 },
 v2 = {
   "defaultValue": null,
@@ -78,7 +78,7 @@ v3 = [
   {
     "kind": "Variable",
     "name": "id",
-    "variableName": "githubRepositoryId"
+    "variableName": "id"
   }
 ],
 v4 = [
@@ -250,16 +250,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "796451c7b7f5eb90db6f34f46122f066",
+    "cacheID": "b9756a37ffc85fc1c01cebd0e7a6b71f",
     "id": null,
     "metadata": {},
     "name": "GithubRepositoryPlotsAnalysisClosedAgeLoaderQuery",
     "operationKind": "query",
-    "text": "query GithubRepositoryPlotsAnalysisClosedAgeLoaderQuery(\n  $githubRepositoryId: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $githubRepositoryId) {\n      analysisClosedAge(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  sentiment\n  unitType\n  value\n}\n"
+    "text": "query GithubRepositoryPlotsAnalysisClosedAgeLoaderQuery(\n  $id: ID!\n  $start: DateTime!\n  $finish: DateTime!\n) {\n  currentUser {\n    githubRepository(id: $id) {\n      analysisClosedAge(start: $start, finish: $finish) {\n        ...PlotHero_plotHero\n      }\n      id\n    }\n    id\n  }\n}\n\nfragment PlotHero_plotHero on PlotHero {\n  byline\n  changeDirection\n  description\n  name\n  sentiment\n  unitType\n  value\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '73e1b2339f1312a2890fd42e7db962bf';
+(node/*: any*/).hash = '4b2d799418a389ab5f248218a662235e';
 
 module.exports = node;
