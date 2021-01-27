@@ -1,5 +1,5 @@
 defmodule AstoriaWeb.Github.WebhookController do
-  alias Astoria.{GithubInstallations, Repo}
+  alias Astoria.{GithubInstallations, GithubRepositories, Repo}
   require Logger
   use AstoriaWeb, :controller
 
@@ -67,11 +67,33 @@ defmodule AstoriaWeb.Github.WebhookController do
     |> send_resp(:no_content, "")
   end
 
+  # Pull request changed
+  @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
+  def create(conn, %{
+        "action" => action,
+        "pull_request" => pull_request,
+        "repository" => repository
+      })
+      when action in ["edited", "synchronize", "opened", "closed", "reopened"] do
+    log("Pull request edit heard")
+
+    with github_repository <-
+           Repo.get_by(GithubRepositories.GithubRepository, %{github_id: repository["id"]}),
+         do:
+           GithubRepositories.GithubPullRequests.enqueue_github_repository_pull_request_sync(
+             github_repository,
+             pull_request["number"]
+           )
+
+    conn
+    |> send_resp(:no_content, "")
+  end
+
   # Unknown event
   @spec create(Plug.Conn.t(), map()) :: Plug.Conn.t()
   def create(conn, params) do
     log("Unknown webhook heard")
-    log(inspect(params))
+    IO.inspect(params, limit: :infinity)
 
     conn
     |> send_resp(:no_content, "")
