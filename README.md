@@ -7,7 +7,6 @@
 - Need to pass period to R code
 - User management (invites, roles)
 - Audit log
-- Handle push events for PRs
 - Flash messages should be handled in JS
 
 ## Server
