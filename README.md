@@ -42,3 +42,5 @@ export NGROK_COMMAND="ngrok http server:4000 -subdomain=$NGROK_SUBDOMAIN -region
 export NGROK_SUBDOMAIN=gotchaslocal
 export NGROK_TOKEN=123
 ```
+
+close without saving
