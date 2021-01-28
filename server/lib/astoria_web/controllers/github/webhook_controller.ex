@@ -75,15 +75,15 @@ defmodule AstoriaWeb.Github.WebhookController do
         "repository" => repository
       })
       when action in [
-             "edited",
-             "synchronize",
-             "opened",
              "closed",
-             "reopened",
+             "edited",
              "labeled",
-             "review_requested"
+             "opened",
+             "reopened",
+             "review_requested",
+             "synchronize"
            ] do
-    log("Pull request edit heard")
+    log("Pull request change heard")
 
     with github_repository <-
            Repo.get_by(GithubRepositories.GithubRepository, %{github_id: repository["id"]}),
