@@ -45,7 +45,7 @@ config :astoria, Oban,
   ],
   queues: [
     scheduled: 1,
-    sync_github: 10
+    sync_github: 20
   ]
 
 # Import environment specific config. This must remain at the bottom

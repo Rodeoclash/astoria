@@ -1,6 +1,4 @@
 defmodule AstoriaWeb.Plugs.CurrentUserRequiredPlug do
-  import Plug.Conn
-
   def init(opts), do: opts
 
   def call(%Plug.Conn{assigns: assigns} = conn, _params) do
