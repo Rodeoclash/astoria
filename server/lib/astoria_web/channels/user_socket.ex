@@ -30,7 +30,7 @@ defmodule AstoriaWeb.UserSocket do
 
     Task.async(Users, :indicate_github_installation_repositories_updated, [
       current_user,
-      delayed: true
+      [delayed: true]
     ])
 
     {:ok, socket}
