@@ -103,5 +103,33 @@ defmodule AstoriaWeb.AuthControllerTest do
 
       assert_enqueued(worker: Astoria.Jobs.GithubSync.Installation)
     end
+
+    test "with missing name", %{conn: conn} do
+      auth = %Ueberauth.Auth{
+        provider: :github,
+        extra: %Ueberauth.Auth.Extra{
+          raw_info: %{
+            user: %{
+              "id" => 63807
+            }
+          }
+        },
+        info: %{
+          name: nil,
+          email: "john.doe@example.com"
+        }
+      }
+
+      conn =
+        conn
+        |> bypass_through(AstoriaWeb.Router, [:browser])
+        |> get(Routes.auth_path(conn, :callback, :github))
+        |> assign(:ueberauth_auth, auth)
+        |> AstoriaWeb.AuthController.callback(%{})
+
+      assert get_flash(conn, :info) == "Hello john.doe, you have been logged in"
+      assert redirected_to(conn) == "/dashboard"
+      assert get_session(conn, :current_user_id)
+    end
   end
 end

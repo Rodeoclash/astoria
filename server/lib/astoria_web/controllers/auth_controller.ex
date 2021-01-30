@@ -24,10 +24,17 @@ defmodule AstoriaWeb.AuthController do
   def callback(%{assigns: %{ueberauth_auth: auth}} = conn, _params) do
     github_installation_id = get_session(conn, :github_installation_id)
 
+    user_details =
+      if auth.info.name == nil do
+        %{auth.info | name: String.split(auth.info[:email], "@") |> List.first()}
+      else
+        auth.info
+      end
+
     multi =
       Ecto.Multi.new()
       |> Ecto.Multi.run(:user, fn _repo, _previous ->
-        Users.upsert(auth.info)
+        Users.upsert(user_details)
       end)
       |> Ecto.Multi.run(:github_oauth_authorization, fn _repo, %{user: user} ->
         Users.GithubOauthAuthorizations.upsert(user, auth.credentials)
