@@ -2,9 +2,12 @@ import React from "react";
 import { css } from "@emotion/core";
 
 import GithubRepositoryName from "dashboard/components/GithubRepository/GithubRepositoryName.jsx";
+
+import GithubRepositoryPlotsAnalysisChangedLinesLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisChangedLinesLoader.jsx";
 import GithubRepositoryPlotsAnalysisClosedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisClosedAgeLoader.jsx";
 import GithubRepositoryPlotsAnalysisLast30TotalLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisLast30TotalLoader.jsx";
 import GithubRepositoryPlotsAnalysisMergedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMergedAgeLoader.jsx";
+import GithubRepositoryPlotsAnalysisMergedClosedRatioLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMergedClosedRatioLoader.jsx";
 import GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader.jsx";
 import GithubRepositoryPlotsAnalysisOpenedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedAgeLoader.jsx";
 import GithubRepositoryPlotsAnalysisOpenedTotalLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedTotalLoader.jsx";
@@ -57,6 +60,12 @@ const GithubRepositoryPage = function ({
             githubRepositoryId={githubRepositoryId}
           />
           <GithubRepositoryPlotsAnalysisOpenedTotalLoader
+            githubRepositoryId={githubRepositoryId}
+          />
+          <GithubRepositoryPlotsAnalysisChangedLinesLoader
+            githubRepositoryId={githubRepositoryId}
+          />
+          <GithubRepositoryPlotsAnalysisMergedClosedRatioLoader
             githubRepositoryId={githubRepositoryId}
           />
         </div>
