@@ -13,13 +13,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
       traces: nil
     }
 
-    github_pull_requests =
-      GithubPullRequest
-      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> select([github_pull_request], %{
-        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
-      })
-      |> Repo.all()
+    github_pull_requests = get_suitable_github_pull_requests(github_repository, start, finish)
 
     if github_pull_requests == [] do
       {:ok, data}
@@ -39,14 +33,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{start: start, finish: finish},
         _resolution
       ) do
-    github_pull_requests =
-      GithubPullRequest
-      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> GithubPullRequest.where_merged()
-      |> select([github_pull_request], %{
-        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
-      })
-      |> Repo.all()
+    github_pull_requests = get_suitable_github_pull_requests(github_repository, start, finish)
 
     if github_pull_requests == [] do
       {:ok, nil}
@@ -60,15 +47,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{start: start, finish: finish},
         _resolution
       ) do
-    github_pull_requests =
-      GithubPullRequest
-      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> select([github_pull_request], %{
-        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
-        created_at: fragment("?->>'created_at'", github_pull_request.data),
-        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
-      })
-      |> Repo.all()
+    github_pull_requests = get_suitable_github_pull_requests(github_repository, start, finish)
 
     if github_pull_requests == [] do
       {:ok, nil}
@@ -82,15 +61,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{start: start, finish: finish},
         _resolution
       ) do
-    github_pull_requests =
-      GithubPullRequest
-      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> select([github_pull_request], %{
-        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
-        created_at: fragment("?->>'created_at'", github_pull_request.data),
-        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
-      })
-      |> Repo.all()
+    github_pull_requests = get_suitable_github_pull_requests(github_repository, start, finish)
 
     if github_pull_requests == [] do
       {:ok, nil}
@@ -104,15 +75,7 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{start: start, finish: finish},
         _resolution
       ) do
-    github_pull_requests =
-      GithubPullRequest
-      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> select([github_pull_request], %{
-        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
-        created_at: fragment("?->>'created_at'", github_pull_request.data),
-        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
-      })
-      |> Repo.all()
+    github_pull_requests = get_suitable_github_pull_requests(github_repository, start, finish)
 
     if github_pull_requests == [] do
       {:ok, nil}
@@ -126,20 +89,23 @@ defmodule AstoriaWeb.Schema.Resolvers.GithubPullRequestResolver do
         %{start: start, finish: finish},
         _resolution
       ) do
-    github_pull_requests =
-      GithubPullRequest
-      |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
-      |> select([github_pull_request], %{
-        closed_at: fragment("?->>'closed_at'", github_pull_request.data),
-        created_at: fragment("?->>'created_at'", github_pull_request.data),
-        merged_at: fragment("?->>'merged_at'", github_pull_request.data)
-      })
-      |> Repo.all()
+    github_pull_requests = get_suitable_github_pull_requests(github_repository, start, finish)
 
     if github_pull_requests == [] do
       {:ok, nil}
     else
       GithubPullRequests.Analysis.opened_total(github_pull_requests)
     end
+  end
+
+  defp get_suitable_github_pull_requests(github_repository, start, finish) do
+    GithubPullRequest
+    |> GithubPullRequest.where_suitable_for_analysis(github_repository.id, start, finish)
+    |> select([github_pull_request], %{
+      closed_at: fragment("?->>'closed_at'", github_pull_request.data),
+      created_at: fragment("?->>'created_at'", github_pull_request.data),
+      merged_at: fragment("?->>'merged_at'", github_pull_request.data)
+    })
+    |> Repo.all()
   end
 end
