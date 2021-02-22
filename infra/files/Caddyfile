@@ -1,0 +1,15 @@
+astoria.richardson.co.nz {
+    reverse_proxy astoria-server:4000
+}
+
+astoria.stagehand.dev {
+    redir https://astoria.richardson.co.nz{uri}
+}
+
+stagehand.dev {
+    redir https://astoria.richardson.co.nz{uri}
+}
+
+www.stagehand.dev {
+    redir https://astoria.richardson.co.nz{uri}
+}
