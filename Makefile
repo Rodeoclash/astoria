@@ -1,4 +1,4 @@
-.PHONY: setup server-setup server-test server-start server-sh server-sh-root infra-setup infra-deploy
+.PHONY: setup server-setup server-test server-start server-bash server-bash-root infra-deploy graphql-update-schema
 
 setup:
 	docker-compose pull

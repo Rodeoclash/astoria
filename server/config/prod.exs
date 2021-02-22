@@ -10,7 +10,7 @@ use Mix.Config
 # which you should run after static files are built and
 # before starting your production server.
 config :astoria, AstoriaWeb.Endpoint,
-  url: [host: "astoria.stagehand.dev", port: 443],
+  url: [host: "astoria.richardson.co.nz", port: 443],
   cache_static_manifest: "priv/static/cache_manifest.json",
   static_url: [scheme: "https", host: "astoria.stagehand.dev", port: 443]
 

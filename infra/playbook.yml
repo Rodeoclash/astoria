@@ -44,18 +44,11 @@
         archive_path: "{{deploy_image_file_local_analysis}}"
         source: local
 
-    - name: Export ssh key
-      copy:
-        src: id_ed25519_astoria.enc
-        dest: '{{lookup("env","HOME")}}/id_ed25519_astoria'
-        mode: 0600
-        owner: "{{ ansible_user_id }}"
-
 - name: Deploy
   hosts: app
   vars:
+    astora_home_directory: "/home/ubuntu/astoria"
     ansible_python_interpreter: "/usr/bin/python3"
-    ansible_ssh_private_key_file: '{{lookup("env","HOME")}}/id_ed25519_astoria'
     deploy_image_file_local_analysis: '{{lookup("env","HOME")}}/analysis_deploy_{{lookup("env","SHA")}}.tar'
     deploy_image_file_local_server: '{{lookup("env","HOME")}}/server_deploy_{{lookup("env","SHA")}}.tar'
     deploy_image_file_remote_analysis: '/tmp/analysis_deploy_{{lookup("env","SHA")}}.tar'
@@ -66,10 +59,15 @@
     - pip:
         name: docker
 
+    - name: Create a directory if it does not exist
+      ansible.builtin.file:
+        path: "{{ astora_home_directory }}"
+        state: directory
+
     - name: Copy private key to remote
       copy:
         src: github_app_key.enc
-        dest: "/root/github_app_key.pem"
+        dest: "{{ astora_home_directory }}/github_app_key.pem"
 
     - name: Copy server image file to remote
       copy:
@@ -97,7 +95,7 @@
       docker_container:
         name: astoria-migrations
         image: "{{deploy_image_name_server}}"
-        restart_policy: no
+        restart_policy: "no"
         state: started
         command: bin/astoria eval "Astoria.Release.migrate"
         env: &env
@@ -108,11 +106,7 @@
           GITHUB_CLIENT_SECRET: "{{ github_client_secret }}"
           SECRET_KEY_BASE: "{{ secret_key_base }}"
         volumes: &volumes
-          - /root/github_app_key.pem:/usr/src/app/priv/keys/github_app_key.pem
-
-    - name: Create websites network
-      docker_network:
-        name: websites
+          - "{{ astora_home_directory }}/github_app_key.pem:/usr/src/app/priv/keys/github_app_key.pem"
 
     - name: Create astoria network
       docker_network:
@@ -129,7 +123,6 @@
           "max-file": "3"
         state: started
         networks:
-          - name: websites
           - name: astoria
         env: *env
         volumes: *volumes
@@ -159,3 +152,11 @@
       file:
         path: "{{deploy_image_file_remote_analysis}}"
         state: absent
+
+    - name: Copy Caddyfile to remote
+      copy:
+        src: "./files/Caddyfile"
+        dest: "/home/ubuntu/sites-enabled/CaddyfileAstoria"
+
+    - name: Restart Caddy
+      command: docker exec caddy caddy reload --config=/etc/caddy/Caddyfile
