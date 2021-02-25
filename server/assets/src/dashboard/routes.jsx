@@ -6,7 +6,7 @@ import AppPage, { AppPageQuery } from "dashboard/pages/AppPage.jsx";
 import DashboardPage, {
   DashboardPageQuery,
 } from "dashboard/pages/DashboardPage.jsx";
-import NoDashboardSelectionPage from "dashboard/pages/NoDashboardSelectionPage.jsx";
+import NoDashboardSelectionPage from "dashboard/components/UI/NoRepositorySelected.jsx";
 import GithubRepositoryPage, {
   GithubRepositoryPageQuery,
   prepareVariables as dashboardPagePrepareVariables,

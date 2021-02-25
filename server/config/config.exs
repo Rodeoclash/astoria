@@ -9,6 +9,7 @@ use Mix.Config
 
 config :astoria,
   public_name: "JumpStart",
+  github_app_page: "https://github.com/apps/astoria-beta",
   ecto_repos: [Astoria.Repo],
   http_client: HTTPoison
 

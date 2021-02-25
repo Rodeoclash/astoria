@@ -9,21 +9,13 @@ import GithubRepositoryPlotsAnalysisMonthlyTotalChangeLoader from "dashboard/com
 import GithubRepositoryPlotsAnalysisOpenedAgeLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedAgeLoader.jsx";
 import GithubRepositoryPlotsAnalysisOpenedTotalLoader from "dashboard/components/GithubRepository/Plots/GithubRepositoryPlotsAnalysisOpenedTotalLoader.jsx";
 
-const headerStyles = css`
-  align-items: center;
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 1rem;
-  margin-top: 0;
-  padding-bottom: 1rem;
-`;
-
 const heroStyles = css`
   align-items: stretch;
   display: flex;
   justify-content: center;
   margin-bottom: 1rem;
   padding-bottom: 2rem;
+  flex-wrap: wrap;
 
   & > * {
     margin: 0 1rem;
@@ -49,9 +41,7 @@ const GithubRepositoryPage = function ({
 
   return (
     <>
-      <header css={headerStyles}>
-        <GithubRepositoryName githubRepository={currentUser.githubRepository} />
-      </header>
+      <GithubRepositoryName githubRepository={currentUser.githubRepository} />
       <div>
         <div css={heroStyles}>
           <GithubRepositoryPlotsAnalysisLast30TotalLoader

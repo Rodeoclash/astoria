@@ -13,6 +13,10 @@ defmodule AstoriaWeb.Schema.Interfaces.ActorInterface do
 
     field :name, non_null(:string)
 
+    field :has_github_installations, non_null(:boolean) do
+      resolve(&Resolvers.ActorResolver.has_github_installations/3)
+    end
+
     field :github_repository, non_null(:github_repository) do
       arg(:id, non_null(:id))
       resolve(&Resolvers.GithubRepositoryResolver.get_from_user/3)
