@@ -16,7 +16,7 @@ export type DashboardPage_QueryResponse = {|
     +selectedGithubRepositoryName: ?string,
   |},
   +currentUser: ?{|
-    +id: string,
+    +hasGithubInstallations: boolean,
     +$fragmentRefs: CurrentUserGithubInstallations_currentUser$ref,
   |},
 |};
@@ -30,8 +30,9 @@ export type DashboardPage_Query = {|
 /*
 query DashboardPage_Query {
   currentUser {
-    id
     ...CurrentUserGithubInstallations_currentUser
+    hasGithubInstallations
+    id
   }
 }
 
@@ -80,7 +81,7 @@ var v0 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "id",
+  "name": "hasGithubInstallations",
   "storageKey": null
 },
 v1 = {
@@ -121,6 +122,13 @@ v2 = [
   }
 ],
 v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -170,7 +178,6 @@ return {
         "name": "currentUser",
         "plural": false,
         "selections": [
-          (v0/*: any*/),
           {
             "alias": null,
             "args": (v2/*: any*/),
@@ -195,7 +202,7 @@ return {
                     "name": "node",
                     "plural": false,
                     "selections": [
-                      (v0/*: any*/),
+                      (v3/*: any*/),
                       {
                         "alias": null,
                         "args": (v2/*: any*/),
@@ -220,7 +227,7 @@ return {
                                 "name": "node",
                                 "plural": false,
                                 "selections": [
-                                  (v0/*: any*/),
+                                  (v3/*: any*/),
                                   {
                                     "alias": null,
                                     "args": null,
@@ -228,7 +235,7 @@ return {
                                     "name": "lastActivityAt",
                                     "storageKey": null
                                   },
-                                  (v3/*: any*/)
+                                  (v4/*: any*/)
                                 ],
                                 "storageKey": null
                               }
@@ -238,7 +245,7 @@ return {
                         ],
                         "storageKey": "githubRepositories(first:100)"
                       },
-                      (v3/*: any*/)
+                      (v4/*: any*/)
                     ],
                     "storageKey": null
                   }
@@ -247,7 +254,9 @@ return {
               }
             ],
             "storageKey": "githubInstallations(first:100)"
-          }
+          },
+          (v0/*: any*/),
+          (v3/*: any*/)
         ],
         "storageKey": null
       },
@@ -255,16 +264,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "8acb2e114e6c0d443f2bf6352c56f338",
+    "cacheID": "6cdcfbff57493a69d63f7b84d6ccf5bd",
     "id": null,
     "metadata": {},
     "name": "DashboardPage_Query",
     "operationKind": "query",
-    "text": "query DashboardPage_Query {\n  currentUser {\n    id\n    ...CurrentUserGithubInstallations_currentUser\n  }\n}\n\nfragment CurrentUserGithubInstallations_currentUser on CurrentUser {\n  githubInstallations(first: 100) {\n    edges {\n      node {\n        ...GithubInstallationNavigationItem_githubInstallation\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationGithubRepositories_githubInstallation on GithubInstallation {\n  id\n  githubRepositories(first: 100) {\n    edges {\n      node {\n        ...GithubRepositoryNavigationItem_githubRepository\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationNavigationItem_githubInstallation on GithubInstallation {\n  ...GithubInstallationGithubRepositories_githubInstallation\n  name\n}\n\nfragment GithubRepositoryNavigationItemActivity_githubRepository on GithubRepository {\n  id\n  lastActivityAt\n}\n\nfragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {\n  ...GithubRepositoryNavigationItemActivity_githubRepository\n  id\n  name\n}\n"
+    "text": "query DashboardPage_Query {\n  currentUser {\n    ...CurrentUserGithubInstallations_currentUser\n    hasGithubInstallations\n    id\n  }\n}\n\nfragment CurrentUserGithubInstallations_currentUser on CurrentUser {\n  githubInstallations(first: 100) {\n    edges {\n      node {\n        ...GithubInstallationNavigationItem_githubInstallation\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationGithubRepositories_githubInstallation on GithubInstallation {\n  id\n  githubRepositories(first: 100) {\n    edges {\n      node {\n        ...GithubRepositoryNavigationItem_githubRepository\n        id\n      }\n    }\n  }\n}\n\nfragment GithubInstallationNavigationItem_githubInstallation on GithubInstallation {\n  ...GithubInstallationGithubRepositories_githubInstallation\n  name\n}\n\nfragment GithubRepositoryNavigationItemActivity_githubRepository on GithubRepository {\n  id\n  lastActivityAt\n}\n\nfragment GithubRepositoryNavigationItem_githubRepository on GithubRepository {\n  ...GithubRepositoryNavigationItemActivity_githubRepository\n  id\n  name\n}\n"
   }
 };
 })();
 // prettier-ignore
-(node/*: any*/).hash = '02799b04498c01ce7c4d6c76e5c427a5';
+(node/*: any*/).hash = 'dfbae587d4253155381c1e881bb2d0ec';
 
 module.exports = node;
