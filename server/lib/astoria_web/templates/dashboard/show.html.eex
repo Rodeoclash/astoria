@@ -1,7 +1,8 @@
 <script>
   window.SPA_CONFIG = {
     channelToken: "<%= channel_token(@current_user) %>",
-    publicName: "<%= public_name() %>",
+    githubAppPage: "<%= get_astoria_config_item(:github_app_page) %>",
+    publicName: "<%= get_astoria_config_item(:public_name) %>",
     userWebsocketURL: "<%= user_websocket_url() %>",
   };
 </script>

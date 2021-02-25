@@ -1,5 +1,5 @@
 defmodule Astoria.Users do
-  alias Astoria.{Repo, Users, GithubInstallations}
+  alias Astoria.{Repo, Users, GithubInstallations, UserGithubInstallations}
   alias __MODULE__
 
   @doc ~S"""
@@ -28,5 +28,10 @@ defmodule Astoria.Users do
     Enum.map(user.github_installations, fn github_installation ->
       GithubInstallations.indicate_github_installation_repositories_updated(github_installation)
     end)
+  end
+
+  def has_github_installations?(user) do
+    UserGithubInstallations.UserGithubInstallation.for_user(user.id)
+    |> Repo.aggregate(:count) > 0
   end
 end
