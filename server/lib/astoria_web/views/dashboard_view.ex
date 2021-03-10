@@ -12,8 +12,4 @@ defmodule AstoriaWeb.DashboardView do
   def user_websocket_url() do
     "wss://" <> AstoriaWeb.Endpoint.host() <> "/socket"
   end
-
-  def get_astoria_config_item(name) do
-    Application.get_env(:astoria, name)
-  end
 end

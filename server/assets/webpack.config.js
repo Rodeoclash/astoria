@@ -6,7 +6,8 @@ module.exports = (env, options) => {
   return {
     devtool: devMode ? "eval-cheap-module-source-map" : undefined,
     entry: {
-      dashboard: ["./src/dashboard.js"],
+      dashboard: ["./src/entries/dashboard.js"],
+      homepage: ["./src/entries/homepage.js"],
     },
     module: {
       rules: [
@@ -26,7 +27,11 @@ module.exports = (env, options) => {
     },
     plugins: [],
     resolve: {
-      modules: [path.resolve(__dirname, "src"), "node_modules"],
+      modules: [
+        path.resolve(__dirname, "src"),
+        path.resolve(__dirname, "src/entries"),
+        "node_modules",
+      ],
     },
   };
 };

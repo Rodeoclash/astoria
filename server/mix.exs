@@ -7,7 +7,7 @@ defmodule Astoria.MixProject do
       version: "0.1.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers() ++ [:jsroutes],
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
@@ -21,7 +21,7 @@ defmodule Astoria.MixProject do
   def application do
     [
       mod: {Astoria.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :eex]
     ]
   end
 
@@ -62,6 +62,7 @@ defmodule Astoria.MixProject do
       {:phoenix, "~> 1.5.5"},
       {:phoenix_ecto, "~> 4.1"},
       {:phoenix_html, "~> 2.11"},
+      {:phoenix_jsroutes, "~> 2.0.0"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:plug_cowboy, "~> 2.0"},
       {:postgrex, ">= 0.0.0"},
@@ -69,7 +70,8 @@ defmodule Astoria.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:ueberauth, "~> 0.6"},
-      {:ueberauth_github, "~> 0.7"}
+      {:ueberauth_github, "~> 0.7"},
+      {:ueberauth_identity, "~> 0.2"}
     ]
   end
 

@@ -14,6 +14,11 @@
         info: "<%= get_flash(@conn, :info) %>",
         error: "<%= get_flash(@conn, :error) %>",
       };
+
+    window.SPA_CONFIG = {
+      githubAppPage: "<%= get_astoria_config_item(:github_app_page) %>",
+      publicName: "<%= get_astoria_config_item(:public_name) %>",
+    };
     </script>
     <%= @inner_content %>
   </body>
