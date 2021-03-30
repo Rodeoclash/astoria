@@ -29,3 +29,5 @@ This directory contains the main web application which uses Elixir's Phoenix Fra
 This directory contains a series of R scripts powered by Plumber that the Phoenix application hands PRs over for analysis. This allowed easy prototyping of various data processing functions with the intention of moving them into either Postgres or another service that could crunch the data a bit faster.
 
 # Screenshot
+
+![Astoria Screenshot](/screenshots/1.png?raw=true "Astoria Main Page")
