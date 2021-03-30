@@ -61,16 +61,18 @@ defmodule AstoriaWeb.Router do
   scope "/", AstoriaWeb do
     pipe_through :browser
 
-    get "/", HomeController, :show
-
     scope "/admin", Admin, as: :admin do
+      pipe_through :current_user_required
       get "/current_user", CurrentUserController, :show
     end
 
-    # must be last
     scope "/dashboard" do
       pipe_through :current_user_required
+      get "/", DashboardController, :show, as: :dashboard_root
       get "/*path", DashboardController, :show
     end
+
+    get "/", HomeController, :show, as: :homepage_root
+    get "/*path", HomeController, :show
   end
 end

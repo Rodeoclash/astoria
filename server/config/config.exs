@@ -32,7 +32,12 @@ config :phoenix, :json_library, Jason
 
 config :ueberauth, Ueberauth,
   providers: [
-    github: {Ueberauth.Strategy.Github, [default_scope: "user:email"]}
+    github: {Ueberauth.Strategy.Github, [default_scope: "user:email"]},
+    identity:
+      {Ueberauth.Strategy.Identity,
+       [
+         callback_methods: ["POST"]
+       ]}
   ]
 
 config :absinthe,
@@ -48,6 +53,8 @@ config :astoria, Oban,
     scheduled: 1,
     sync_github: 20
   ]
+
+config :astoria, :jsroutes, output_folder: "assets/src/services"
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

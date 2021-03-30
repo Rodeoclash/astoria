@@ -1,10 +1,5 @@
-<p>Marketing / Home page</p>
+<script>
+  window.SPA_CONFIG = Object.assign({}, window.SPA_CONFIG);
+</script>
 
-<%= if assigns[:current_user?] == false do %>
-  <%= link "Login", to: Routes.auth_path(@conn, :request, "github") %>
-<% else %>
-  Logged in
-  <a href="/dashboard">
-    Go to dashboard
-  </a>
-<% end %>
+<script type="text/javascript" src="<%= Routes.static_url(@conn, "/js/homepage.js") %>"></script>
