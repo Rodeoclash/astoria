@@ -5,10 +5,11 @@ setup:
 	docker-compose build
 
 server-setup: setup
-	docker-compose run --no-deps --user=root:root --rm server chown -R 1000:1000 /home/server
-	docker-compose run --no-deps server mix local.hex --force
-	docker-compose run --no-deps server mix local.rebar --force
-	docker-compose run server mix setup
+	docker-compose run --no-deps --user=root:root --rm astoria-server chown -R 1000:1000 /home/server
+	docker-compose run --no-deps --user=root:root --rm astoria-server chown -R 1000:1000 /opt
+	docker-compose run --no-deps astoria-server mix local.hex --force
+	docker-compose run --no-deps astoria-server mix local.rebar --force
+	docker-compose run astoria-server mix setup
 
 server-test: server-setup
 	docker-compose run server mix test

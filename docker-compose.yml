@@ -36,7 +36,6 @@ services:
       - GITHUB_APP_PRIVATE_KEY=/usr/src/app/priv/keys/github_app_key_development.pem
       - GITHUB_CLIENT_ID
       - GITHUB_CLIENT_SECRET
-    image: rodeoclash/astoria:latest
     logging: *logging
     ports:
       - "4000:4000"
@@ -50,7 +49,6 @@ services:
   astoria-analysis:
     build:
       context: ./analysis
-    image: rodeoclash/analysis:latest
     logging: *logging
     ports:
       - "8000:8000"
@@ -71,8 +69,10 @@ services:
       - "5000:80"
 
   relay-compiler:
+    build:
+      context: ./server
+      target: development
     command: ./node_modules/relay-compiler/bin/relay-compiler --src ./src --schema ./src/schema.json --watch
-    image: rodeoclash/astoria:latest
     logging: *logging
     user: "1000"
     working_dir: /usr/src/app/assets/
