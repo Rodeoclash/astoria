@@ -7,10 +7,10 @@ A hosted version is available at https://astoria.richardson.co.nz/ if you want t
 ## Current hero numbers
 
 - How many merged PRs in the last 30 days?
-- How Long Until Work Is Merged?
+- How long until work is merged?
 - How old were lost PRs?
 - How old are the open PRs?
-- How Many PRs Are Open?
+- How many PRs are open?
 
 Most hero numbers also contain comparasions with themselves over the past 30 days or previous year to be able to build a trend.
 
