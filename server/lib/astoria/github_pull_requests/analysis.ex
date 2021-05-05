@@ -78,4 +78,22 @@ defmodule Astoria.GithubPullRequests.Analysis do
         {:ok, Enum.at(response.body, 0)}
     end
   end
+
+  @spec changed_lines(list(%GithubPullRequests.GithubPullRequest{})) :: map()
+  def changed_lines(payload) do
+    case Analysis.Api.Endpoints.ChangedLines.create(payload)
+         |> Analysis.Api.Request.perform() do
+      {:ok, response} ->
+        {:ok, Enum.at(response.body, 0)}
+    end
+  end
+
+  @spec merged_closed_ratio(list(%GithubPullRequests.GithubPullRequest{})) :: map()
+  def merged_closed_ratio(payload) do
+    case Analysis.Api.Endpoints.MergedClosedRatio.create(payload)
+         |> Analysis.Api.Request.perform() do
+      {:ok, response} ->
+        {:ok, Enum.at(response.body, 0)}
+    end
+  end
 end
