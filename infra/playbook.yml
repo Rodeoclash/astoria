@@ -104,6 +104,7 @@
           GITHUB_APP_PRIVATE_KEY: /usr/src/app/priv/keys/github_app_key.pem
           GITHUB_CLIENT_ID: Iv1.72f681082d3f83aa
           GITHUB_CLIENT_SECRET: "{{ github_client_secret }}"
+          POOL_SIZE: 1
           SECRET_KEY_BASE: "{{ secret_key_base }}"
         volumes: &volumes
           - "{{ astora_home_directory }}/github_app_key.pem:/usr/src/app/priv/keys/github_app_key.pem"
