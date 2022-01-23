@@ -2,8 +2,6 @@
 
 JumpStart (née: Astoria) is an open source Github Application to read pull requests from GitHub and build analytics on top of them. Think https://www.usehaystack.io/ but less polished and created in peoples spare time.
 
-A hosted version is available at https://astoria.richardson.co.nz/ if you want to play with the tool without installing it.
-
 ## Current hero numbers
 
 - How many merged PRs in the last 30 days?
